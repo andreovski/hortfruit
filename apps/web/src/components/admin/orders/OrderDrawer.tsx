@@ -13,6 +13,7 @@ import { Check, MapPin, MessageCircle, Pencil, StickyNote, Truck, Undo2, User } 
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { ProductImage } from '@/components/product-image';
 import { useOrder, useSetOrderStatus } from '@/features/admin/orders';
 
 import { ConfirmDialog } from '../ConfirmDialog';
@@ -111,13 +112,7 @@ function OrderDetail({ order }: { order: AdminOrderDetail }) {
         <ul className='m-0 list-none p-0'>
           {order.items.map((item) => (
             <li key={item.productId} className='flex items-center gap-3 border-b border-line-soft py-2.5'>
-              <span
-                aria-hidden
-                className='flex size-9 flex-none items-center justify-center rounded-[10px]'
-                style={{ background: item.color }}
-              >
-                <img src={item.imageUrl} alt='' className='size-7 object-contain' />
-              </span>
+              <ProductImage product={item} className='size-9 flex-none rounded-[10px]' imageClassName='size-7' />
               <span className='flex min-w-0 flex-1 flex-col'>
                 <span className='font-semibold'>{item.name}</span>
                 <span className='text-xs text-ink-2'>

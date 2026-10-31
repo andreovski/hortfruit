@@ -32,3 +32,8 @@ export const CARD_COLORS = [
   '#FBE1E4',
   '#E6F1DA',
 ];
+
+/** Ilustração do app (fica sobre a cor do card) ou foto enviada (cobre o card, sem fundo)? */
+export function isIllustration(url: string): boolean {
+  return url.startsWith('/products/');
+}

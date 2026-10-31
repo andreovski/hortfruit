@@ -2,6 +2,7 @@ import { generateUploadButton } from '@uploadthing/react';
 import { Check } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { ProductImage } from '@/components/product-image';
 import { ILLUSTRATIONS } from '@/lib/illustrations';
 import { cn } from '@/lib/utils';
 
@@ -24,13 +25,11 @@ export function ImagePicker({
   return (
     <div className='flex flex-col gap-3'>
       <div className='flex items-center gap-3'>
-        <span
-          aria-hidden
-          className='flex size-16 flex-none items-center justify-center overflow-hidden rounded-2xl'
-          style={{ background: color }}
-        >
-          {value ? <img src={value} alt='' className='size-12 object-contain' /> : null}
-        </span>
+        <ProductImage
+          product={{ imageUrl: value, color }}
+          className='size-16 flex-none rounded-2xl'
+          imageClassName='size-12'
+        />
         {uploadsEnabled ? (
           <UploadButton
             endpoint='productImage'

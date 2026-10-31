@@ -14,7 +14,7 @@ import { CATEGORIES, CATEGORY_LABEL } from '@/features/admin/labels';
 import { useSaveProduct } from '@/features/admin/products';
 import { usePendingUploads } from '@/features/admin/uploads';
 import { errorMessage } from '@/lib/api';
-import { CARD_COLORS, ILLUSTRATIONS } from '@/lib/illustrations';
+import { CARD_COLORS, ILLUSTRATIONS, isIllustration } from '@/lib/illustrations';
 import { cn } from '@/lib/utils';
 
 import { Button, Field, inputClass, Switch } from '../ui';
@@ -248,8 +248,10 @@ export function ProductForm({
         />
       </fieldset>
 
-      <fieldset className='m-0 flex flex-col gap-2 border-0 p-0'>
-        <legend className='mb-2 p-0 text-[13px] font-semibold text-ink'>Cor do card</legend>
+      {/* Foto enviada cobre o card inteiro: a cor só vale para as ilustrações. */}
+      {isIllustration(form.imageUrl) ? (
+        <fieldset className='m-0 flex flex-col gap-2 border-0 p-0'>
+          <legend className='mb-2 p-0 text-[13px] font-semibold text-ink'>Cor do card</legend>
         <div className='flex flex-wrap gap-2'>
           {CARD_COLORS.map((c) => (
             <button
@@ -266,7 +268,8 @@ export function ProductForm({
             />
           ))}
         </div>
-      </fieldset>
+        </fieldset>
+      ) : null}
 
       {product ? (
         <div className='flex flex-col gap-1 rounded-xl bg-cream px-3.5 py-2'>

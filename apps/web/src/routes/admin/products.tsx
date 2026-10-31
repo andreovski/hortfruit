@@ -19,6 +19,7 @@ import {
   PageHeader,
   TableSkeleton,
 } from '@/components/admin/ui';
+import { ProductImage } from '@/components/product-image';
 import { usePriceDrafts } from '@/features/admin/price-drafts';
 import { DRAFT_MUTATION_KEY, usePatchDraft, useProducts, usePublish } from '@/features/admin/products';
 import { useSettings } from '@/features/admin/settings';
@@ -225,13 +226,7 @@ function ArchivedList({ products, onEdit }: { products: AdminProduct[]; onEdit: 
       <ul className='m-0 list-none p-0'>
         {products.map((p) => (
           <li key={p.id} className='flex items-center gap-3 border-t border-line-soft px-5 py-2'>
-            <span
-              aria-hidden
-              className='flex size-10 flex-none items-center justify-center rounded-[10px] opacity-60'
-              style={{ background: p.color }}
-            >
-              <img src={p.imageUrl} alt='' className='size-8 object-contain' />
-            </span>
+            <ProductImage product={p} className='size-10 flex-none rounded-[10px] opacity-60' imageClassName='size-8' />
             <span className='flex-1 font-semibold text-ink-3'>{p.name}</span>
             <Button variant='ghost' onClick={() => onEdit(p)} aria-label={`Editar ${p.name}`}>
               <Pencil aria-hidden className='size-4' />
