@@ -51,6 +51,14 @@
   --color-danger-border: #e2b8b1;
   --color-danger-strong: #b42318;
 
+  /* Painel ADM: status "Entregue", aviso de pedido editado, rascunho alterado, switch desligado. */
+  --color-info: #3a78ad;
+  --color-info-100: #e4ecf3;
+  --color-info-ink: #1d4466;
+  --color-amber-50: #fff8e8;
+  --color-amber-400: #e0b45c;
+  --color-switch-off: #b5b0a1;
+
   --radius-card: 20px;
 }
 
