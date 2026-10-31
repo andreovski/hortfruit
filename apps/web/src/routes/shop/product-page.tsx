@@ -11,6 +11,7 @@ import { ArrowLeft, Clock, Minus, Package, Plus, Scale, Trash2, Truck } from 'lu
 import { type ReactNode, useState } from 'react';
 import { toast } from 'sonner';
 
+import { ProductImage } from '@/components/product-image';
 import { EmptyState, ErrorState, PageSkeleton } from '@/components/shop/feedback';
 import { BottomBar, ShopPage } from '@/components/shop/layout';
 import { Pill } from '@/components/shop/product-card';
@@ -77,14 +78,12 @@ function ProductDetail({ product, data }: { product: CatalogProduct; data: Catal
 
   return (
     <ShopPage className='pb-32'>
-      <div
-        className='relative flex h-[300px] items-center justify-center rounded-b-[28px]'
-        style={{ backgroundColor: product.color }}
-      >
-        <img
-          src={product.imageUrl}
+      <div className='relative h-[300px]'>
+        <ProductImage
+          product={product}
           alt={product.name}
-          className='mt-4 size-[216px] object-contain'
+          className='size-full rounded-b-[28px]'
+          imageClassName='mt-4 size-[216px]'
         />
         <Link
           to='/'

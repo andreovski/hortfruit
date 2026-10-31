@@ -4,6 +4,7 @@ import { useMemo } from 'react';
 
 import { buttonLinkClass } from '@/components/admin/button-link';
 import { Button, Card, EmptyState, ErrorState, PageHeader, TableSkeleton } from '@/components/admin/ui';
+import { ProductImage } from '@/components/product-image';
 import { ordersLabel } from '@/features/admin/labels';
 import { usePurchaseList } from '@/features/admin/orders';
 import { useProducts } from '@/features/admin/products';
@@ -79,13 +80,11 @@ export function PurchaseListPage() {
                   return (
                     <tr key={row.productId} className='border-t border-line-soft'>
                       <td className='px-5 py-2.5'>
-                        <span
-                          aria-hidden
-                          className='flex size-10 items-center justify-center rounded-[10px] bg-muted'
-                          style={look ? { background: look.color } : undefined}
-                        >
-                          {look ? <img src={look.imageUrl} alt='' className='size-8 object-contain' /> : null}
-                        </span>
+                        {look ? (
+                          <ProductImage product={look} className='size-10 rounded-[10px]' imageClassName='size-8' />
+                        ) : (
+                          <span aria-hidden className='flex size-10 rounded-[10px] bg-muted' />
+                        )}
                       </td>
                       <td className='px-3 py-2.5'>
                         <span className='block font-semibold'>{row.name}</span>

@@ -3,7 +3,8 @@ import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vites
 import { buildApp } from '@/app';
 import { prisma } from '@/lib/prisma';
 import { ensureOwner } from '@/services/admins';
-import { OWNER, resetDatabase } from '@/test/helpers';
+import { uploadStorage } from '@/services/uploads';
+import { client, createProduct, loginAsOwner, OWNER, resetDatabase } from '@/test/helpers';
 
 import { SESSION_COOKIE } from './session';
 
@@ -25,7 +26,10 @@ describe('upload de fotos (UploadThing)', () => {
     vi.unstubAllEnvs();
     await app.close();
   });
-  beforeEach(resetDatabase);
+  beforeEach(async () => {
+    vi.restoreAllMocks();
+    await resetDatabase();
+  });
 
   it('com o token, /uploadthing serve a configuração da rota', async () => {
     const res = await app.inject({ method: 'GET', url: '/uploadthing' });
@@ -59,5 +63,62 @@ describe('upload de fotos (UploadThing)', () => {
     expect((await upload(`${SESSION_COOKIE}=${token}`)).statusCode).toBe(403);
 
     // Com sessão válida o adaptador gera as URLs e avisa o UploadThing pela rede: fica fora do e2e.
+  });
+
+  describe('foto que sai de uso é apagada do UploadThing', () => {
+    const OLD = 'https://app123.ufs.sh/f/antiga_foto.jpg';
+    const NEW = 'https://app123.ufs.sh/f/nova_foto.jpg';
+
+    it('ao trocar a foto do produto, apaga a anterior', async () => {
+      const remove = vi.spyOn(uploadStorage, 'remove').mockResolvedValue();
+      const product = await createProduct({ imageUrl: OLD });
+      const api = client(app, (await loginAsOwner(app)).cookie);
+
+      expect((await api.patch(`/admin/products/${product.id}`, { imageUrl: NEW })).statusCode).toBe(200);
+      expect(remove).toHaveBeenCalledExactlyOnceWith('antiga_foto.jpg');
+
+      // Mesma foto, ilustração antiga ou nada de foto: não apaga nada.
+      remove.mockClear();
+      await api.patch(`/admin/products/${product.id}`, { imageUrl: NEW, name: 'Tomate italiano' });
+      await api.patch(`/admin/products/${product.id}`, { priceCents: 990 });
+      const other = await createProduct({ imageUrl: '/products/tomate.svg' });
+      await api.patch(`/admin/products/${other.id}`, { imageUrl: NEW });
+      expect(remove).not.toHaveBeenCalled();
+    });
+
+    it('não apaga foto que outro produto ainda usa', async () => {
+      const remove = vi.spyOn(uploadStorage, 'remove').mockResolvedValue();
+      const product = await createProduct({ imageUrl: OLD });
+      await createProduct({ name: 'Cebola', imageUrl: OLD });
+      const api = client(app, (await loginAsOwner(app)).cookie);
+      await api.patch(`/admin/products/${product.id}`, { imageUrl: NEW });
+      expect(remove).not.toHaveBeenCalled();
+    });
+
+    it('falha no UploadThing não derruba a edição', async () => {
+      vi.spyOn(uploadStorage, 'remove').mockRejectedValue(new Error('rede'));
+      const product = await createProduct({ imageUrl: OLD });
+      const api = client(app, (await loginAsOwner(app)).cookie);
+      const res = await api.patch(`/admin/products/${product.id}`, { imageUrl: NEW });
+      expect(res.statusCode).toBe(200);
+      expect(res.json().imageUrl).toBe(NEW);
+    });
+
+    it('descartar a foto enviada e não salva', async () => {
+      const remove = vi.spyOn(uploadStorage, 'remove').mockResolvedValue();
+      await createProduct({ imageUrl: OLD });
+      const anonymous = await client(app).post('/admin/uploads/discard', { url: NEW });
+      expect(anonymous.statusCode).toBe(401);
+
+      const api = client(app, (await loginAsOwner(app)).cookie);
+      expect((await api.post('/admin/uploads/discard', { url: NEW })).statusCode).toBe(204);
+      expect(remove).toHaveBeenCalledExactlyOnceWith('nova_foto.jpg');
+
+      // Em uso por um produto ou fora do UploadThing: fica.
+      remove.mockClear();
+      expect((await api.post('/admin/uploads/discard', { url: OLD })).statusCode).toBe(204);
+      expect((await api.post('/admin/uploads/discard', { url: '/products/tomate.svg' })).statusCode).toBe(204);
+      expect(remove).not.toHaveBeenCalled();
+    });
   });
 });

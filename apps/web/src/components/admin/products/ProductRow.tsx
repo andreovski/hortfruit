@@ -2,6 +2,7 @@ import { formatBRL, parseBRL, priceChangePercent, quantityLabel, unitShort } fro
 import type { AdminProduct, Badge } from '@hortifruit/schemas';
 import { Pencil } from 'lucide-react';
 
+import { ProductImage } from '@/components/product-image';
 import { BADGE_OPTIONS, CATEGORY_LABEL } from '@/features/admin/labels';
 import { cn } from '@/lib/utils';
 
@@ -49,13 +50,11 @@ export function ProductRow({
   return (
     <tr className={cn('border-t border-line-soft', product.changed && 'bg-amber-50/50')}>
       <td className='py-2.5 pr-2 pl-5'>
-        <span
-          aria-hidden
-          className={cn('flex size-11 items-center justify-center rounded-xl', !draft.available && 'opacity-55')}
-          style={{ background: product.color }}
-        >
-          <img src={product.imageUrl} alt='' className='size-[34px] object-contain' />
-        </span>
+        <ProductImage
+          product={product}
+          className={cn('size-11 rounded-xl', !draft.available && 'opacity-55')}
+          imageClassName='size-[34px]'
+        />
       </td>
       <td className='px-3 py-2.5'>
         <span className='flex flex-wrap items-center gap-2'>

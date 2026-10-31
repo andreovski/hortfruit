@@ -74,7 +74,7 @@ export function CustomersPage() {
             <EmptyState>
               {debouncedSearch || status !== 'all'
                 ? 'Nenhum cliente encontrado.'
-                : 'Nenhum cliente cadastrado. Cadastre o primeiro restaurante em "Novo cliente".'}
+                : 'Nenhum cliente cadastrado. Cadastre o primeiro cliente em "Novo cliente".'}
             </EmptyState>
           ) : (
             <CustomersTable
@@ -90,7 +90,7 @@ export function CustomersPage() {
         open={!!editing}
         onOpenChange={(open) => !open && setEditing(null)}
         title={editing?.mode === 'edit' ? 'Editar cliente' : 'Novo cliente'}
-        description='Sem senha nem link de acesso: o restaurante se identifica pelo telefone no fim do pedido.'
+        description='Sem senha nem link de acesso: o cliente se identifica pelo telefone no fim do pedido.'
       >
         {editing ? (
           <CustomerForm
@@ -117,7 +117,7 @@ function CustomersTable({
     <table className='w-full min-w-[820px] border-collapse text-left'>
       <thead>
         <tr className='text-xs tracking-[0.05em] text-ink-2'>
-          <th scope='col' className='px-5 py-3 font-bold'>RESTAURANTE</th>
+          <th scope='col' className='px-5 py-3 font-bold'>CLIENTE</th>
           <th scope='col' className='px-3 py-3 font-bold'>TELEFONE</th>
           <th scope='col' className='px-3 py-3 font-bold'>ENDEREÇO</th>
           <th scope='col' className='px-3 py-3 font-bold'>PEDIDOS</th>

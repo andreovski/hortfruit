@@ -3,28 +3,11 @@ import type { CatalogProduct } from '@hortifruit/schemas';
 import { Link } from '@tanstack/react-router';
 import { Minus, Plus } from 'lucide-react';
 
+import { ProductImage } from '@/components/product-image';
 import { BADGE_LABEL } from '@/features/shop/format';
 import { cn } from '@/lib/utils';
 
-/** Imagem do produto sobre a cor do card (cor e imagem vêm do cadastro do produto). */
-export function ProductImage({
-  product,
-  className,
-  imageClassName,
-}: {
-  product: Pick<CatalogProduct, 'imageUrl' | 'color'>;
-  className?: string;
-  imageClassName?: string;
-}) {
-  return (
-    <span
-      className={cn('flex items-center justify-center', className)}
-      style={{ backgroundColor: product.color }}
-    >
-      <img src={product.imageUrl} alt='' className={cn('object-contain', imageClassName)} />
-    </span>
-  );
-}
+export { ProductImage };
 
 export function Pill({ children, muted }: { children: string; muted?: boolean }) {
   return (

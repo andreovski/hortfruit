@@ -13,7 +13,8 @@ mesmo SPA:
 - **Painel ADM** (`/admin`, desktop-first, com senha): pedidos, lista de compra, clientes, produtos
   e preços, ajustes.
 
-Escopo de produto em `docs/escopo.md`. Textos da interface em português do Brasil.
+Escopo de produto em `docs/escopo.md`. Textos da interface em português do Brasil. A interface fala
+em **cliente**, nunca em "restaurante": a venda não é só para restaurantes.
 
 Monorepo pnpm + Turborepo, no molde do Jottape:
 
@@ -63,7 +64,9 @@ pnpm --filter api seed                         # primeiro ADM, ajustes e os 13 p
 - **Avisos**: só no painel (contador de pedidos novos com atualização a cada 30 s).
 - **Fotos**: UploadThing (`UPLOADTHING_TOKEN`), rota `/uploadthing` na API, só para ADM logado.
   Sem o token, o painel esconde o envio e o ADM escolhe uma das ilustrações de
-  `apps/web/public/products`.
+  `apps/web/public/products`. Foto trocada no produto (ou enviada e descartada antes de salvar,
+  `POST /admin/uploads/discard`) é apagada do UploadThing se nenhum produto a usa
+  (`services/uploads.ts`, best-effort).
 - **WhatsApp** da Morro Verde: variável `WHATSAPP_NUMBER` (só dígitos, com DDD), devolvida no
   catálogo. Sem ela, os botões de WhatsApp somem.
 

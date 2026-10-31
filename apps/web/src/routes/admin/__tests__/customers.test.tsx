@@ -59,12 +59,12 @@ describe('Clientes', () => {
     const drawer = await screen.findByRole('dialog', { name: 'Novo cliente' });
     await user.click(within(drawer).getByRole('button', { name: 'Cadastrar cliente' }));
 
-    expect(within(drawer).getByText('Informe o nome do restaurante.')).toBeInTheDocument();
+    expect(within(drawer).getByText('Informe o nome.')).toBeInTheDocument();
     expect(within(drawer).getByText('Informe o endereço de entrega.')).toBeInTheDocument();
     expect(within(drawer).getByLabelText(/Telefone/)).toHaveAttribute('aria-invalid', 'true');
     expect(callsTo('POST', 'admin/customers')).toHaveLength(0);
 
-    await user.type(within(drawer).getByLabelText(/Nome do restaurante/), 'Bistrô Araucária');
+    await user.type(within(drawer).getByLabelText(/^Nome/), 'Bistrô Araucária');
     await user.type(within(drawer).getByLabelText(/Telefone/), '41997123080');
     expect(within(drawer).getByLabelText(/Telefone/)).toHaveValue('(41) 99712-3080');
     await user.type(within(drawer).getByLabelText(/Endereço de entrega/), 'Av. do Batel, 1868');
