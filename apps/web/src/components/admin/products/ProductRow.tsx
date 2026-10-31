@@ -1,13 +1,8 @@
-import {
-  formatBRL,
-  parseBRL,
-  priceChangePercent,
-  quantityLabel,
-  unitShort,
-} from '@hortifruit/core';
+import { formatBRL, parseBRL, priceChangePercent, quantityLabel, unitShort } from '@hortifruit/core';
 import type { AdminProduct, Badge } from '@hortifruit/schemas';
 import { Pencil } from 'lucide-react';
 
+import { ProductImage } from '@/components/product-image';
 import { BADGE_OPTIONS, CATEGORY_LABEL } from '@/features/admin/labels';
 import { cn } from '@/lib/utils';
 
@@ -153,16 +148,11 @@ export function ProductCard({
 
 function ProductThumb({ product }: { product: AdminProduct }) {
   return (
-    <span
-      aria-hidden
-      className={cn(
-        'flex size-11 flex-none items-center justify-center rounded-xl',
-        !product.draft.available && 'opacity-55'
-      )}
-      style={{ background: product.color }}
-    >
-      <img src={product.imageUrl} alt='' className='size-[34px] object-contain' />
-    </span>
+    <ProductImage
+      product={product}
+      className={cn('size-11 flex-none rounded-xl', !product.draft.available && 'opacity-55')}
+      imageClassName='size-[34px]'
+    />
   );
 }
 

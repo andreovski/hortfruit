@@ -51,13 +51,7 @@ export function OrdersPage() {
   const query = useOrders({ search: debouncedSearch, weekId: week === 'all' ? 'all' : undefined });
   const orders = useMemo(() => query.data?.orders ?? [], [query.data]);
   const counts = useMemo(() => {
-    const c: Record<StatusFilter, number> = {
-      ALL: orders.length,
-      NOVO: 0,
-      CONFIRMADO: 0,
-      ENTREGUE: 0,
-      CANCELADO: 0,
-    };
+    const c: Record<StatusFilter, number> = { ALL: orders.length, NOVO: 0, CONFIRMADO: 0, ENTREGUE: 0, CANCELADO: 0 };
     for (const o of orders) c[o.status] += 1;
     return c;
   }, [orders]);
@@ -110,7 +104,7 @@ export function OrdersPage() {
               {visible.length === 0 ? (
                 <EmptyState>
                   {orders.length === 0 && !debouncedSearch
-                    ? 'Nenhum pedido ainda. Os pedidos chegam pelo app dos restaurantes.'
+                    ? 'Nenhum pedido ainda. Os pedidos chegam pelo app.'
                     : 'Nenhum pedido encontrado com esse filtro.'}
                 </EmptyState>
               ) : null}

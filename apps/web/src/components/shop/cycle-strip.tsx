@@ -134,7 +134,7 @@ export function HowItWorksSheet({
               quantidade mínima
             </Rule>
             <Rule icon={<Phone className='size-[18px]' />}>
-              No fim, você se identifica <strong>só com o telefone</strong> do restaurante
+              No fim, você se identifica <strong>só com o telefone</strong>
             </Rule>
             <Rule icon={<Scale className='size-[18px]' />}>
               O total é <strong>estimado</strong>: itens por kg seguem o peso real na entrega

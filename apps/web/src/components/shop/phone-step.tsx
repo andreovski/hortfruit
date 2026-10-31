@@ -23,7 +23,7 @@ export function PhoneField({
     <section aria-labelledby='fone-titulo' className={`${cardClass} flex flex-col gap-3 p-4`}>
       <div className='flex flex-col gap-0.5'>
         <h2 id='fone-titulo' className='m-0 font-display text-lg font-semibold text-brand'>
-          Telefone do restaurante
+          Telefone
         </h2>
         <p className='m-0 text-[13px] text-ink-2'>
           É com ele que achamos o seu cadastro. Não precisa de senha.
@@ -127,7 +127,7 @@ export function PhoneNotFound({
         <a
           href={whatsappLink(
             whatsapp,
-            `Olá! Quero fazer o cadastro do meu restaurante para pedir pela Morro Verde. Meu telefone é ${formatPhone(phone)}.`
+            `Olá! Quero fazer o meu cadastro para pedir pela Morro Verde. Meu telefone é ${formatPhone(phone)}.`
           )}
           target='_blank'
           rel='noopener noreferrer'

@@ -13,6 +13,7 @@ import { Check, MapPin, MessageCircle, Pencil, StickyNote, Truck, Undo2, User } 
 import { useState } from 'react';
 import { toast } from 'sonner';
 
+import { ProductImage } from '@/components/product-image';
 import { useOrder, useSetOrderStatus } from '@/features/admin/orders';
 
 import { ConfirmDialog } from '../ConfirmDialog';
@@ -64,7 +65,7 @@ function OrderDetail({ order }: { order: AdminOrderDetail }) {
 
       {order.editedAt ? (
         <Banner tone='info' icon={<Pencil aria-hidden className='size-4 flex-none' />}>
-          Alterado pelo restaurante em {formatDateTime(order.editedAt)}
+          Alterado pelo cliente em {formatDateTime(order.editedAt)}
         </Banner>
       ) : null}
 
@@ -111,13 +112,7 @@ function OrderDetail({ order }: { order: AdminOrderDetail }) {
         <ul className='m-0 list-none p-0'>
           {order.items.map((item) => (
             <li key={item.productId} className='flex items-center gap-3 border-b border-line-soft py-2.5'>
-              <span
-                aria-hidden
-                className='flex size-9 flex-none items-center justify-center rounded-[10px]'
-                style={{ background: item.color }}
-              >
-                <img src={item.imageUrl} alt='' className='size-7 object-contain' />
-              </span>
+              <ProductImage product={item} className='size-9 flex-none rounded-[10px]' imageClassName='size-7' />
               <span className='flex min-w-0 flex-1 flex-col'>
                 <span className='font-semibold'>{item.name}</span>
                 <span className='text-xs text-ink-2'>
@@ -147,7 +142,7 @@ function Timeline({ order }: { order: AdminOrderDetail }) {
     ['Confirmado', order.confirmedAt],
     ['Entregue', order.deliveredAt],
     [
-      order.canceledBy === 'CUSTOMER' ? 'Cancelado pelo restaurante' : 'Cancelado',
+      order.canceledBy === 'CUSTOMER' ? 'Cancelado pelo cliente' : 'Cancelado',
       order.canceledAt,
     ],
   ];
@@ -226,8 +221,8 @@ function OrderActions({ order }: { order: AdminOrderDetail }) {
       {order.status === 'CANCELADO' ? (
         <p className='m-0 rounded-xl bg-cream px-3.5 py-3 text-sm text-ink-3'>
           {order.canceledBy === 'CUSTOMER'
-            ? 'Cancelado pelo restaurante no app, antes do fechamento.'
-            : 'Pedido cancelado pela Morro Verde. O restaurante vê este status em Meus pedidos.'}
+            ? 'Cancelado pelo cliente no app, antes do fechamento.'
+            : 'Pedido cancelado pela Morro Verde. O cliente vê este status em Meus pedidos.'}
         </p>
       ) : null}
 
@@ -235,7 +230,7 @@ function OrderActions({ order }: { order: AdminOrderDetail }) {
         open={confirmCancel}
         onOpenChange={setConfirmCancel}
         title={`Cancelar o pedido #${order.number}?`}
-        description='O restaurante verá o status "Cancelado" em Meus pedidos.'
+        description='O cliente verá o status "Cancelado" em Meus pedidos.'
         confirmLabel='Sim, cancelar'
         tone='danger'
         loading={busy && pending === 'CANCELADO'}

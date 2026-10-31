@@ -2,6 +2,7 @@ import { generateUploadButton } from '@uploadthing/react';
 import { Check } from 'lucide-react';
 import { toast } from 'sonner';
 
+import { ProductImage } from '@/components/product-image';
 import { ILLUSTRATIONS } from '@/lib/illustrations';
 import { cn } from '@/lib/utils';
 
@@ -18,18 +19,17 @@ export function ImagePicker({
   value: string;
   color: string;
   uploadsEnabled: boolean;
-  onPick: (url: string, color?: string) => void;
+  /** `uploaded`: foto que acabou de ser enviada ao UploadThing. */
+  onPick: (url: string, color?: string, uploaded?: boolean) => void;
 }) {
   return (
     <div className='flex flex-col gap-3'>
       <div className='flex items-center gap-3'>
-        <span
-          aria-hidden
-          className='flex size-16 flex-none items-center justify-center overflow-hidden rounded-2xl'
-          style={{ background: color }}
-        >
-          {value ? <img src={value} alt='' className='size-12 object-contain' /> : null}
-        </span>
+        <ProductImage
+          product={{ imageUrl: value, color }}
+          className='size-16 flex-none rounded-2xl'
+          imageClassName='size-12'
+        />
         {uploadsEnabled ? (
           <UploadButton
             endpoint='productImage'
@@ -37,7 +37,7 @@ export function ImagePicker({
               const file = res?.[0] as { serverData?: { url?: string } | null; ufsUrl?: string } | undefined;
               const url = file?.serverData?.url ?? file?.ufsUrl;
               if (url) {
-                onPick(url);
+                onPick(url, undefined, true);
                 toast.success('Foto enviada.');
               }
             }}

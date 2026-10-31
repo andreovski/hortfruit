@@ -23,10 +23,7 @@ export function AdminsSettings() {
   function toggle(admin: AdminUser) {
     update.mutate(
       { id: admin.id, body: { active: !admin.active } },
-      {
-        onSuccess: () =>
-          toast.success(admin.active ? `${admin.name} desativado.` : `${admin.name} ativado.`),
-      }
+      { onSuccess: () => toast.success(admin.active ? `${admin.name} desativado.` : `${admin.name} ativado.`) }
     );
   }
 
@@ -62,32 +59,18 @@ export function AdminsSettings() {
                     {self ? <span className='font-normal text-ink-2'> (você)</span> : null}
                   </span>
                   <span className='text-[13px] [overflow-wrap:anywhere] text-ink-2'>
-                    {[admin.email, admin.phone ? formatPhone(admin.phone) : null]
-                      .filter(Boolean)
-                      .join(' · ')}
+                    {[admin.email, admin.phone ? formatPhone(admin.phone) : null].filter(Boolean).join(' · ')}
                   </span>
                 </div>
-                <Pill tone={admin.active ? 'green' : 'gray'}>
-                  {admin.active ? 'Ativo' : 'Inativo'}
-                </Pill>
-                <Button
-                  variant='ghost'
-                  onClick={() => setPasswordFor(admin)}
-                  aria-label={`Trocar senha de ${admin.name}`}
-                >
+                <Pill tone={admin.active ? 'green' : 'gray'}>{admin.active ? 'Ativo' : 'Inativo'}</Pill>
+                <Button variant='ghost' onClick={() => setPasswordFor(admin)} aria-label={`Trocar senha de ${admin.name}`}>
                   <KeyRound aria-hidden className='size-4' />
                   Senha
                 </Button>
                 <Button
                   variant='secondary'
                   disabled={self || lastActive || update.isPending}
-                  title={
-                    self
-                      ? 'Você não pode desativar a si mesmo.'
-                      : lastActive
-                        ? 'É o último administrador ativo.'
-                        : undefined
-                  }
+                  title={self ? 'Você não pode desativar a si mesmo.' : lastActive ? 'É o último administrador ativo.' : undefined}
                   onClick={() => toggle(admin)}
                 >
                   {admin.active ? 'Desativar' : 'Ativar'}
@@ -107,9 +90,7 @@ export function AdminsSettings() {
         title='Trocar senha'
         description={passwordFor?.name}
       >
-        {passwordFor ? (
-          <PasswordForm admin={passwordFor} onDone={() => setPasswordFor(null)} />
-        ) : null}
+        {passwordFor ? <PasswordForm admin={passwordFor} onDone={() => setPasswordFor(null)} /> : null}
       </FormDialog>
     </SettingsCard>
   );
@@ -149,25 +130,14 @@ function AddAdminForm({ onDone }: { onDone: () => void }) {
     });
   }
 
-  const input = (
-    key: keyof typeof form,
-    label: string,
-    extra: Partial<React.ComponentProps<'input'>> = {}
-  ) => (
-    <Field
-      id={`adm-${key}`}
-      label={label}
-      error={errors[key]}
-      required={key === 'name' || key === 'password'}
-    >
+  const input = (key: keyof typeof form, label: string, extra: Partial<React.ComponentProps<'input'>> = {}) => (
+    <Field id={`adm-${key}`} label={label} error={errors[key]} required={key === 'name' || key === 'password'}>
       <input
         id={`adm-${key}`}
         value={form[key]}
         aria-invalid={!!errors[key]}
         aria-describedby={errors[key] ? `adm-${key}-error` : undefined}
-        onChange={(e) =>
-          set(key, key === 'phone' ? maskPhoneInput(e.target.value) : e.target.value)
-        }
+        onChange={(e) => set(key, key === 'phone' ? maskPhoneInput(e.target.value) : e.target.value)}
         className={inputClass}
         {...extra}
       />
@@ -177,19 +147,14 @@ function AddAdminForm({ onDone }: { onDone: () => void }) {
   return (
     <form noValidate onSubmit={submit} className='flex flex-col gap-3'>
       {apiError ? (
-        <p
-          role='alert'
-          className='m-0 rounded-xl bg-danger-100 px-3.5 py-3 text-sm text-danger-ink'
-        >
+        <p role='alert' className='m-0 rounded-xl bg-danger-100 px-3.5 py-3 text-sm text-danger-ink'>
           {apiError}
         </p>
       ) : null}
       {input('name', 'Nome', { autoComplete: 'off' })}
       {input('email', 'E-mail', { type: 'email', autoComplete: 'off' })}
       {input('phone', 'Telefone', { type: 'tel', inputMode: 'tel', autoComplete: 'off' })}
-      <p className='m-0 text-xs text-ink-2'>
-        Informe e-mail ou telefone (ou os dois): é com ele que a pessoa entra.
-      </p>
+      <p className='m-0 text-xs text-ink-2'>Informe e-mail ou telefone (ou os dois): é com ele que a pessoa entra.</p>
       {input('password', 'Senha', { type: 'password', autoComplete: 'new-password' })}
       <div className='grid grid-cols-2 gap-2 pt-1'>
         <DialogClose asChild>

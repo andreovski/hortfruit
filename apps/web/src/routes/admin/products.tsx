@@ -19,13 +19,9 @@ import {
   PageHeader,
   TableSkeleton,
 } from '@/components/admin/ui';
+import { ProductImage } from '@/components/product-image';
 import { usePriceDrafts } from '@/features/admin/price-drafts';
-import {
-  DRAFT_MUTATION_KEY,
-  usePatchDraft,
-  useProducts,
-  usePublish,
-} from '@/features/admin/products';
+import { DRAFT_MUTATION_KEY, usePatchDraft, useProducts, usePublish } from '@/features/admin/products';
 import { useSettings } from '@/features/admin/settings';
 import { useCurrentWeek } from '@/features/admin/week';
 
@@ -64,8 +60,7 @@ export function ProductsPage() {
   const changedCount = query.data?.changedCount ?? 0;
   const invalidCount = prices.invalidIds.size;
   // Sem semana aberta dá para publicar sem mudanças: é o que reabre os pedidos.
-  const blocked =
-    !query.data || !weekQuery.data || invalidCount > 0 || (weekOpen && changedCount === 0);
+  const blocked = !query.data || !weekQuery.data || invalidCount > 0 || (weekOpen && changedCount === 0);
   const filterDef = FILTERS.find((f) => f.value === filter)!;
   const visible = active.filter(filterDef.test);
 
@@ -102,9 +97,7 @@ export function ProductsPage() {
         {changedCount > 0 ? (
           <span className='inline-flex items-center gap-2 text-sm font-semibold text-amber-ink'>
             <span aria-hidden className='size-2 rounded-full bg-amber' />
-            {changedCount === 1
-              ? '1 alteração não publicada'
-              : `${changedCount} alterações não publicadas`}
+            {changedCount === 1 ? '1 alteração não publicada' : `${changedCount} alterações não publicadas`}
           </span>
         ) : null}
         <Button variant='secondary' onClick={() => setEditing({ product: null })}>
@@ -118,21 +111,12 @@ export function ProductsPage() {
       </PageHeader>
 
       {publishedNow ? (
-        <Banner
-          role='status'
-          tone='success'
-          icon={<CircleCheck aria-hidden className='size-5 flex-none' />}
-        >
-          <strong>Lista publicada.</strong> Os restaurantes já veem os novos preços e a
-          disponibilidade.
+        <Banner role='status' tone='success' icon={<CircleCheck aria-hidden className='size-5 flex-none' />}>
+          <strong>Lista publicada.</strong> Os clientes já veem os novos preços e a disponibilidade.
         </Banner>
       ) : null}
       {invalidCount > 0 ? (
-        <Banner
-          role='alert'
-          tone='danger'
-          icon={<TriangleAlert aria-hidden className='size-5 flex-none' />}
-        >
+        <Banner role='alert' tone='danger' icon={<TriangleAlert aria-hidden className='size-5 flex-none' />}>
           Corrija os preços em vermelho antes de publicar.
         </Banner>
       ) : null}
@@ -178,9 +162,7 @@ export function ProductsPage() {
               />
               {visible.length === 0 ? (
                 <EmptyState>
-                  {active.length === 0
-                    ? 'Nenhum produto cadastrado.'
-                    : 'Nenhum produto com esse filtro.'}
+                  {active.length === 0 ? 'Nenhum produto cadastrado.' : 'Nenhum produto com esse filtro.'}
                 </EmptyState>
               ) : null}
             </>
@@ -189,19 +171,17 @@ export function ProductsPage() {
       </Card>
 
       <p className='m-0 text-[13px] text-ink-2'>
-        As alterações só aparecem para os restaurantes depois de publicar. Produtos em falta
-        continuam visíveis no app, sem opção de pedido.
+        As alterações só aparecem para os clientes depois de publicar. Produtos em falta continuam visíveis no
+        app, sem opção de pedido.
       </p>
 
-      {archived.length > 0 ? (
-        <ArchivedList products={archived} onEdit={(product) => setEditing({ product })} />
-      ) : null}
+      {archived.length > 0 ? <ArchivedList products={archived} onEdit={(product) => setEditing({ product })} /> : null}
 
       <ConfirmDialog
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title='Publicar lista da semana?'
-        description='Os restaurantes passam a ver os novos preços, a disponibilidade e os selos agora.'
+        description='Os clientes passam a ver os novos preços, a disponibilidade e os selos agora.'
         confirmLabel={savingDrafts ? 'Salvando…' : 'Publicar'}
         loading={publish.isPending || savingDrafts}
         onConfirm={() => doPublish()}
@@ -220,9 +200,7 @@ export function ProductsPage() {
         open={!!editing}
         onOpenChange={(open) => !open && setEditing(null)}
         title={editing?.product ? 'Editar produto' : 'Novo produto'}
-        description={
-          editing?.product ? editing.product.name : 'Aparece no app depois de publicar a lista.'
-        }
+        description={editing?.product ? editing.product.name : 'Aparece no app depois de publicar a lista.'}
       >
         {editing ? (
           <ProductForm
@@ -237,13 +215,7 @@ export function ProductsPage() {
   );
 }
 
-function ArchivedList({
-  products,
-  onEdit,
-}: {
-  products: AdminProduct[];
-  onEdit: (p: AdminProduct) => void;
-}) {
+function ArchivedList({ products, onEdit }: { products: AdminProduct[]; onEdit: (p: AdminProduct) => void }) {
   return (
     <details className='group rounded-card border border-line bg-surface'>
       <summary className='flex min-h-11 cursor-pointer list-none items-center gap-2 px-5 py-3 font-semibold text-ink-3'>
@@ -254,13 +226,7 @@ function ArchivedList({
       <ul className='m-0 list-none p-0'>
         {products.map((p) => (
           <li key={p.id} className='flex items-center gap-3 border-t border-line-soft px-5 py-2'>
-            <span
-              aria-hidden
-              className='flex size-10 flex-none items-center justify-center rounded-[10px] opacity-60'
-              style={{ background: p.color }}
-            >
-              <img src={p.imageUrl} alt='' className='size-8 object-contain' />
-            </span>
+            <ProductImage product={p} className='size-10 flex-none rounded-[10px] opacity-60' imageClassName='size-8' />
             <span className='flex-1 font-semibold text-ink-3'>{p.name}</span>
             <Button variant='ghost' onClick={() => onEdit(p)} aria-label={`Editar ${p.name}`}>
               <Pencil aria-hidden className='size-4' />
