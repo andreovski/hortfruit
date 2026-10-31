@@ -6,7 +6,7 @@ O Hortifruit roda em dois serviços e um banco, no projeto `hortifruit` do Railw
 | ---------------- | ------------------------------------------------------------------------------------------ | ------------------------------ |
 | `hortifruit-api` | API Fastify + Prisma                                                                       | `node apps/api/dist/server.js` |
 | `hortifruit-web` | SPA (Vite) servida por `apps/web/server.mjs`, que repassa `/api/*` para a API pela rede privada | `node apps/web/server.mjs`     |
-| `Postgres`       | Postgres 17, criado pelo painel                                                            | —                              |
+| `Postgres`       | Postgres 18, criado pelo painel                                                            | —                              |
 
 A configuração dos dois serviços está em `.railway/railway.ts` (Railway IaC) e só muda com
 `railway config plan` → `railway config apply`. O código vai para produção a cada push na `main`;
@@ -19,7 +19,7 @@ de primeira parte.
 
 ## 1. Primeira vez
 
-1. Crie o projeto `hortifruit` no Railway e, nele, um **Postgres 17** pelo painel (nome `Postgres`).
+1. Crie o projeto `hortifruit` no Railway e, nele, um **Postgres 18** pelo painel (nome `Postgres`).
 2. Na raiz do repositório: `pnpm install`, `pnpm exec railway login`, `pnpm exec railway link`
    (escolha o projeto).
 3. `pnpm exec railway config plan` e, se o plano criar os dois serviços, `pnpm exec railway config apply`.

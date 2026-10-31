@@ -23,7 +23,7 @@ Escopo em [`docs/escopo.md`](docs/escopo.md); telas do protótipo em `docs/proto
 
 ```bash
 pnpm install
-docker compose up -d                       # Postgres 17 na porta 5432
+docker compose up -d                       # Postgres 18 na porta 5432
 cp apps/api/.env.example apps/api/.env     # e preencha OWNER_* e WHATSAPP_NUMBER
 pnpm --filter=api... run build             # os pacotes exportam de dist/
 pnpm --filter api exec prisma migrate deploy
