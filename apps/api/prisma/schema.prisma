@@ -1,0 +1,179 @@
+// Morro Verde Hortifruti. Dinheiro em centavos inteiros; quantidades inteiras na unidade de venda.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Quem entra no painel (com senha). Login por e-mail OU telefone.
+model Admin {
+  id           String   @id @default(uuid())
+  name         String
+  email        String?  @unique
+  /// Só dígitos, DDD + número.
+  phone        String?  @unique
+  passwordHash String   @map("password_hash")
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  @@map("admins")
+}
+
+/// Restaurante. O telefone é a chave de identificação no app (sem login).
+model Customer {
+  id           String   @id @default(uuid())
+  name         String
+  contactName  String?  @map("contact_name")
+  /// Só dígitos, DDD + número. Único.
+  phone        String   @unique
+  cnpj         String?
+  email        String?
+  /// Rua e número (um endereço de entrega por cliente).
+  address      String
+  neighborhood String?
+  city         String?
+  notes        String?
+  active       Boolean  @default(true)
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
+
+  orders Order[]
+
+  @@map("customers")
+}
+
+enum Category {
+  LEGUMES
+  FRUTAS
+  VERDURAS
+  OUTROS
+}
+
+enum Badge {
+  DESTAQUE
+  NOVO
+}
+
+/// Produto. Os campos `draft*` são o que o ADM edita; `published*` é o que o app mostra, copiado
+/// na publicação da lista da semana.
+model Product {
+  id              String   @id @default(uuid())
+  name            String
+  category        Category
+  /// kg | saco | un | caixa | maco | duzia | bandeja
+  unit            String
+  /// Forma de venda por extenso: "Quilo", "Saco 20 kg".
+  saleDescription String   @map("sale_description")
+  minQuantity     Int      @map("min_quantity")
+  imageUrl        String   @map("image_url")
+  color           String
+  description     String?
+  sortOrder       Int      @default(0) @map("sort_order")
+  archived        Boolean  @default(false)
+
+  draftPriceCents Int     @map("draft_price_cents")
+  draftAvailable  Boolean @default(true) @map("draft_available")
+  draftBadge      Badge?  @map("draft_badge")
+
+  publishedPriceCents Int?    @map("published_price_cents")
+  publishedAvailable  Boolean @default(false) @map("published_available")
+  publishedBadge      Badge?  @map("published_badge")
+  /// Preço publicado antes da última publicação (variação na tabela do ADM).
+  previousPriceCents  Int?    @map("previous_price_cents")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  orderItems OrderItem[]
+
+  @@map("products")
+}
+
+/// Semana de vendas: o ADM abre (publicando a lista) e ela fecha sozinha em `closesAt`
+/// (quinta 12h) ou à mão (`closedAt`).
+model Week {
+  id           String    @id @default(uuid())
+  deliveryDate DateTime  @map("delivery_date") @db.Date
+  closesAt     DateTime  @map("closes_at")
+  closedAt     DateTime? @map("closed_at")
+  openedAt     DateTime  @default(now()) @map("opened_at")
+
+  orders Order[]
+
+  @@map("weeks")
+}
+
+enum OrderStatus {
+  NOVO
+  CONFIRMADO
+  ENTREGUE
+  CANCELADO
+}
+
+enum Actor {
+  CUSTOMER
+  ADMIN
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  /// Número que o restaurante e o ADM veem (#1001, #1002...).
+  number     Int         @unique @default(autoincrement())
+  /// Segredo do link /pedido/:token (sem login). Nunca vai para listagens do ADM.
+  token      String      @unique
+  customerId String      @map("customer_id")
+  weekId     String      @map("week_id")
+  status     OrderStatus @default(NOVO)
+  note       String?
+  totalCents Int         @map("total_cents")
+
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  /// Última edição feita pelo cliente depois de enviar.
+  editedAt    DateTime? @map("edited_at")
+  confirmedAt DateTime? @map("confirmed_at")
+  deliveredAt DateTime? @map("delivered_at")
+  canceledAt  DateTime? @map("canceled_at")
+  canceledBy  Actor?    @map("canceled_by")
+
+  customer Customer    @relation(fields: [customerId], references: [id])
+  week     Week        @relation(fields: [weekId], references: [id])
+  items    OrderItem[]
+
+  @@index([weekId, status])
+  @@index([customerId])
+  @@map("orders")
+}
+
+/// Item com o preço e o nome do momento do pedido (mudar o produto depois não mexe no pedido).
+model OrderItem {
+  id             String @id @default(uuid())
+  orderId        String @map("order_id")
+  productId      String @map("product_id")
+  name           String
+  unit           String
+  quantity       Int
+  unitPriceCents Int    @map("unit_price_cents")
+  subtotalCents  Int    @map("subtotal_cents")
+
+  order   Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product Product @relation(fields: [productId], references: [id])
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+/// Ajustes do painel (uma linha só, id = 1).
+model Setting {
+  id            Int      @id @default(1)
+  minOrderCents Int      @default(20000) @map("min_order_cents")
+  publishedAt   DateTime? @map("published_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@map("settings")
+}

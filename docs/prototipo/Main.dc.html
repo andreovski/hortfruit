@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Produtos da semana</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#0B4A24}a:hover{color:#003818}
+button{font:inherit}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #F6F3EA; color: #14261A; font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.4">
+
+<div style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 150px; box-sizing: border-box">
+
+<header style="position: sticky; top: 0; z-index: 5; background: #F6F3EA; padding: 14px 16px 12px; display: flex; align-items: center; gap: 12px">
+<div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex: none; position: relative">
+<img src="/_blob/68b6b6b261938bb0badd6d3edf3ed918" alt="Morro Verde Hortifruti" style="position: absolute; width: 56px; height: 56px; left: -6px; top: -6px">
+</div>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+<span style="font-size: 11px; font-weight: 700; letter-spacing: 0.08em; color: #3D7A47">CLIENTE</span>
+<span style="font-family: Outfit, sans-serif; font-weight: 600; font-size: 17px; color: #003818; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{cliente.nome}}</span>
+<span style="font-size: 12px; color: #56665A">{{cliente.fone}}</span>
+</div>
+<button onClick="{{abrirHistorico}}" aria-label="Meus pedidos" style="width: 44px; height: 44px; flex: none; border-radius: 50%; background: #FFFFFF; border: 1px solid #E4E0D4; box-sizing: border-box; color: #003818; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>
+</button>
+<a href="{{waDuvida}}" target="_blank" rel="noopener" aria-label="Falar no WhatsApp" style="width: 44px; height: 44px; border-radius: 50%; background: #FFFFFF; border: 1px solid #E4E0D4; box-sizing: border-box; color: #003818; display: flex; align-items: center; justify-content: center; text-decoration: none">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>
+</a>
+</header>
+
+<main style="padding: 4px 16px 16px; display: flex; flex-direction: column; gap: 16px">
+
+<button onClick="{{abrirRegras}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 12px; border-radius: 14px; border: 1px solid #CFE5CE; background: #E3F1E2; color: #14261A; text-align: left; cursor: pointer">
+<span aria-hidden="true" style="width: 10px; height: 10px; border-radius: 50%; background: #3D8A4A; flex: none; box-shadow: 0 0 0 4px #CFE5CE"></span>
+<span style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+<span style="font-size: 13px; font-weight: 700; color: #003818">Aceitando pedidos até qui, 12h</span>
+<span style="font-size: 12px; color: #2E5A3A">Faltam {{cdTexto}} · entrega sex, 06/11</span>
+</span>
+<span style="display: flex; align-items: center; gap: 2px; font-size: 12px; font-weight: 600; color: #0B4A24; flex: none">Regras<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></span>
+</button>
+
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h1 style="margin: 0; font-family: Outfit, sans-serif; font-size: 26px; font-weight: 600; color: #003818; line-height: 1.15">Produtos da semana</h1>
+<span style="font-size: 13px; color: #56665A">Preços atualizados em 02/11 · {{qtdProdutos}} itens</span>
+</div>
+
+<div role="group" aria-label="Filtrar produtos" style="display: flex; gap: 8px">
+<sc-for list="{{filtros}}" as="f" hint-placeholder-count="3">
+<button aria-pressed="{{f.pressed}}" onClick="{{f.pick}}" style="min-height: 40px; padding: 0 16px; border-radius: 999px; font-weight: 600; font-size: 14px; cursor: pointer; border: 1px solid {{f.borda}}; background: {{f.fundo}}; color: {{f.cor}}">{{f.label}}</button>
+</sc-for>
+</div>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{produtos}}" as="p" hint-placeholder-count="6">
+<article style="background: #FFFFFF; border: 1.5px solid {{p.borda}}; border-radius: 20px; padding: 6px 6px 8px; display: flex; flex-direction: column; gap: 10px; opacity: {{p.cardOp}}">
+<button onClick="{{p.abrir}}" style="border: 0; background: transparent; padding: 0; margin: 0; width: 100%; text-align: left; color: inherit; display: flex; flex-direction: column; gap: 8px; cursor: pointer">
+<span style="position: relative; display: flex; align-items: center; justify-content: center; height: 136px; border-radius: 15px; background: {{p.bg}}">
+<img src="{{p.img}}" alt="" style="width: 108px; height: 108px">
+<sc-if value="{{p.temSelo}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; top: 8px; left: 8px; font-size: 11px; font-weight: 700; background: #FFFFFF; color: #7A4300; padding: 3px 8px; border-radius: 999px">{{p.selo}}</span>
+</sc-if>
+<sc-if value="{{p.emFalta}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; top: 8px; left: 8px; font-size: 11px; font-weight: 700; background: #FFFFFF; color: #4F4F48; padding: 3px 8px; border-radius: 999px">Em falta</span>
+</sc-if>
+</span>
+<span style="display: flex; flex-direction: column; gap: 1px; padding: 0 6px">
+<span style="font-family: Outfit, sans-serif; font-weight: 600; font-size: 16px; line-height: 1.2; color: #14261A">{{p.nome}}</span>
+<span style="font-size: 12px; color: #56665A">{{p.minLabel}}</span>
+<span style="display: flex; align-items: baseline; gap: 4px; margin-top: 4px">
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 18px; color: #003818">{{p.precoFmt}}</span>
+<span style="font-size: 12px; color: #56665A">{{p.sufixo}}</span>
+</span>
+</span>
+</button>
+<sc-if value="{{p.livre}}" hint-placeholder-val="{{true}}">
+<button onClick="{{p.add}}" aria-label="{{p.addAria}}" style="min-height: 44px; border-radius: 12px; border: 0; background: #E3F1E2; color: #003818; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Adicionar</button>
+</sc-if>
+<sc-if value="{{p.noCarrinho}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; align-items: center; justify-content: space-between; background: #003818; border-radius: 12px">
+<button onClick="{{p.dec}}" aria-label="{{p.decLabel}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>
+<span aria-live="polite" style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 15px; color: #FFFFFF; white-space: nowrap">{{p.qtdLabel}}</span>
+<button onClick="{{p.inc}}" aria-label="{{p.incLabel}}" style="width: 44px; height: 44px; border: 0; background: transparent; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+</sc-if>
+<sc-if value="{{p.emFalta}}" hint-placeholder-val="{{false}}">
+<div style="min-height: 44px; border-radius: 12px; background: #EEEDE7; color: #4F4F48; display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 14px">Indisponível</div>
+</sc-if>
+</article>
+</sc-for>
+</div>
+
+<p style="margin: 8px 0 0; font-size: 13px; color: #56665A; text-align: center">Preços válidos até quinta, 05/11, às 12h.<br>Itens por kg são cobrados pelo peso real.</p>
+</main>
+</div>
+
+<sc-if value="{{mostrarBarra}}" hint-placeholder-val="{{true}}">
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 10px 16px 16px; background: #F6F3EA; border-top: 1px solid #E4E0D4; z-index: 10; display: flex; flex-direction: column; gap: 8px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<div style="display: flex; justify-content: space-between; font-size: 12px; color: #2E5A3A"><span>{{progressoTexto}}</span><span>mín. {{minimoFmt}}</span></div>
+<div aria-hidden="true" style="height: 6px; border-radius: 999px; background: #DCD8CB; overflow: hidden"><div style="height: 100%; border-radius: 999px; background: {{barraCor}}; width: {{pct}}%"></div></div>
+</div>
+<button onClick="{{abrir}}" style="min-height: 56px; border-radius: 16px; border: 0; background: #003818; color: #FFFFFF; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; cursor: pointer">
+<span style="display: flex; flex-direction: column; align-items: flex-start"><span style="font-size: 12px; color: #B8DDB9">{{itensLabel}}</span><span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 18px">{{totalFmt}}</span></span>
+<span style="display: flex; align-items: center; gap: 6px; font-weight: 700">Ver pedido<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"></path></svg></span>
+</button>
+</div>
+</sc-if>
+
+<sc-if value="{{detalheAberto}}" hint-placeholder-val="{{false}}">
+<div role="dialog" aria-modal="true" aria-labelledby="det-nome" style="position: absolute; inset: 0; z-index: 30; background: #F6F3EA">
+<div style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 110px; box-sizing: border-box">
+<div style="position: relative; height: 300px; background: {{d.bg}}; border-radius: 0 0 28px 28px; display: flex; align-items: center; justify-content: center">
+<img src="{{d.img}}" alt="{{d.alt}}" style="width: 216px; height: 216px; margin-top: 16px">
+<button onClick="{{fecharDetalhe}}" aria-label="Voltar para a lista" style="position: absolute; top: 14px; left: 16px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: #FFFFFF; color: #14261A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<sc-if value="{{d.temSelo}}" hint-placeholder-val="{{false}}">
+<span style="position: absolute; top: 24px; right: 16px; font-size: 12px; font-weight: 700; background: #FFFFFF; color: #7A4300; padding: 4px 10px; border-radius: 999px">{{d.selo}}</span>
+</sc-if>
+</div>
+
+<div style="padding: 20px 16px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 13px; font-weight: 600; color: #3D7A47; letter-spacing: 0.04em">{{d.categoria}}</span>
+<h1 id="det-nome" style="margin: 0; font-family: Outfit, sans-serif; font-size: 30px; font-weight: 600; color: #003818; line-height: 1.1">{{d.nome}}</h1>
+<div style="display: flex; align-items: baseline; gap: 6px; margin-top: 6px">
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 28px; color: #003818">{{d.precoFmt}}</span>
+<span style="color: #56665A">{{d.sufixo}}</span>
+</div>
+</div>
+
+<sc-if value="{{d.emFalta}}" hint-placeholder-val="{{false}}">
+<div style="background: #EEEDE7; color: #3F3F39; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-weight: 700">Em falta esta semana</span>
+<span style="font-size: 14px">Ele volta assim que tiver na lista. Dúvidas? Fale com a gente pelo WhatsApp.</span>
+</div>
+</sc-if>
+
+<sc-if value="{{d.disponivel}}" hint-placeholder-val="{{true}}">
+<section aria-labelledby="qtd-titulo" style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 14px">
+<div style="display: flex; justify-content: space-between; align-items: baseline">
+<h2 id="qtd-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 18px; font-weight: 600; color: #003818">Quantidade</h2>
+<span style="font-size: 13px; color: #56665A">{{d.minLabel}}</span>
+</div>
+<div style="display: flex; align-items: center; justify-content: space-between; gap: 12px">
+<button onClick="{{d.dec}}" disabled="{{d.decBloq}}" aria-label="Diminuir quantidade" style="width: 52px; height: 52px; border-radius: 16px; border: 1.5px solid {{d.decBorda}}; background: #FFFFFF; color: {{d.decCor}}; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14"></path></svg></button>
+<span aria-live="polite" style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 30px; color: #003818">{{d.qtdLabel}}</span>
+<button onClick="{{d.inc}}" aria-label="Aumentar quantidade" style="width: 52px; height: 52px; border-radius: 16px; border: 0; background: #003818; color: #FFFFFF; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg></button>
+</div>
+<div role="group" aria-label="Quantidades rápidas" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
+<sc-for list="{{d.atalhos}}" as="a" hint-placeholder-count="3">
+<button onClick="{{a.pick}}" aria-pressed="{{a.pressed}}" style="min-height: 44px; border-radius: 12px; font-weight: 600; font-size: 14px; cursor: pointer; border: 1px solid {{a.borda}}; background: {{a.fundo}}; color: {{a.cor}}">{{a.label}}</button>
+</sc-for>
+</div>
+<div style="display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid #EFECE3; padding-top: 12px">
+<span style="color: #56665A">Subtotal estimado</span>
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 20px; color: #003818">{{d.subtotal}}</span>
+</div>
+</section>
+</sc-if>
+
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D7A47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8-4 8 4-8 4z"></path><path d="M4 8v8l8 4 8-4V8"></path></svg>
+<span style="font-size: 12px; color: #56665A">Vendido por</span>
+<span style="font-weight: 600">{{d.vendidoPor}}</span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D7A47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg>
+<span style="font-size: 12px; color: #56665A">Mínimo do item</span>
+<span style="font-weight: 600">{{d.minCurto}}</span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D7A47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+<span style="font-size: 12px; color: #56665A">Pedidos até</span>
+<span style="font-weight: 600">qui, 05/11 · 12h</span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 16px; padding: 12px; display: flex; flex-direction: column; gap: 6px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D7A47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"></path><path d="M14 10h4l3 3v3h-7"></path><circle cx="7" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg>
+<span style="font-size: 12px; color: #56665A">Entrega</span>
+<span style="font-weight: 600">sex, 06/11</span>
+</div>
+</div>
+
+<section aria-labelledby="sobre-titulo" style="display: flex; flex-direction: column; gap: 6px">
+<h2 id="sobre-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 18px; font-weight: 600; color: #003818">Sobre o produto</h2>
+<p style="margin: 0; color: #56665A">[Origem, variedade e classificação a confirmar]</p>
+<sc-if value="{{d.porKg}}" hint-placeholder-val="{{true}}">
+<p style="margin: 0; color: #56665A">Vendido por kg: o valor final segue o peso real na entrega.</p>
+</sc-if>
+</section>
+</div>
+</div>
+
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 16px 16px; background: #F6F3EA; border-top: 1px solid #E4E0D4; display: flex; gap: 10px">
+<sc-if value="{{d.noCarrinho}}" hint-placeholder-val="{{false}}">
+<button onClick="{{d.remover}}" aria-label="Remover do pedido" style="width: 56px; height: 56px; flex: none; border-radius: 16px; border: 1.5px solid #D6D1C2; background: #FFFFFF; color: #4F4F48; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"></path></svg></button>
+</sc-if>
+<sc-if value="{{d.disponivel}}" hint-placeholder-val="{{true}}">
+<button onClick="{{d.confirmar}}" style="flex: 1; min-height: 56px; border-radius: 16px; border: 0; background: #003818; color: #FFFFFF; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; cursor: pointer">
+<span>{{d.acao}}</span><span style="font-family: Outfit, sans-serif">{{d.subtotal}}</span></button>
+</sc-if>
+<sc-if value="{{d.emFalta}}" hint-placeholder-val="{{false}}">
+<button disabled="{{true}}" style="flex: 1; min-height: 56px; border-radius: 16px; border: 0; background: #DCD8CB; color: #4F4F48; font-weight: 700; font-size: 16px">Indisponível esta semana</button>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{historicoAberto}}" hint-placeholder-val="{{false}}">
+<div role="dialog" aria-modal="true" aria-labelledby="hist-titulo" style="position: absolute; inset: 0; z-index: 30; background: #F6F3EA">
+<div style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 24px; box-sizing: border-box">
+<header style="position: sticky; top: 0; z-index: 2; background: #F6F3EA; padding: 14px 16px 12px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #E4E0D4">
+<button onClick="{{fecharHistorico}}" aria-label="Voltar para os produtos" style="width: 44px; height: 44px; flex: none; border-radius: 50%; border: 1px solid #E4E0D4; box-sizing: border-box; background: #FFFFFF; color: #14261A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"></path></svg></button>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+<h1 id="hist-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 22px; font-weight: 600; color: #003818; line-height: 1.15">Meus pedidos</h1>
+<span style="font-size: 13px; color: #56665A; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{cliente.nome}} · {{cliente.fone}}</span>
+</div>
+</header>
+<main style="padding: 16px; display: flex; flex-direction: column; gap: 20px">
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+<div style="background: #003818; color: #FFFFFF; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; color: #B8DDB9">Pedidos entregues</span>
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 26px">{{hist.qtd}}</span>
+<span style="font-size: 12px; color: #B8DDB9">desde set/2026</span>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 2px">
+<span style="font-size: 12px; color: #56665A">Média por pedido</span>
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 26px; color: #003818">{{hist.media}}</span>
+<span style="font-size: 12px; color: #56665A">valores estimados</span>
+</div>
+</div>
+<sc-for list="{{hist.grupos}}" as="g" hint-placeholder-count="2">
+<section style="display: flex; flex-direction: column; gap: 10px">
+<h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 0.06em; color: #56665A">{{g.mes}}</h2>
+<sc-for list="{{g.pedidos}}" as="o" hint-placeholder-count="2">
+<article style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 12px">
+<div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 10px">
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px">
+<span style="font-family: Outfit, sans-serif; font-weight: 600; font-size: 16px; color: #14261A">Entrega {{o.data}}</span>
+<span style="font-size: 13px; color: #56665A">{{o.resumo}}</span>
+</div>
+<span style="flex: none; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; background: {{o.badgeBg}}; color: {{o.badgeCor}}; padding: 4px 10px; border-radius: 999px"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: {{o.badgeDot}}"></span>{{o.status}}</span>
+</div>
+<div style="display: flex; align-items: center; gap: 6px">
+<sc-for list="{{o.thumbs}}" as="t" hint-placeholder-count="4">
+<span aria-hidden="true" style="width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: {{t.bg}}"><img src="{{t.img}}" alt="" style="width: 28px; height: 28px"></span>
+</sc-for>
+<span style="flex: 1"></span>
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 18px; color: #003818">{{o.total}}</span>
+</div>
+<sc-if value="{{o.aberto}}" hint-placeholder-val="{{false}}">
+<div style="border-top: 1px solid #EFECE3; display: flex; flex-direction: column">
+<sc-for list="{{o.linhas}}" as="l" hint-placeholder-count="4">
+<div style="display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid #EFECE3; font-size: 14px">
+<span><strong style="font-weight: 600">{{l.nome}}</strong> <span style="color: #56665A">· {{l.qtd}}</span></span>
+<span style="white-space: nowrap">{{l.sub}}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button onClick="{{o.toggle}}" aria-expanded="{{o.expanded}}" style="min-height: 44px; border-radius: 12px; border: 1px solid #D6D1C2; background: #FFFFFF; color: #14261A; font-weight: 600; font-size: 14px; cursor: pointer">{{o.toggleLabel}}</button>
+<button onClick="{{o.repetir}}" style="min-height: 44px; border-radius: 12px; border: 0; background: #E3F1E2; color: #003818; font-weight: 700; font-size: 14px; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer">
+<svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 14-5.3L20 9"></path><path d="M20 4v5h-5"></path><path d="M20 12a8 8 0 0 1-14 5.3L4 15"></path><path d="M4 20v-5h5"></path></svg>{{o.acaoLabel}}</button>
+</div>
+<sc-if value="{{o.podeCancelar}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0; font-size: 13px; color: #56665A">Você pode editar ou cancelar até qui, 05/11 às 12h.</p>
+<sc-if value="{{o.semConfirmacao}}" hint-placeholder-val="{{true}}">
+<button onClick="{{o.pedirCancelar}}" style="min-height: 44px; border-radius: 12px; border: 1px solid #E2B8B1; background: #FFFFFF; color: #8A1F11; font-weight: 700; font-size: 14px; cursor: pointer">Cancelar pedido</button>
+</sc-if>
+<sc-if value="{{o.confirmando}}" hint-placeholder-val="{{false}}">
+<div role="alert" style="background: #F9E1DE; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 10px">
+<span style="font-size: 14px; color: #6E1A0E"><strong>Cancelar este pedido?</strong> A Morro Verde vê o cancelamento no painel.</span>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+<button onClick="{{o.voltarCancelar}}" style="min-height: 44px; border-radius: 12px; border: 1px solid #D6D1C2; background: #FFFFFF; color: #14261A; font-weight: 600; cursor: pointer">Voltar</button>
+<button onClick="{{o.cancelar}}" style="min-height: 44px; border-radius: 12px; border: 0; background: #8A1F11; color: #FFFFFF; font-weight: 700; cursor: pointer">Sim, cancelar</button>
+</div>
+</div>
+</sc-if>
+</sc-if>
+</article>
+</sc-for>
+</section>
+</sc-for>
+<p style="margin: 0; font-size: 13px; color: #56665A; text-align: center">"Repetir pedido" usa os preços e a disponibilidade desta semana.</p>
+</main>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{regras}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; inset: 0; z-index: 40; display: flex; align-items: flex-end">
+<button onClick="{{fecharRegras}}" aria-label="Fechar regras" style="position: absolute; inset: 0; border: 0; background: rgba(0, 28, 12, 0.5); cursor: pointer"></button>
+<section role="dialog" aria-modal="true" aria-labelledby="regras-titulo" style="position: relative; width: 100%; background: #F6F3EA; border-radius: 24px 24px 0 0; padding: 10px 16px 20px; box-sizing: border-box; display: flex; flex-direction: column; gap: 6px">
+<div aria-hidden="true" style="width: 40px; height: 4px; border-radius: 999px; background: #C9C4B4; margin: 0 auto 6px"></div>
+<div style="display: flex; align-items: center; justify-content: space-between">
+<h2 id="regras-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 22px; font-weight: 600; color: #003818">Como funciona</h2>
+<button onClick="{{fecharRegras}}" aria-label="Fechar" style="width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; color: #14261A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 18px; padding: 4px 14px">
+<div style="display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFECE3">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 10px; background: #E3F1E2; color: #0B4A24; display: flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg></span>
+<span>Pedidos e preços valem até <strong>quinta, 12h</strong></span>
+</div>
+<div style="display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFECE3">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 10px; background: #E3F1E2; color: #0B4A24; display: flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h11v9H3z"></path><path d="M14 10h4l3 3v3h-7"></path><circle cx="7" cy="17.5" r="1.8"></circle><circle cx="17" cy="17.5" r="1.8"></circle></svg></span>
+<span>Entrega <strong>toda sexta-feira</strong></span>
+</div>
+<div style="display: flex; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid #EFECE3">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 10px; background: #E3F1E2; color: #0B4A24; display: flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8-4 8 4-8 4z"></path><path d="M4 8v8l8 4 8-4V8"></path></svg></span>
+<span>Pedido mínimo de <strong>{{minimoFmt}}</strong>, e cada item tem sua quantidade mínima</span>
+</div>
+<div style="display: flex; gap: 12px; align-items: center; padding: 12px 0">
+<span aria-hidden="true" style="width: 32px; height: 32px; border-radius: 10px; background: #E3F1E2; color: #0B4A24; display: flex; align-items: center; justify-content: center; flex: none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-5.5-6-11a6 6 0 0 1 12 0c0 5.5-6 11-6 11z"></path><circle cx="12" cy="10" r="2.2"></circle></svg></span>
+<span>Área de entrega e taxa: <span style="color: #56665A">[a confirmar]</span></span>
+</div>
+</div>
+<p style="margin: 6px 0 0; font-size: 13px; color: #56665A">Monte o pedido aqui e confirme pelo WhatsApp. Não há pagamento no app.</p>
+</section>
+</div>
+</sc-if>
+
+<sc-if value="{{sheet}}" hint-placeholder-val="{{false}}">
+<div style="position: absolute; inset: 0; z-index: 20; display: flex; align-items: flex-end">
+<button onClick="{{fechar}}" aria-label="Fechar resumo" style="position: absolute; inset: 0; border: 0; background: rgba(0, 28, 12, 0.5); cursor: pointer"></button>
+<section role="dialog" aria-modal="true" aria-labelledby="resumo-titulo" style="position: relative; width: 100%; max-height: 90%; background: #F6F3EA; border-radius: 24px 24px 0 0; display: flex; flex-direction: column">
+<div aria-hidden="true" style="width: 40px; height: 4px; border-radius: 999px; background: #C9C4B4; margin: 10px auto 0"></div>
+<sc-if value="{{enviado}}" hint-placeholder-val="{{false}}">
+<div style="padding: 12px 20px 22px; display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+<span aria-hidden="true" style="width: 64px; height: 64px; border-radius: 50%; background: #E3F1E2; color: #003818; display: flex; align-items: center; justify-content: center; margin-top: 8px">
+<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 id="resumo-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 24px; font-weight: 600; color: #003818">Pedido enviado!</h2>
+<span style="color: #56665A">Pedido {{ultimo.numero}} · {{ultimo.itens}} · {{ultimo.total}}</span>
+</div>
+<ol aria-label="Andamento do pedido" style="list-style: none; margin: 0; padding: 14px 10px; width: 100%; box-sizing: border-box; background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 16px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 6px">
+<li style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+<span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 50%; background: #003818; color: #FFFFFF; display: flex; align-items: center; justify-content: center"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg></span>
+<span style="font-size: 13px; font-weight: 700; color: #003818">Recebido</span><span style="font-size: 12px; color: #56665A">agora</span></li>
+<li style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+<span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 50%; border: 2px solid #C9C4B4; box-sizing: border-box; background: #FFFFFF"></span>
+<span style="font-size: 13px; font-weight: 600; color: #3B4A3F">Confirmado</span><span style="font-size: 12px; color: #56665A">pela Morro Verde</span></li>
+<li style="display: flex; flex-direction: column; align-items: center; gap: 6px">
+<span aria-hidden="true" style="width: 28px; height: 28px; border-radius: 50%; border: 2px solid #C9C4B4; box-sizing: border-box; background: #FFFFFF"></span>
+<span style="font-size: 13px; font-weight: 600; color: #3B4A3F">Entregue</span><span style="font-size: 12px; color: #56665A">sex, 06/11</span></li>
+</ol>
+<p style="margin: 0; font-size: 14px; color: #3B4A3F">Acompanhe em Meus pedidos. Dá para editar ou cancelar até qui, 05/11 às 12h.</p>
+<div style="width: 100%; display: flex; flex-direction: column; gap: 8px">
+<button onClick="{{verPedidos}}" style="min-height: 56px; border-radius: 16px; border: 0; background: #003818; color: #FFFFFF; font-weight: 700; font-size: 16px; cursor: pointer">Ver meus pedidos</button>
+<a href="{{ultimo.wa}}" target="_blank" rel="noopener" style="min-height: 48px; border-radius: 14px; border: 1.5px solid #0B4A24; color: #0B4A24; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"></path></svg>Avisar também pelo WhatsApp</a>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{montando}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 8px 8px 20px">
+<div style="display: flex; flex-direction: column">
+<h2 id="resumo-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 22px; font-weight: 600; color: #003818">Seu pedido</h2>
+<span style="font-size: 13px; color: #56665A">Entrega sex, 06/11 · envie até qui, 12h</span>
+</div>
+<button onClick="{{fechar}}" aria-label="Fechar" style="width: 44px; height: 44px; border-radius: 50%; border: 0; background: transparent; color: #14261A; display: flex; align-items: center; justify-content: center; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"></path></svg></button>
+</div>
+<div style="overflow-y: auto; padding: 0 16px; display: flex; flex-direction: column; gap: 12px">
+<div style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 16px; padding: 4px 14px">
+<sc-for list="{{linhas}}" as="l" hint-placeholder-count="3">
+<div style="display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid #EFECE3">
+<span aria-hidden="true" style="width: 40px; height: 40px; flex: none; border-radius: 10px; display: flex; align-items: center; justify-content: center; background: {{l.bg}}"><img src="{{l.img}}" alt="" style="width: 32px; height: 32px"></span>
+<div style="flex: 1; min-width: 0; display: flex; flex-direction: column"><span style="font-weight: 600">{{l.nome}}</span><span style="font-size: 13px; color: #56665A">{{l.qtd}} × {{l.unit}}</span></div>
+<span style="font-weight: 600; white-space: nowrap">{{l.sub}}</span>
+</div>
+</sc-for>
+<div style="display: flex; justify-content: space-between; padding: 14px 0 12px; align-items: baseline">
+<span style="font-weight: 600">Total estimado</span>
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 22px; color: #003818">{{totalFmt}}</span>
+</div>
+</div>
+<sc-if value="{{abaixoMinimo}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; gap: 10px; align-items: flex-start; background: #FCEFD6; color: #6B3B00; border-radius: 14px; padding: 12px 14px; font-size: 14px">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" style="flex: none; margin-top: 1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.5"></path></svg>
+<span>Faltam <strong>{{faltaFmt}}</strong> para o pedido mínimo de {{minimoFmt}}.</span>
+</div>
+</sc-if>
+<div style="display: flex; flex-direction: column; gap: 6px">
+<label for="obs-pedido" style="font-size: 14px; font-weight: 600; color: #14261A">Observação para a entrega <span style="font-weight: 400; color: #56665A">(opcional)</span></label>
+<textarea id="obs-pedido" rows="2" value="{{obs}}" onChange="{{onObs}}" placeholder="Ex.: entregar até 9h, portão lateral" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 12px; border: 1px solid #D6D1C2; background: #FFFFFF; color: #14261A; font-size: 15px; resize: none"></textarea>
+</div>
+<p style="margin: 0; font-size: 13px; color: #56665A">O pedido vai direto para a Morro Verde e aparece em Meus pedidos. Itens por kg são cobrados pelo peso real na entrega.</p>
+</div>
+<div style="padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 8px">
+<sc-if value="{{podeEnviar}}" hint-placeholder-val="{{true}}">
+<button onClick="{{enviar}}" style="min-height: 56px; border-radius: 16px; border: 0; background: #003818; color: #FFFFFF; font-weight: 700; font-size: 16px; display: flex; align-items: center; justify-content: center; gap: 10px; cursor: pointer">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-7z"></path></svg>Enviar pedido</button>
+</sc-if>
+<sc-if value="{{abaixoMinimo}}" hint-placeholder-val="{{false}}">
+<button disabled="{{true}}" style="min-height: 56px; border-radius: 16px; border: 0; background: #DCD8CB; color: #4F4F48; font-weight: 700; font-size: 16px">Atinja o mínimo para enviar</button>
+</sc-if>
+<button onClick="{{fechar}}" style="min-height: 48px; border-radius: 14px; border: 0; background: transparent; color: #0B4A24; font-weight: 700; font-size: 15px; cursor: pointer">Continuar escolhendo</button>
+</div>
+</sc-if>
+</section>
+</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"pedidoMinimo":{"editor":"int","default":200,"min":0,"max":2000,"step":10,"unit":"R$","section":"Regras"},"$preview":{"width":390,"height":844}}'>
+var IMG = {
+  tomate: '/_blob/042c6f4182681089e589df753b851581',
+  cebola: '/_blob/f4814d3e180ba8fabb93340d3b61d589',
+  pimentao: '/_blob/ae26aa61c9ba0672ebf061fa75b502b2',
+  alho: '/_blob/a853ef8ff821112514036b6c9abec1aa',
+  batata: '/_blob/8607678ab6e49533b609e47ee8e55b9f',
+  cenoura: '/_blob/20289fc438bc551b4f0d68c5f48bd618',
+  abacaxi: '/_blob/16b75889b6a346970cd914941a531f23',
+  manga: '/_blob/df70f9039f0dcbeb7e3f39f3aa07013a',
+  laranja: '/_blob/3a6e8aa8ebd1c964e1011299fcc79565',
+  banana: '/_blob/a7cdf77a4c4b5aa0d1e8802d2cb60b67',
+  maracuja: '/_blob/539f82d127c5c64fd92aa6d3c9c11598',
+  morango: '/_blob/138a8a4f18f40e214188505e434743c8',
+  limao: '/_blob/0711221b11c6fef7f3e41760cc71653a'
+};
+var PRODUTOS = [
+  { id: 'tomate', nome: 'Tomate', cat: 'legumes', un: 'kg', min: 10, step: 1, preco: 6.9, bg: '#FBE4DE' },
+  { id: 'cebola', nome: 'Cebola', cat: 'legumes', un: 'kg', min: 5, step: 1, preco: 4.5, bg: '#F6E9D6' },
+  { id: 'pimentao', nome: 'Pimentão', cat: 'legumes', un: 'kg', min: 2, step: 1, preco: 8.9, bg: '#E3F1E2' },
+  { id: 'alho', nome: 'Alho', cat: 'legumes', un: 'kg', min: 2, step: 1, preco: 28, bg: '#EFEBDF' },
+  { id: 'batata', nome: 'Batata Reino', cat: 'legumes', un: 'kg', min: 5, step: 1, preco: 4.2, bg: '#F3E8D3' },
+  { id: 'cenoura', nome: 'Cenoura', cat: 'legumes', un: 'kg', min: 2, step: 1, preco: 4.8, bg: '#FDE7D3' },
+  { id: 'abacaxi', nome: 'Abacaxi', cat: 'frutas', un: 'kg', min: 5, step: 1, preco: 5.5, bg: '#F8F0D2' },
+  { id: 'manga', nome: 'Manga', cat: 'frutas', un: 'kg', min: 10, step: 1, preco: 6.5, bg: '#FDEBD2', selo: 'Destaque' },
+  { id: 'laranja', nome: 'Laranja', cat: 'frutas', un: 'saco', kgEmb: 20, min: 1, step: 1, preco: 52, bg: '#FDE6CF' },
+  { id: 'banana', nome: 'Banana da terra', cat: 'frutas', un: 'un', min: 10, step: 1, preco: 1.8, bg: '#F7EFCB' },
+  { id: 'maracuja', nome: 'Maracujá', cat: 'frutas', un: 'saco', kgEmb: 12, min: 1, step: 1, preco: 78, bg: '#F7EFCB' },
+  { id: 'morango', nome: 'Morango', cat: 'frutas', un: 'caixa', min: 1, step: 1, preco: 32, falta: true, bg: '#FBE1E4' },
+  { id: 'limao', nome: 'Limão', cat: 'frutas', un: 'saco', kgEmb: 20, min: 1, step: 1, preco: 64, bg: '#E6F1DA' }
+];
+
+var CLIENTE = { nome: 'Cantina Bella Vista', fone: '(41) 99876-5432' };
+var HISTORICO = [
+  { id: 'o1', data: 'sex, 30/10', mes: 'OUTUBRO 2026', itens: { tomate: 10, cebola: 5, batata: 10, alho: 2, limao: 1 } },
+  { id: 'o2', data: 'sex, 23/10', mes: 'OUTUBRO 2026', itens: { tomate: 15, cebola: 5, pimentao: 3, laranja: 2 } },
+  { id: 'o3', data: 'sex, 16/10', mes: 'OUTUBRO 2026', itens: { tomate: 10, manga: 10, abacaxi: 5, maracuja: 1, limao: 1 } },
+  { id: 'o4', data: 'sex, 09/10', mes: 'OUTUBRO 2026', itens: { tomate: 10, cebola: 10, cenoura: 4, batata: 10, alho: 2 } },
+  { id: 'o5', data: 'sex, 25/09', mes: 'SETEMBRO 2026', itens: { tomate: 12, cebola: 5, banana: 20, laranja: 1, cenoura: 3 } }
+];
+function prod(id) { return PRODUTOS.find(function (x) { return x.id === id; }); }
+
+function brl(v) { return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+function qtd(n, un) {
+  if (un === 'kg') return n + ' kg';
+  if (un === 'un') return n + ' un';
+  if (un === 'saco') return n + (n === 1 ? ' saco' : ' sacos');
+  if (un === 'caixa') return n + (n === 1 ? ' caixa' : ' caixas');
+  return String(n);
+}
+function pad(n) { return n < 10 ? '0' + n : String(n); }
+function embalagem(p) {
+  if (p.un === 'saco') return 'Saco de ' + p.kgEmb + ' kg';
+  if (p.un === 'caixa') return 'Caixa com 4 bandejas';
+  if (p.un === 'un') return 'Unidade';
+  return 'Quilo (kg)';
+}
+function minLabel(p) {
+  if (p.un === 'saco') return 'Saco ' + p.kgEmb + ' kg · mín. 1';
+  if (p.un === 'caixa') return '4 bandejas · mín. 1';
+  return 'Mínimo ' + qtd(p.min, p.un);
+}
+function sufixo(p) { return p.un === 'un' ? '/un' : '/' + p.un; }
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { cart: { tomate: 10, cebola: 5, limao: 1 }, filtro: 'todos', sheet: false, regras: false, detalhe: null, detQtd: 0, historico: false, histAberto: 'o1', enviados: [], enviado: false, ultimo: null, obs: '', cancelandoId: null, secs: 182699 };
+  }
+  componentDidMount() {
+    this.timer = setInterval(() => {
+      this.setState((s) => ({ secs: Math.max(0, s.secs - 1) }));
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this.timer); }
+
+  setQtd(id, q) {
+    this.setState((st) => {
+      var c = Object.assign({}, st.cart);
+      if (q <= 0) delete c[id]; else c[id] = q;
+      return { cart: c, sheet: Object.keys(c).length ? st.sheet : false };
+    });
+  }
+
+  renderVals() {
+    var s = this.state;
+    var cart = s.cart;
+    var minimo = this.props.pedidoMinimo ?? 200;
+
+    var filtros = [
+      { id: 'todos', label: 'Todos' },
+      { id: 'legumes', label: 'Legumes' },
+      { id: 'frutas', label: 'Frutas' }
+    ].map((f) => {
+      var on = s.filtro === f.id;
+      return {
+        label: f.label,
+        pressed: on ? 'true' : 'false',
+        fundo: on ? '#003818' : '#FFFFFF',
+        cor: on ? '#FFFFFF' : '#14261A',
+        borda: on ? '#003818' : '#D6D1C2',
+        pick: () => this.setState({ filtro: f.id })
+      };
+    });
+
+    var produtos = PRODUTOS.filter((p) => s.filtro === 'todos' || p.cat === s.filtro).map((p) => {
+      var q = cart[p.id] || 0;
+      var desce = q - p.step < p.min;
+      var dentro = q > 0 && !p.falta;
+      return {
+        nome: p.nome,
+        img: IMG[p.id],
+        bg: p.bg,
+        selo: p.selo || '',
+        temSelo: !!p.selo && !p.falta,
+        precoFmt: brl(p.preco),
+        sufixo: sufixo(p),
+        minLabel: minLabel(p),
+        qtdLabel: qtd(q, p.un),
+        emFalta: !!p.falta,
+        livre: q === 0 && !p.falta,
+        noCarrinho: dentro,
+        borda: dentro ? '#003818' : '#E4E0D4',
+        cardOp: p.falta ? '0.72' : '1',
+        addAria: 'Adicionar ' + qtd(p.min, p.un) + ' de ' + p.nome,
+        decLabel: desce ? 'Remover ' + p.nome : 'Diminuir ' + p.nome,
+        incLabel: 'Aumentar ' + p.nome,
+        abrir: () => this.setState({ detalhe: p.id, detQtd: cart[p.id] || p.min }),
+        add: () => this.setQtd(p.id, p.min),
+        inc: () => this.setQtd(p.id, q + p.step),
+        dec: () => this.setQtd(p.id, desce ? 0 : q - p.step)
+      };
+    });
+
+    var d = {};
+    var dp = PRODUTOS.find((p) => p.id === s.detalhe);
+    if (dp) {
+      var dq = s.detQtd;
+      var naCesta = (cart[dp.id] || 0) > 0;
+      var bloq = dq - dp.step < dp.min;
+      d = {
+        nome: dp.nome,
+        alt: 'Ilustração de ' + dp.nome,
+        img: IMG[dp.id],
+        bg: dp.bg,
+        categoria: dp.cat === 'frutas' ? 'FRUTAS' : 'LEGUMES',
+        selo: dp.selo || '',
+        temSelo: !!dp.selo && !dp.falta,
+        precoFmt: brl(dp.preco),
+        sufixo: 'por ' + (dp.un === 'un' ? 'unidade' : dp.un),
+        minLabel: 'Mínimo ' + qtd(dp.min, dp.un),
+        minCurto: qtd(dp.min, dp.un),
+        vendidoPor: embalagem(dp),
+        porKg: dp.un === 'kg',
+        emFalta: !!dp.falta,
+        disponivel: !dp.falta,
+        noCarrinho: naCesta && !dp.falta,
+        qtdLabel: qtd(dq, dp.un),
+        subtotal: brl(dq * dp.preco),
+        acao: naCesta ? 'Atualizar pedido' : 'Adicionar ao pedido',
+        decBloq: bloq,
+        decBorda: bloq ? '#E4E0D4' : '#003818',
+        decCor: bloq ? '#A9A99F' : '#003818',
+        dec: () => this.setState((st) => ({ detQtd: Math.max(dp.min, st.detQtd - dp.step) })),
+        inc: () => this.setState((st) => ({ detQtd: st.detQtd + dp.step })),
+        atalhos: [1, 2, 3].map((k) => {
+          var v = dp.min * k;
+          var on = v === dq;
+          return {
+            label: qtd(v, dp.un),
+            pressed: on ? 'true' : 'false',
+            fundo: on ? '#E3F1E2' : '#FFFFFF',
+            cor: on ? '#003818' : '#14261A',
+            borda: on ? '#003818' : '#D6D1C2',
+            pick: () => this.setState({ detQtd: v })
+          };
+        }),
+        confirmar: () => { this.setQtd(dp.id, dq); this.setState({ detalhe: null }); },
+        remover: () => { this.setQtd(dp.id, 0); this.setState({ detalhe: null }); }
+      };
+    }
+
+    var total = 0;
+    var linhas = PRODUTOS.filter((p) => cart[p.id] && !p.falta).map((p) => {
+      var q = cart[p.id];
+      total += q * p.preco;
+      return { nome: p.nome, img: IMG[p.id], bg: p.bg, qtd: qtd(q, p.un), unit: brl(p.preco) + sufixo(p), sub: brl(q * p.preco) };
+    });
+    var n = linhas.length;
+    var falta = Math.max(0, minimo - total);
+    var abaixo = falta > 0;
+    var pct = minimo > 0 ? Math.min(100, Math.round((total / minimo) * 100)) : 100;
+
+    var msg = 'Olá, Morro Verde! Pedido para a entrega de sexta, 06/11:\n\n' +
+      linhas.map((l) => '• ' + l.nome + ': ' + l.qtd).join('\n') +
+      '\n\nTotal estimado: ' + brl(total) + '\nRestaurante: ' + CLIENTE.nome + ' · ' + CLIENTE.fone;
+
+    var baseHist = s.enviados.concat(HISTORICO.map((o, i) => Object.assign({ numero: 1047 - i }, o)));
+    var pedidosHist = baseHist.map((o) => {
+      var ids = Object.keys(o.itens);
+      var tot = 0;
+      var hl = ids.map((id) => {
+        var p = prod(id);
+        var q = o.itens[id];
+        tot += q * p.preco;
+        return { nome: p.nome, qtd: qtd(q, p.un), sub: brl(q * p.preco) };
+      });
+      var nomes = ids.map((id) => prod(id).nome);
+      var aberto = s.histAberto === o.id;
+      return {
+        mes: o.mes,
+        data: o.data,
+        status: o.cancelado ? 'Cancelado' : (o.novo ? 'Recebido' : 'Entregue'),
+        badgeBg: o.cancelado ? '#F9E1DE' : (o.novo ? '#FCEFD6' : '#E3F1E2'),
+        badgeCor: o.cancelado ? '#8A1F11' : (o.novo ? '#6B3B00' : '#0B4A24'),
+        badgeDot: o.cancelado ? '#C0392B' : (o.novo ? '#C77A12' : '#3D8A4A'),
+        entregue: !o.novo,
+        acaoLabel: (o.novo && !o.cancelado) ? 'Editar pedido' : 'Repetir pedido',
+        podeCancelar: o.novo && !o.cancelado,
+        confirmando: s.cancelandoId === o.id,
+        semConfirmacao: s.cancelandoId !== o.id,
+        pedirCancelar: () => this.setState({ cancelandoId: o.id }),
+        voltarCancelar: () => this.setState({ cancelandoId: null }),
+        cancelar: () => this.setState((st) => ({ cancelandoId: null, enviados: st.enviados.map((x) => (x.id === o.id ? Object.assign({}, x, { cancelado: true }) : x)) })),
+        resumo: '#' + o.numero + ' · ' + ids.length + ' produtos · ' + nomes.slice(0, 2).join(', ') + (nomes.length > 2 ? ' e mais ' + (nomes.length - 2) : ''),
+        thumbs: ids.slice(0, 5).map((id) => ({ img: IMG[id], bg: prod(id).bg })),
+        total: brl(tot),
+        totalNum: tot,
+        linhas: hl,
+        aberto: aberto,
+        expanded: aberto ? 'true' : 'false',
+        toggleLabel: aberto ? 'Ocultar itens' : 'Ver itens',
+        toggle: () => this.setState({ histAberto: aberto ? null : o.id }),
+        repetir: () => {
+          var c = {};
+          ids.forEach((id) => { if (!prod(id).falta) c[id] = o.itens[id]; });
+          this.setState((st) => ({ cart: c, historico: false, detalhe: null, sheet: true, enviado: false, obs: o.obs || '', enviados: (o.novo && !o.cancelado) ? st.enviados.filter((x) => x.id !== o.id) : st.enviados }));
+        }
+      };
+    });
+    var grupos = [];
+    pedidosHist.forEach((p) => {
+      var g = grupos.find((x) => x.mes === p.mes);
+      if (!g) { g = { mes: p.mes, pedidos: [] }; grupos.push(g); }
+      g.pedidos.push(p);
+    });
+    var entreguesH = pedidosHist.filter((p) => p.entregue);
+    var somaHist = entreguesH.reduce((a, p) => a + p.totalNum, 0);
+    var sec = s.secs;
+    var dd = Math.floor(sec / 86400);
+    var hh = Math.floor((sec % 86400) / 3600);
+    var mm = Math.floor((sec % 3600) / 60);
+
+    return {
+      cdTexto: dd + 'd ' + pad(hh) + 'h ' + pad(mm) + 'min',
+      cliente: CLIENTE,
+      historicoAberto: s.historico,
+      abrirHistorico: () => this.setState({ historico: true }),
+      fecharHistorico: () => this.setState({ historico: false }),
+      hist: { qtd: entreguesH.length, media: brl(somaHist / entreguesH.length), grupos: grupos },
+      montando: !s.enviado,
+      enviado: s.enviado,
+      ultimo: s.ultimo || {},
+      obs: s.obs,
+      onObs: (e) => this.setState({ obs: e.target.value }),
+      verPedidos: () => this.setState({ sheet: false, enviado: false, historico: true }),
+      enviar: () => {
+        var num = 1048 + s.enviados.length;
+        var itens = {};
+        PRODUTOS.forEach((p) => { if (cart[p.id] && !p.falta) itens[p.id] = cart[p.id]; });
+        var novo = { id: 'n' + num, numero: num, data: 'sex, 06/11', mes: 'PRÓXIMA ENTREGA', itens: itens, novo: true, obs: s.obs };
+        this.setState({
+          enviados: [novo].concat(s.enviados), cart: {}, obs: '', enviado: true, histAberto: novo.id,
+          ultimo: {
+            numero: '#' + num,
+            itens: n + (n === 1 ? ' produto' : ' produtos'),
+            total: brl(total),
+            wa: 'https://wa.me/?text=' + encodeURIComponent('Olá, Morro Verde! Acabei de enviar o pedido #' + num + ' pelo app. ' + CLIENTE.nome + ' · ' + CLIENTE.fone)
+          }
+        });
+      },
+      filtros: filtros,
+      produtos: produtos,
+      qtdProdutos: PRODUTOS.length,
+      detalheAberto: !!dp,
+      d: d,
+      fecharDetalhe: () => this.setState({ detalhe: null }),
+      regras: s.regras,
+      abrirRegras: () => this.setState({ regras: true }),
+      fecharRegras: () => this.setState({ regras: false }),
+      linhas: linhas,
+      mostrarBarra: n > 0 && !dp,
+      itensLabel: n + (n === 1 ? ' produto' : ' produtos'),
+      totalFmt: brl(total),
+      minimoFmt: brl(minimo),
+      faltaFmt: brl(falta),
+      abaixoMinimo: abaixo,
+      podeEnviar: !abaixo,
+      pct: pct,
+      barraCor: abaixo ? '#C77A12' : '#3D8A4A',
+      progressoTexto: abaixo ? 'Faltam ' + brl(falta) + ' para o mínimo' : 'Pedido mínimo atingido',
+      sheet: s.sheet,
+      abrir: () => this.setState({ sheet: true }),
+      fechar: () => this.setState({ sheet: false, enviado: false }),
+      waPedido: 'https://wa.me/?text=' + encodeURIComponent(msg),
+      waDuvida: 'https://wa.me/?text=' + encodeURIComponent('Olá, Morro Verde! Tenho uma dúvida sobre o pedido desta semana.')
+    };
+  }
+}
+</script>
+</body>
+</html>

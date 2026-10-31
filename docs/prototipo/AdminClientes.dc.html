@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Painel · Clientes</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#0B4A24}a:hover{color:#003818}
+button,input,textarea{font:inherit}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F6F3EA; color: #14261A; font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.4">
+
+<nav aria-label="Menu do painel" style="flex: 1 1 240px; background: #003818; color: #FFFFFF; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+<div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex: none; position: relative">
+<img src="/_blob/68b6b6b261938bb0badd6d3edf3ed918" alt="Morro Verde Hortifruti" style="position: absolute; width: 56px; height: 56px; left: -6px; top: -6px">
+</div>
+<div style="display: flex; flex-direction: column">
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.04em; line-height: 1.15">MORRO VERDE</span>
+<span style="font-size: 12px; color: #B8DDB9">Painel administrativo</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<a href="AdminPedidos.dc.html" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 12px; color: #DCEFDC; text-decoration: none; font-weight: 600">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>
+<span style="flex: 1">Pedidos</span>
+<span style="min-width: 24px; height: 24px; padding: 0 7px; box-sizing: border-box; border-radius: 999px; background: #62A96B; color: #002B12; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">3</span>
+</a>
+<a href="AdminClientes.dc.html" aria-current="page" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 12px; background: #0B4A24; color: #FFFFFF; text-decoration: none; font-weight: 600">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7"></path><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"></path></svg>
+<span>Clientes</span>
+</a>
+<a href="AdminProdutos.dc.html" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 12px; color: #DCEFDC; text-decoration: none; font-weight: 600">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"></path><circle cx="7.5" cy="8.5" r="1.5"></circle></svg>
+<span>Produtos e preços</span>
+</a>
+</div>
+<div style="background: #0B4A24; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; color: #B8DDB9">Semana atual</span>
+<span style="font-weight: 600">Entrega sex, 06/11</span>
+<span style="font-size: 13px; color: #DCEFDC">Pedidos fecham qui, 05/11 às 12h</span>
+</div>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; box-sizing: border-box">
+<div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: Outfit, sans-serif; font-size: 32px; font-weight: 600; color: #003818; line-height: 1.1">Clientes</h1>
+<p style="margin: 0; color: #56665A">{{resumo}}</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; gap: 10px">
+<label style="display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 14px; border: 1px solid #D6D1C2; border-radius: 12px; background: #FFFFFF; flex: 0 1 300px; box-sizing: border-box; color: #56665A">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="6.5"></circle><path d="M16 16l4.5 4.5"></path></svg>
+<input aria-label="Buscar cliente" placeholder="Buscar nome, bairro ou telefone" value="{{busca}}" onChange="{{onBusca}}" style="flex: 1; min-width: 0; border: 0; outline: none; background: transparent; color: #14261A; font-size: 15px">
+</label>
+<button onClick="{{novo}}" style="min-height: 44px; padding: 0 18px; border-radius: 12px; border: 0; background: #003818; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"></path></svg>Novo cliente</button>
+</div>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+
+<section aria-label="Lista de clientes" style="flex: 999 1 560px; min-width: 0; background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 20px; overflow: hidden">
+<div style="overflow-x: auto">
+<div style="min-width: 760px">
+<div style="display: grid; grid-template-columns: minmax(190px, 2fr) 136px minmax(200px, 2fr) 72px 92px 84px; gap: 12px; padding: 12px 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; color: #56665A">
+<span>RESTAURANTE</span><span>TELEFONE</span><span>ENDEREÇO</span><span>PEDIDOS</span><span>ÚLTIMO</span><span>STATUS</span>
+</div>
+<sc-for list="{{lista}}" as="c" hint-placeholder-count="9">
+<button onClick="{{c.editar}}" aria-pressed="{{c.sel}}" style="width: 100%; display: grid; grid-template-columns: minmax(190px, 2fr) 136px minmax(200px, 2fr) 72px 92px 84px; gap: 12px; align-items: center; padding: 14px 20px; border: 0; border-top: 1px solid #EFECE3; background: {{c.rowBg}}; text-align: left; color: #14261A; cursor: pointer">
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.nome}}</span><span style="font-size: 12px; color: #56665A">{{c.resp}}</span></span>
+<span style="font-size: 14px; white-space: nowrap">{{c.fone}}</span>
+<span style="display: flex; flex-direction: column; min-width: 0"><span style="font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.endereco}}</span><span style="font-size: 12px; color: #56665A">{{c.bairro}}</span></span>
+<span style="font-size: 14px">{{c.pedidos}}</span>
+<span style="font-size: 14px; color: #3B4A3F">{{c.ultimo}}</span>
+<span><span style="display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; background: {{c.stBg}}; color: {{c.stCor}}"><span aria-hidden="true" style="width: 7px; height: 7px; border-radius: 50%; background: {{c.stDot}}"></span>{{c.stLabel}}</span></span>
+</button>
+</sc-for>
+<sc-if value="{{vazio}}" hint-placeholder-val="{{false}}">
+<p style="margin: 0; padding: 32px 20px; border-top: 1px solid #EFECE3; color: #56665A; text-align: center">Nenhum cliente encontrado.</p>
+</sc-if>
+</div>
+</div>
+</section>
+
+<aside aria-labelledby="form-titulo" style="flex: 1 1 380px; min-width: 0; background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 20px; padding: 22px; box-sizing: border-box; display: flex; flex-direction: column; gap: 18px">
+
+<sc-if value="{{mostraForm}}" hint-placeholder-val="{{true}}">
+<div style="display: flex; flex-direction: column; gap: 2px">
+<h2 id="form-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 24px; font-weight: 600; color: #003818">{{formTitulo}}</h2>
+<span style="font-size: 13px; color: #56665A">Campos com <span aria-hidden="true" style="color: #B42318">*</span> são obrigatórios</span>
+</div>
+
+<fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+<legend style="padding: 0; margin-bottom: 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #56665A">RESTAURANTE</legend>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{camposRest}}" as="f" hint-placeholder-count="3">
+<div style="grid-column: span {{f.span}}; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<label for="{{f.id}}" style="font-size: 13px; font-weight: 600; color: #14261A">{{f.label}}<sc-if value="{{f.obrig}}" hint-placeholder-val="{{false}}"><span aria-hidden="true" style="color: #B42318"> *</span></sc-if></label>
+<input id="{{f.id}}" type="{{f.tipo}}" value="{{f.value}}" onChange="{{f.onChange}}" placeholder="{{f.ph}}" aria-invalid="{{f.invalid}}" style="min-height: 44px; width: 100%; box-sizing: border-box; padding: 0 12px; border-radius: 10px; border: 1px solid {{f.borda}}; background: #FFFFFF; color: #14261A; font-size: 15px">
+<sc-if value="{{f.temErro}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: #B42318">{{f.erro}}</span></sc-if>
+</div>
+</sc-for>
+</div>
+</fieldset>
+
+<fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px">
+<legend style="padding: 0; margin-bottom: 12px; font-size: 12px; font-weight: 700; letter-spacing: 0.06em; color: #56665A">ENDEREÇO DE ENTREGA</legend>
+<div style="display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 12px">
+<sc-for list="{{camposEnd}}" as="f" hint-placeholder-count="6">
+<div style="grid-column: span {{f.span}}; display: flex; flex-direction: column; gap: 6px; min-width: 0">
+<label for="{{f.id}}" style="font-size: 13px; font-weight: 600; color: #14261A">{{f.label}}<sc-if value="{{f.obrig}}" hint-placeholder-val="{{false}}"><span aria-hidden="true" style="color: #B42318"> *</span></sc-if></label>
+<input id="{{f.id}}" type="{{f.tipo}}" value="{{f.value}}" onChange="{{f.onChange}}" placeholder="{{f.ph}}" aria-invalid="{{f.invalid}}" style="min-height: 44px; width: 100%; box-sizing: border-box; padding: 0 12px; border-radius: 10px; border: 1px solid {{f.borda}}; background: #FFFFFF; color: #14261A; font-size: 15px">
+<sc-if value="{{f.temErro}}" hint-placeholder-val="{{false}}"><span style="font-size: 12px; color: #B42318">{{f.erro}}</span></sc-if>
+</div>
+</sc-for>
+<div style="grid-column: span 6; display: flex; flex-direction: column; gap: 6px">
+<label for="c-obs" style="font-size: 13px; font-weight: 600; color: #14261A">Observações de entrega</label>
+<textarea id="c-obs" rows="2" value="{{form.obs}}" onChange="{{onObs}}" placeholder="Horário de recebimento, portão, ponto de referência" style="width: 100%; box-sizing: border-box; padding: 10px 12px; border-radius: 10px; border: 1px solid #D6D1C2; background: #FFFFFF; color: #14261A; font-size: 15px; resize: vertical"></textarea>
+</div>
+</div>
+</fieldset>
+
+<sc-if value="{{editando}}" hint-placeholder-val="{{false}}">
+<label style="display: flex; align-items: center; gap: 10px; min-height: 44px; cursor: pointer">
+<input type="checkbox" checked="{{form.ativo}}" onChange="{{toggleAtivo}}" style="width: 20px; height: 20px; margin: 0; accent-color: #003818">
+<span>Cliente ativo <span style="color: #56665A">(pode fazer pedidos)</span></span>
+</label>
+</sc-if>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button onClick="{{salvar}}" style="flex: 1 1 160px; min-height: 52px; border-radius: 14px; border: 0; background: #003818; color: #FFFFFF; font-weight: 700; font-size: 15px; cursor: pointer">{{botaoSalvar}}</button>
+<button onClick="{{novo}}" style="flex: 0 1 140px; min-height: 52px; border-radius: 14px; border: 1px solid #D6D1C2; background: #FFFFFF; color: #14261A; font-weight: 600; font-size: 15px; cursor: pointer">{{botaoSec}}</button>
+</div>
+</sc-if>
+
+<sc-if value="{{mostraSalvo}}" hint-placeholder-val="{{false}}">
+<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 14px">
+<span aria-hidden="true" style="width: 56px; height: 56px; border-radius: 50%; background: #E3F1E2; color: #003818; display: flex; align-items: center; justify-content: center">
+<svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg></span>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h2 id="form-titulo" style="margin: 0; font-family: Outfit, sans-serif; font-size: 24px; font-weight: 600; color: #003818">{{salvo.titulo}}</h2>
+<p style="margin: 0; color: #3B4A3F"><strong>{{salvo.nome}}</strong> · {{salvo.fone}}</p>
+<p style="margin: 0; color: #56665A">Envie o link de primeiro acesso: o restaurante abre o link, já com este telefone, e cria a própria senha.</p>
+</div>
+<a href="{{salvo.wa}}" target="_blank" rel="noopener" style="width: 100%; box-sizing: border-box; min-height: 52px; border-radius: 14px; background: #003818; color: #FFFFFF; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-7z"></path></svg>Enviar link de primeiro acesso</a>
+<button onClick="{{novo}}" style="width: 100%; min-height: 48px; border-radius: 14px; border: 1px solid #D6D1C2; background: #FFFFFF; color: #14261A; font-weight: 600; cursor: pointer">Cadastrar outro cliente</button>
+</div>
+</sc-if>
+</aside>
+</div>
+
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1120}}'>
+var INICIAL = [
+  { id: 'bellavista', nome: 'Cantina Bella Vista', resp: 'Marcos Antunes', fone: '(41) 99876-5432', cep: '80040-450', rua: 'Rua Itupava', num: '1240', comp: '', bairro: 'Alto da XV', cidade: 'Curitiba', obs: 'Receber pela porta dos fundos.', pedidos: 6, ultimo: '04/11', ativo: true },
+  { id: 'araucaria', nome: 'Bistrô Araucária', resp: 'Fernanda Lima', fone: '(41) 99712-3080', cep: '80420-090', rua: 'Av. do Batel', num: '1868', comp: 'Loja 2', bairro: 'Batel', cidade: 'Curitiba', obs: 'Entregar até 9h.', pedidos: 11, ultimo: '04/11', ativo: true },
+  { id: 'serra', nome: 'Sabor da Serra', resp: 'João Pedro Silva', fone: '(41) 98834-2211', cep: '80530-010', rua: 'Rua Mateus Leme', num: '905', comp: '', bairro: 'São Francisco', cidade: 'Curitiba', obs: '', pedidos: 9, ultimo: '03/11', ativo: true },
+  { id: 'fornovelho', nome: 'Pizzaria Forno Velho', resp: 'Carla Mendes', fone: '(41) 99645-7710', cep: '80730-000', rua: 'Rua Padre Anchieta', num: '2140', comp: '', bairro: 'Bigorrilho', cidade: 'Curitiba', obs: 'Portão lateral, tocar interfone.', pedidos: 14, ultimo: '03/11', ativo: true },
+  { id: 'kaori', nome: 'Sushi Kaori', resp: 'Rafael Tanaka', fone: '(41) 99301-4589', cep: '80430-200', rua: 'Rua Desembargador Motta', num: '1530', comp: '', bairro: 'Mercês', cidade: 'Curitiba', obs: '', pedidos: 4, ultimo: '04/11', ativo: true },
+  { id: 'mesaposta', nome: 'Empório Mesa Posta', resp: 'Juliana Rocha', fone: '(41) 98877-6650', cep: '80430-190', rua: 'Rua Fernando Simas', num: '410', comp: '', bairro: 'Mercês', cidade: 'Curitiba', obs: '', pedidos: 5, ultimo: '23/10', ativo: true },
+  { id: 'largo', nome: 'Boteco do Largo', resp: 'Paulo Ribeiro', fone: '(41) 99256-1102', cep: '80020-280', rua: 'Largo da Ordem', num: '88', comp: '', bairro: 'São Francisco', cidade: 'Curitiba', obs: '', pedidos: 8, ultimo: '02/11', ativo: true },
+  { id: 'volurdes', nome: 'Cozinha da Vó Lurdes', resp: 'Lurdes Martins', fone: '(41) 99488-3327', cep: '80220-180', rua: 'Rua Chile', num: '1755', comp: '', bairro: 'Rebouças', cidade: 'Curitiba', obs: '', pedidos: 10, ultimo: '03/11', ativo: true },
+  { id: 'ponto24', nome: 'Lanchonete Ponto 24', resp: 'Sérgio Alves', fone: '(41) 99120-4471', cep: '80020-310', rua: 'Rua XV de Novembro', num: '2210', comp: '', bairro: 'Centro', cidade: 'Curitiba', obs: '', pedidos: 3, ultimo: '14/08', ativo: false }
+];
+var VAZIO = { cnpj: '', email: '', nome: '', resp: '', fone: '', cep: '', rua: '', num: '', comp: '', bairro: '', cidade: 'Curitiba', obs: '', ativo: true };
+var REST = [
+  ['nome', 'Nome do restaurante', 6, true, 'Ex.: Cantina Bella Vista', 'text'],
+  ['resp', 'Responsável', 3, false, 'Quem faz os pedidos', 'text'],
+  ['fone', 'Telefone (WhatsApp)', 3, true, '(41) 90000-0000', 'tel'],
+  ['cnpj', 'CNPJ (opcional)', 3, false, '00.000.000/0000-00', 'text'],
+  ['email', 'E-mail (opcional)', 3, false, 'contato@restaurante.com', 'email']
+];
+var END = [
+  ['cep', 'CEP', 2, false, '00000-000', 'text'],
+  ['rua', 'Rua', 4, true, 'Rua, avenida...', 'text'],
+  ['num', 'Número', 2, true, '', 'text'],
+  ['comp', 'Complemento', 4, false, 'Loja, sala, bloco', 'text'],
+  ['bairro', 'Bairro', 3, true, '', 'text'],
+  ['cidade', 'Cidade', 3, true, '', 'text']
+];
+function maskFone(v) {
+  var d = v.replace(/\D/g, '').slice(0, 11);
+  if (!d.length) return '';
+  if (d.length <= 2) return '(' + d;
+  if (d.length <= 7) return '(' + d.slice(0, 2) + ') ' + d.slice(2);
+  return '(' + d.slice(0, 2) + ') ' + d.slice(2, 7) + '-' + d.slice(7);
+}
+function maskCnpj(v) {
+  var d = v.replace(/\D/g, '').slice(0, 14);
+  var r = d.slice(0, 2);
+  if (d.length > 2) r += '.' + d.slice(2, 5);
+  if (d.length > 5) r += '.' + d.slice(5, 8);
+  if (d.length > 8) r += '/' + d.slice(8, 12);
+  if (d.length > 12) r += '-' + d.slice(12);
+  return r;
+}
+function maskCep(v) {
+  var d = v.replace(/\D/g, '').slice(0, 8);
+  return d.length > 5 ? d.slice(0, 5) + '-' + d.slice(5) : d;
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { clientes: INICIAL, busca: '', modo: 'novo', editId: null, form: Object.assign({}, VAZIO), erros: {}, salvo: null };
+  }
+  campo(k, v) {
+    if (k === 'fone') v = maskFone(v);
+    if (k === 'cep') v = maskCep(v);
+    if (k === 'cnpj') v = maskCnpj(v);
+    this.setState((x) => {
+      var f = Object.assign({}, x.form);
+      f[k] = v;
+      var er = Object.assign({}, x.erros);
+      delete er[k];
+      return { form: f, erros: er };
+    });
+  }
+  salvar() {
+    var f = this.state.form;
+    var er = {};
+    if (!f.nome.trim()) er.nome = 'Informe o nome do restaurante';
+    if (f.fone.replace(/\D/g, '').length < 10) er.fone = 'Telefone incompleto';
+    ['rua', 'num', 'bairro', 'cidade'].forEach((k) => { if (!f[k].trim()) er[k] = 'Campo obrigatório'; });
+    if (Object.keys(er).length) { this.setState({ erros: er }); return; }
+    this.setState((x) => {
+      var lista;
+      if (x.editId) {
+        lista = x.clientes.map((c) => (c.id === x.editId ? Object.assign({}, c, f) : c));
+      } else {
+        lista = [Object.assign({ id: 'n' + x.clientes.length, pedidos: 0, ultimo: '—' }, f)].concat(x.clientes);
+      }
+      return {
+        clientes: lista, modo: 'salvo', erros: {},
+        salvo: {
+          titulo: x.editId ? 'Alterações salvas' : 'Cliente cadastrado',
+          nome: f.nome, fone: f.fone,
+          wa: 'https://wa.me/55' + f.fone.replace(/\D/g, '') + '?text=' + encodeURIComponent('Olá, ' + f.nome + '! Crie sua senha para fazer pedidos na Morro Verde Hortifruti: [link de primeiro acesso]')
+        }
+      };
+    });
+  }
+  renderVals() {
+    var s = this.state;
+    var q = s.busca.trim().toLowerCase();
+    var ativos = s.clientes.filter((c) => c.ativo).length;
+    var lista = s.clientes.filter((c) => !q || (c.nome + ' ' + c.resp + ' ' + c.bairro + ' ' + c.fone).toLowerCase().indexOf(q) >= 0).map((c) => {
+      var on = s.editId === c.id && s.modo !== 'novo';
+      return {
+        nome: c.nome, resp: c.resp || '—', fone: c.fone,
+        endereco: c.rua + ', ' + c.num + (c.comp ? ' · ' + c.comp : ''), bairro: c.bairro + ' · ' + c.cidade,
+        pedidos: c.pedidos, ultimo: c.ultimo,
+        stLabel: c.ativo ? 'Ativo' : 'Inativo',
+        stBg: c.ativo ? '#E3F1E2' : '#EEEDE7', stCor: c.ativo ? '#0B4A24' : '#4F4F48', stDot: c.ativo ? '#3D8A4A' : '#8C8C82',
+        sel: on ? 'true' : 'false', rowBg: on ? '#EEF6ED' : '#FFFFFF',
+        editar: () => this.setState({
+          modo: 'editar', editId: c.id, erros: {},
+          form: { cnpj: c.cnpj || '', email: c.email || '', nome: c.nome, resp: c.resp, fone: c.fone, cep: c.cep, rua: c.rua, num: c.num, comp: c.comp, bairro: c.bairro, cidade: c.cidade, obs: c.obs, ativo: c.ativo }
+        })
+      };
+    });
+    var mk = (def) => {
+      var k = def[0];
+      var err = s.erros[k];
+      return {
+        id: 'c-' + k, label: def[1], span: def[2], obrig: def[3], ph: def[4], tipo: def[5],
+        value: s.form[k], temErro: !!err, erro: err || '', invalid: err ? 'true' : 'false',
+        borda: err ? '#B42318' : '#D6D1C2',
+        onChange: (e) => this.campo(k, e.target.value)
+      };
+    };
+    var editando = s.modo === 'editar';
+    return {
+      resumo: s.clientes.length + ' cadastrados · ' + ativos + ' ativos',
+      busca: s.busca,
+      onBusca: (e) => this.setState({ busca: e.target.value }),
+      lista: lista,
+      vazio: lista.length === 0,
+      mostraForm: s.modo !== 'salvo',
+      mostraSalvo: s.modo === 'salvo',
+      editando: editando,
+      formTitulo: editando ? 'Editar cliente' : 'Novo cliente',
+      botaoSalvar: editando ? 'Salvar alterações' : 'Salvar cliente',
+      botaoSec: editando ? 'Cancelar' : 'Limpar',
+      camposRest: REST.map(mk),
+      camposEnd: END.map(mk),
+      form: s.form,
+      onObs: (e) => this.campo('obs', e.target.value),
+      toggleAtivo: () => this.setState((x) => ({ form: Object.assign({}, x.form, { ativo: !x.form.ativo }) })),
+      salvar: () => this.salvar(),
+      novo: () => this.setState({ modo: 'novo', editId: null, erros: {}, form: Object.assign({}, VAZIO) }),
+      salvo: s.salvo || {}
+    };
+  }
+}
+</script>
+</body>
+</html>
