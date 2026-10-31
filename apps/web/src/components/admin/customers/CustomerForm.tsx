@@ -33,7 +33,7 @@ function initialState(customer: Customer | null): FormState {
 
 export const CUSTOMER_FORM_ID = 'cliente-form';
 
-/** Cadastro e edição do restaurante. O telefone é a chave de identificação no app. */
+/** Cadastro e edição do cliente. O telefone é a chave de identificação no app. */
 export function CustomerForm({ customer, onDone }: { customer: Customer | null; onDone: () => void }) {
   const save = useSaveCustomer();
   const [form, setForm] = useState(() => initialState(customer));
@@ -110,8 +110,8 @@ export function CustomerForm({ customer, onDone }: { customer: Customer | null; 
       ) : null}
 
       <fieldset className='m-0 grid grid-cols-6 gap-3 border-0 p-0'>
-        <legend className='mb-3 p-0 text-xs font-bold tracking-[0.06em] text-ink-2'>RESTAURANTE</legend>
-        {text('name', 'Nome do restaurante', { required: true, className: 'col-span-6' })}
+        <legend className='mb-3 p-0 text-xs font-bold tracking-[0.06em] text-ink-2'>CLIENTE</legend>
+        {text('name', 'Nome', { required: true, className: 'col-span-6' })}
         {text('contactName', 'Responsável', { className: 'col-span-6 sm:col-span-3' })}
         {text('phone', 'Telefone', {
           required: true,
@@ -119,7 +119,7 @@ export function CustomerForm({ customer, onDone }: { customer: Customer | null; 
           inputMode: 'tel',
           placeholder: '(41) 99999-9999',
           mask: maskPhoneInput,
-          hint: 'É como o restaurante se identifica no app.',
+          hint: 'É como o cliente se identifica no app.',
           className: 'col-span-6 sm:col-span-3',
         })}
         {text('cnpj', 'CNPJ', { inputMode: 'numeric', className: 'col-span-6 sm:col-span-3' })}

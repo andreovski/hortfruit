@@ -98,7 +98,7 @@ export function OrdersPage() {
               {visible.length === 0 ? (
                 <EmptyState>
                   {orders.length === 0 && !debouncedSearch
-                    ? 'Nenhum pedido ainda. Os pedidos chegam pelo app dos restaurantes.'
+                    ? 'Nenhum pedido ainda. Os pedidos chegam pelo app.'
                     : 'Nenhum pedido encontrado com esse filtro.'}
                 </EmptyState>
               ) : null}

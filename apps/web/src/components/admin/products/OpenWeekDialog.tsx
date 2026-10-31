@@ -23,7 +23,7 @@ export function OpenWeekDialog({
       open={open}
       onOpenChange={onOpenChange}
       title='Abrir semana de entrega'
-      description='Não há semana aberta. Ao publicar, os restaurantes voltam a fazer pedidos até o fechamento.'
+      description='Não há semana aberta. Ao publicar, os clientes voltam a fazer pedidos até o fechamento.'
     >
       <WeekDatesForm id='abrir-semana' initial={suggestion} onSubmit={onSubmit}>
         <div className='grid grid-cols-2 gap-2'>

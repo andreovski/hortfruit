@@ -12,7 +12,7 @@ const optionalText = (max: number) =>
     .optional();
 
 export const customerBodySchema = z.object({
-  name: z.string().trim().min(1, 'Informe o nome do restaurante.').max(120),
+  name: z.string().trim().min(1, 'Informe o nome.').max(120),
   contactName: optionalText(120),
   phone: phoneInputSchema,
   cnpj: optionalText(20),

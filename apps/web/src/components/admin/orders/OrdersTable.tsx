@@ -62,7 +62,7 @@ export function OrdersTable({
                 <StatusBadge status={o.status} />
                 {o.editedAt ? (
                   <span
-                    title={`Editado pelo restaurante ${formatDateTime(o.editedAt)}`}
+                    title={`Editado pelo cliente ${formatDateTime(o.editedAt)}`}
                     className='inline-flex items-center gap-1 rounded-full bg-info-100 px-2 py-0.5 text-[11px] font-bold text-info-ink'
                   >
                     <Pencil aria-hidden className='size-3' />

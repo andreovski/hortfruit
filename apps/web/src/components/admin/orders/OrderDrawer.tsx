@@ -64,7 +64,7 @@ function OrderDetail({ order }: { order: AdminOrderDetail }) {
 
       {order.editedAt ? (
         <Banner tone='info' icon={<Pencil aria-hidden className='size-4 flex-none' />}>
-          Alterado pelo restaurante em {formatDateTime(order.editedAt)}
+          Alterado pelo cliente em {formatDateTime(order.editedAt)}
         </Banner>
       ) : null}
 
@@ -147,7 +147,7 @@ function Timeline({ order }: { order: AdminOrderDetail }) {
     ['Confirmado', order.confirmedAt],
     ['Entregue', order.deliveredAt],
     [
-      order.canceledBy === 'CUSTOMER' ? 'Cancelado pelo restaurante' : 'Cancelado',
+      order.canceledBy === 'CUSTOMER' ? 'Cancelado pelo cliente' : 'Cancelado',
       order.canceledAt,
     ],
   ];
@@ -226,8 +226,8 @@ function OrderActions({ order }: { order: AdminOrderDetail }) {
       {order.status === 'CANCELADO' ? (
         <p className='m-0 rounded-xl bg-cream px-3.5 py-3 text-sm text-ink-3'>
           {order.canceledBy === 'CUSTOMER'
-            ? 'Cancelado pelo restaurante no app, antes do fechamento.'
-            : 'Pedido cancelado pela Morro Verde. O restaurante vê este status em Meus pedidos.'}
+            ? 'Cancelado pelo cliente no app, antes do fechamento.'
+            : 'Pedido cancelado pela Morro Verde. O cliente vê este status em Meus pedidos.'}
         </p>
       ) : null}
 
@@ -235,7 +235,7 @@ function OrderActions({ order }: { order: AdminOrderDetail }) {
         open={confirmCancel}
         onOpenChange={setConfirmCancel}
         title={`Cancelar o pedido #${order.number}?`}
-        description='O restaurante verá o status "Cancelado" em Meus pedidos.'
+        description='O cliente verá o status "Cancelado" em Meus pedidos.'
         confirmLabel='Sim, cancelar'
         tone='danger'
         loading={busy && pending === 'CANCELADO'}

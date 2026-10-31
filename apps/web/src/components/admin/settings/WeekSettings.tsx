@@ -72,7 +72,7 @@ export function WeekSettings() {
         open={confirmClose}
         onOpenChange={setConfirmClose}
         title='Fechar os pedidos agora?'
-        description='Os restaurantes não conseguem mais pedir, editar nem cancelar nesta semana. Para reabrir, publique a lista com uma semana nova.'
+        description='Os clientes não conseguem mais pedir, editar nem cancelar nesta semana. Para reabrir, publique a lista com uma semana nova.'
         confirmLabel='Fechar pedidos'
         tone='danger'
         loading={close.isPending}

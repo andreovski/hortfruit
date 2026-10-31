@@ -54,7 +54,7 @@ export function ShopHeader({ whatsapp }: { whatsapp: string | null | undefined }
         <span className='font-display text-[17px] leading-tight font-semibold text-brand'>
           Morro Verde
         </span>
-        <span className='text-xs text-ink-2'>Hortifruti para restaurantes</span>
+        <span className='text-xs text-ink-2'>Hortifruti em quantidade</span>
       </div>
       <Link to='/meus-pedidos' aria-label='Meus pedidos' className={roundIconButton}>
         <ReceiptText className='size-5' aria-hidden />

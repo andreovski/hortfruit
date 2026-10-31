@@ -111,7 +111,7 @@ export function ProductsPage() {
 
       {publishedNow ? (
         <Banner role='status' tone='success' icon={<CircleCheck aria-hidden className='size-5 flex-none' />}>
-          <strong>Lista publicada.</strong> Os restaurantes já veem os novos preços e a disponibilidade.
+          <strong>Lista publicada.</strong> Os clientes já veem os novos preços e a disponibilidade.
         </Banner>
       ) : null}
       {invalidCount > 0 ? (
@@ -170,7 +170,7 @@ export function ProductsPage() {
       </Card>
 
       <p className='m-0 text-[13px] text-ink-2'>
-        As alterações só aparecem para os restaurantes depois de publicar. Produtos em falta continuam visíveis no
+        As alterações só aparecem para os clientes depois de publicar. Produtos em falta continuam visíveis no
         app, sem opção de pedido.
       </p>
 
@@ -180,7 +180,7 @@ export function ProductsPage() {
         open={confirmOpen}
         onOpenChange={setConfirmOpen}
         title='Publicar lista da semana?'
-        description='Os restaurantes passam a ver os novos preços, a disponibilidade e os selos agora.'
+        description='Os clientes passam a ver os novos preços, a disponibilidade e os selos agora.'
         confirmLabel={savingDrafts ? 'Salvando…' : 'Publicar'}
         loading={publish.isPending || savingDrafts}
         onConfirm={() => doPublish()}
