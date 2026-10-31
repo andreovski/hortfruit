@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<title>Painel · Produtos e preços</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#0B4A24}a:hover{color:#003818}
+button,input,select{font:inherit}
+</style>
+</helmet>
+<div style="min-height: 100vh; display: flex; flex-wrap: wrap; background: #F6F3EA; color: #14261A; font-family: 'DM Sans', system-ui, sans-serif; font-size: 15px; line-height: 1.4">
+
+<nav aria-label="Menu do painel" style="flex: 1 1 240px; background: #003818; color: #FFFFFF; padding: 24px 16px; box-sizing: border-box; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; align-items: center; gap: 12px; padding: 0 8px">
+<div style="width: 44px; height: 44px; border-radius: 50%; overflow: hidden; flex: none; position: relative">
+<img src="/_blob/68b6b6b261938bb0badd6d3edf3ed918" alt="Morro Verde Hortifruti" style="position: absolute; width: 56px; height: 56px; left: -6px; top: -6px">
+</div>
+<div style="display: flex; flex-direction: column">
+<span style="font-family: Outfit, sans-serif; font-weight: 700; font-size: 16px; letter-spacing: 0.04em; line-height: 1.15">MORRO VERDE</span>
+<span style="font-size: 12px; color: #B8DDB9">Painel administrativo</span>
+</div>
+</div>
+<div style="display: flex; flex-direction: column; gap: 4px">
+<a href="AdminPedidos.dc.html" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 12px; color: #DCEFDC; text-decoration: none; font-weight: 600">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6M9 16h3"></path></svg>
+<span style="flex: 1">Pedidos</span>
+<span style="min-width: 24px; height: 24px; padding: 0 7px; box-sizing: border-box; border-radius: 999px; background: #62A96B; color: #002B12; font-size: 12px; font-weight: 700; display: flex; align-items: center; justify-content: center">3</span>
+</a>
+<a href="AdminClientes.dc.html" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 12px; color: #DCEFDC; text-decoration: none; font-weight: 600">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"></circle><path d="M2.5 20a6.5 6.5 0 0 1 13 0"></path><path d="M16 4.5a3.5 3.5 0 0 1 0 7"></path><path d="M18 14.5a6.5 6.5 0 0 1 3.5 5.5"></path></svg>
+<span>Clientes</span>
+</a>
+<a href="AdminProdutos.dc.html" aria-current="page" style="min-height: 44px; display: flex; align-items: center; gap: 12px; padding: 0 12px; border-radius: 12px; background: #0B4A24; color: #FFFFFF; text-decoration: none; font-weight: 600">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12V4h8l10 10-8 8z"></path><circle cx="7.5" cy="8.5" r="1.5"></circle></svg>
+<span>Produtos e preços</span>
+</a>
+</div>
+<div style="background: #0B4A24; border-radius: 14px; padding: 14px; display: flex; flex-direction: column; gap: 4px">
+<span style="font-size: 12px; color: #B8DDB9">Semana atual</span>
+<span style="font-weight: 600">Entrega sex, 06/11</span>
+<span style="font-size: 13px; color: #DCEFDC">Pedidos fecham qui, 05/11 às 12h</span>
+</div>
+</nav>
+
+<main style="flex: 999 1 560px; min-width: 0; padding: 32px; box-sizing: border-box">
+<div style="max-width: 1240px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px">
+
+<div style="display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 4px">
+<h1 style="margin: 0; font-family: Outfit, sans-serif; font-size: 32px; font-weight: 600; color: #003818; line-height: 1.1">Produtos e preços</h1>
+<p style="margin: 0; color: #56665A">Lista publicada {{publicadoEm}} · válida até qui, 05/11 às 12h</p>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 12px">
+<sc-if value="{{temAlteracao}}" hint-placeholder-val="{{true}}">
+<span style="display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #6B3B00"><span aria-hidden="true" style="width: 8px; height: 8px; border-radius: 50%; background: #C77A12"></span>{{alteracoesTexto}}</span>
+</sc-if>
+<button onClick="{{publicar}}" disabled="{{bloqueado}}" style="min-height: 48px; padding: 0 20px; border-radius: 14px; border: 0; background: {{pubFundo}}; color: {{pubCor}}; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; cursor: pointer">
+<svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12l16-8-6 16-3-7z"></path></svg>Publicar lista da semana</button>
+</div>
+</div>
+
+<sc-if value="{{publicadoAgora}}" hint-placeholder-val="{{false}}">
+<div role="status" style="display: flex; align-items: center; gap: 12px; background: #E3F1E2; border: 1px solid #CFE5CE; color: #003818; border-radius: 14px; padding: 14px 16px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"></path></svg>
+<span><strong>Lista publicada.</strong> Os restaurantes já veem os novos preços e a disponibilidade.</span>
+</div>
+</sc-if>
+<sc-if value="{{temInvalido}}" hint-placeholder-val="{{false}}">
+<div role="alert" style="display: flex; align-items: center; gap: 12px; background: #F9E1DE; color: #6E1A0E; border-radius: 14px; padding: 14px 16px">
+<svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 8v5M12 16.5v.5"></path></svg>
+<span>Corrija os preços em vermelho antes de publicar.</span>
+</div>
+</sc-if>
+
+<div role="group" aria-label="Filtrar produtos" style="display: flex; flex-wrap: wrap; gap: 8px">
+<sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+<button aria-pressed="{{c.pressed}}" onClick="{{c.pick}}" style="min-height: 40px; padding: 0 8px 0 14px; border-radius: 999px; border: 1px solid {{c.borda}}; background: {{c.fundo}}; color: {{c.cor}}; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; cursor: pointer">{{c.label}}<span style="min-width: 24px; height: 24px; padding: 0 6px; box-sizing: border-box; border-radius: 999px; background: {{c.nFundo}}; color: {{c.nCor}}; font-size: 12px; display: flex; align-items: center; justify-content: center">{{c.n}}</span></button>
+</sc-for>
+</div>
+
+<section aria-label="Lista de produtos" style="background: #FFFFFF; border: 1px solid #E4E0D4; border-radius: 20px; overflow: hidden">
+<div style="overflow-x: auto">
+<div style="min-width: 1060px">
+<div style="display: grid; grid-template-columns: 48px minmax(170px, 1.5fr) 140px 96px 156px 110px 140px 140px; gap: 12px; padding: 12px 20px; font-size: 12px; font-weight: 700; letter-spacing: 0.05em; color: #56665A">
+<span></span><span>PRODUTO</span><span>VENDA</span><span>MÍNIMO</span><span>PREÇO DA SEMANA</span><span>VARIAÇÃO</span><span>DISPONIBILIDADE</span><span>SELO</span>
+</div>
+<sc-for list="{{lista}}" as="p" hint-placeholder-count="13">
+<div style="display: grid; grid-template-columns: 48px minmax(170px, 1.5fr) 140px 96px 156px 110px 140px 140px; gap: 12px; align-items: center; padding: 10px 20px; border-top: 1px solid #EFECE3; background: {{p.rowBg}}">
+<span aria-hidden="true" style="width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: {{p.bg}}; opacity: {{p.imgOp}}"><img src="{{p.img}}" alt="" style="width: 34px; height: 34px"></span>
+<span style="display: flex; flex-direction: column; min-width: 0">
+<span style="display: flex; align-items: center; gap: 8px"><span style="font-weight: 600">{{p.nome}}</span><sc-if value="{{p.mud}}" hint-placeholder-val="{{false}}"><span style="font-size: 11px; font-weight: 700; color: #6B3B00; background: #FCEFD6; padding: 2px 8px; border-radius: 999px">Alterado</span></sc-if></span>
+<span style="font-size: 12px; color: #56665A">{{p.cat}}</span>
+</span>
+<span style="font-size: 14px">{{p.venda}}</span>
+<span style="font-size: 14px">{{p.min}}</span>
+<span style="display: flex; flex-direction: column; gap: 2px">
+<label style="display: flex; align-items: center; gap: 6px; min-height: 40px; padding: 0 10px; border-radius: 10px; border: 1px solid {{p.borda}}; background: {{p.inputBg}}; box-sizing: border-box">
+<span style="font-size: 13px; color: #56665A">R$</span>
+<input aria-label="{{p.ariaPreco}}" value="{{p.preco}}" onChange="{{p.onPreco}}" style="width: 100%; min-width: 0; border: 0; outline: none; background: transparent; font-weight: 600; font-size: 15px; color: #14261A">
+<span style="font-size: 12px; color: #56665A">/{{p.un}}</span>
+</label>
+<span style="font-size: 12px; color: #56665A">antes {{p.anterior}}</span>
+</span>
+<span style="font-size: 14px; font-weight: 600; color: {{p.varCor}}">{{p.varTxt}}</span>
+<button role="switch" aria-checked="{{p.dispStr}}" aria-label="{{p.ariaDisp}}" onClick="{{p.toggle}}" style="display: flex; align-items: center; gap: 8px; min-height: 44px; border: 0; background: transparent; padding: 0; cursor: pointer; color: #14261A">
+<span aria-hidden="true" style="width: 40px; height: 24px; flex: none; border-radius: 999px; background: {{p.trilho}}; position: relative"><span style="position: absolute; top: 3px; left: {{p.knobX}}px; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF"></span></span>
+<span style="font-size: 13px; font-weight: 600; color: {{p.dispCor}}">{{p.dispLabel}}</span>
+</button>
+<select aria-label="{{p.ariaSelo}}" value="{{p.selo}}" onChange="{{p.onSelo}}" style="min-height: 40px; width: 100%; border-radius: 10px; border: 1px solid #D6D1C2; padding: 0 10px; background: #FFFFFF; color: #14261A; font-size: 14px">
+<option value="">Sem selo</option>
+<option value="Destaque">Destaque</option>
+<option value="Novo">Novo</option>
+</select>
+</div>
+</sc-for>
+</div>
+</div>
+</section>
+
+<p style="margin: 0; font-size: 13px; color: #56665A">As alterações só aparecem para os restaurantes depois de publicar. Produtos em falta continuam visíveis no app, sem opção de pedido.</p>
+</div>
+</main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":1320}}'>
+var BASE = [
+  { id: 'tomate', nome: 'Tomate', cat: 'Legumes', venda: 'Quilo', un: 'kg', min: '10 kg', anterior: 6.5, preco: 6.9, disp: true, selo: '', bg: '#FBE4DE', img: '/_blob/042c6f4182681089e589df753b851581' },
+  { id: 'cebola', nome: 'Cebola', cat: 'Legumes', venda: 'Quilo', un: 'kg', min: '5 kg', anterior: 4.8, preco: 4.5, disp: true, selo: '', bg: '#F6E9D6', img: '/_blob/f4814d3e180ba8fabb93340d3b61d589' },
+  { id: 'pimentao', nome: 'Pimentão', cat: 'Legumes', venda: 'Quilo', un: 'kg', min: '2 kg', anterior: 8.9, preco: 8.9, disp: true, selo: '', bg: '#E3F1E2', img: '/_blob/ae26aa61c9ba0672ebf061fa75b502b2' },
+  { id: 'alho', nome: 'Alho', cat: 'Legumes', venda: 'Quilo', un: 'kg', min: '2 kg', anterior: 27, preco: 28, disp: true, selo: '', bg: '#EFEBDF', img: '/_blob/a853ef8ff821112514036b6c9abec1aa' },
+  { id: 'batata', nome: 'Batata Reino', cat: 'Legumes', venda: 'Quilo', un: 'kg', min: '5 kg', anterior: 4.2, preco: 4.2, disp: true, selo: '', bg: '#F3E8D3', img: '/_blob/8607678ab6e49533b609e47ee8e55b9f' },
+  { id: 'cenoura', nome: 'Cenoura', cat: 'Legumes', venda: 'Quilo', un: 'kg', min: '2 kg', anterior: 5.2, preco: 4.8, disp: true, selo: '', bg: '#FDE7D3', img: '/_blob/20289fc438bc551b4f0d68c5f48bd618' },
+  { id: 'abacaxi', nome: 'Abacaxi', cat: 'Frutas', venda: 'Quilo', un: 'kg', min: '5 kg', anterior: 5.5, preco: 5.5, disp: true, selo: '', bg: '#F8F0D2', img: '/_blob/16b75889b6a346970cd914941a531f23' },
+  { id: 'manga', nome: 'Manga', cat: 'Frutas', venda: 'Quilo', un: 'kg', min: '10 kg', anterior: 7, preco: 6.5, disp: true, selo: 'Destaque', bg: '#FDEBD2', img: '/_blob/df70f9039f0dcbeb7e3f39f3aa07013a' },
+  { id: 'laranja', nome: 'Laranja', cat: 'Frutas', venda: 'Saco 20 kg', un: 'saco', min: '1 saco', anterior: 50, preco: 52, disp: true, selo: '', bg: '#FDE6CF', img: '/_blob/3a6e8aa8ebd1c964e1011299fcc79565' },
+  { id: 'banana', nome: 'Banana da terra', cat: 'Frutas', venda: 'Unidade', un: 'un', min: '10 un', anterior: 1.8, preco: 1.8, disp: true, selo: '', bg: '#F7EFCB', img: '/_blob/a7cdf77a4c4b5aa0d1e8802d2cb60b67' },
+  { id: 'maracuja', nome: 'Maracujá', cat: 'Frutas', venda: 'Saco 12 kg', un: 'saco', min: '1 saco', anterior: 72, preco: 78, disp: true, selo: '', bg: '#F7EFCB', img: '/_blob/539f82d127c5c64fd92aa6d3c9c11598' },
+  { id: 'morango', nome: 'Morango', cat: 'Frutas', venda: 'Caixa 4 bandejas', un: 'caixa', min: '1 caixa', anterior: 32, preco: 32, disp: false, selo: '', bg: '#FBE1E4', img: '/_blob/138a8a4f18f40e214188505e434743c8' },
+  { id: 'limao', nome: 'Limão', cat: 'Frutas', venda: 'Saco 20 kg', un: 'saco', min: '1 saco', anterior: 58, preco: 64, disp: true, selo: '', bg: '#E6F1DA', img: '/_blob/0711221b11c6fef7f3e41760cc71653a' }
+];
+function brl(v) { return v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }); }
+function fmt(v) { return v.toFixed(2).replace('.', ','); }
+function parse(str) {
+  var t = String(str).trim();
+  if (!t) return null;
+  var n = parseFloat(t.replace(/\./g, '').replace(',', '.'));
+  return isNaN(n) || n <= 0 ? null : n;
+}
+
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    var pub = {};
+    BASE.forEach(function (p) { pub[p.id] = { preco: fmt(p.preco), disp: p.disp, selo: p.selo }; });
+    var atual = JSON.parse(JSON.stringify(pub));
+    atual.tomate.preco = '7,20';
+    this.state = { pub: pub, atual: atual, filtro: 'todos', publicadoEm: 'seg, 02/11 às 08:15', publicadoAgora: false };
+  }
+  set(id, k, v) {
+    this.setState((x) => {
+      var a = Object.assign({}, x.atual);
+      a[id] = Object.assign({}, a[id]);
+      a[id][k] = v;
+      return { atual: a, publicadoAgora: false };
+    });
+  }
+  renderVals() {
+    var s = this.state;
+    var alterados = 0;
+    var invalidos = 0;
+    var rows = BASE.map((p) => {
+      var a = s.atual[p.id];
+      var pb = s.pub[p.id];
+      var mud = a.preco !== pb.preco || a.disp !== pb.disp || a.selo !== pb.selo;
+      if (mud) alterados += 1;
+      if (parse(a.preco) === null) invalidos += 1;
+      return { p: p, a: a, mud: mud };
+    });
+    var counts = {
+      todos: rows.length,
+      legumes: rows.filter((r) => r.p.cat === 'Legumes').length,
+      frutas: rows.filter((r) => r.p.cat === 'Frutas').length,
+      falta: rows.filter((r) => !r.a.disp).length,
+      alterados: alterados
+    };
+    var chips = [['todos', 'Todos'], ['legumes', 'Legumes'], ['frutas', 'Frutas'], ['falta', 'Em falta'], ['alterados', 'Alterados']].map((c) => {
+      var on = s.filtro === c[0];
+      return {
+        label: c[1], n: counts[c[0]], pressed: on ? 'true' : 'false',
+        fundo: on ? '#003818' : '#FFFFFF', cor: on ? '#FFFFFF' : '#14261A', borda: on ? '#003818' : '#D6D1C2',
+        nFundo: on ? '#0B4A24' : '#EFECE3', nCor: on ? '#FFFFFF' : '#3B4A3F',
+        pick: () => this.setState({ filtro: c[0] })
+      };
+    });
+    var lista = rows.filter((r) => {
+      if (s.filtro === 'legumes') return r.p.cat === 'Legumes';
+      if (s.filtro === 'frutas') return r.p.cat === 'Frutas';
+      if (s.filtro === 'falta') return !r.a.disp;
+      if (s.filtro === 'alterados') return r.mud;
+      return true;
+    }).map((r) => {
+      var p = r.p;
+      var a = r.a;
+      var v = parse(a.preco);
+      var varTxt = '—';
+      var varCor = '#56665A';
+      if (v !== null) {
+        var pct = ((v - p.anterior) / p.anterior) * 100;
+        if (Math.abs(pct) >= 0.05) {
+          varTxt = (pct > 0 ? '+' : '') + pct.toFixed(1).replace('.', ',') + '%';
+          varCor = pct > 0 ? '#8F4A00' : '#0B4A24';
+        }
+      }
+      return {
+        img: p.img, bg: p.bg, imgOp: a.disp ? '1' : '0.55',
+        nome: p.nome, cat: p.cat, venda: p.venda, min: p.min, un: p.un,
+        preco: a.preco, anterior: brl(p.anterior),
+        ariaPreco: 'Preço de ' + p.nome + ' por ' + p.un,
+        onPreco: (e) => this.set(p.id, 'preco', e.target.value.replace(/[^\d,.]/g, '')),
+        varTxt: varTxt, varCor: varCor,
+        borda: v === null ? '#B42318' : (r.mud ? '#E0B45C' : '#D6D1C2'),
+        inputBg: r.mud ? '#FFF8E8' : '#FFFFFF',
+        mud: r.mud, rowBg: r.mud ? '#FFFCF4' : '#FFFFFF',
+        dispStr: a.disp ? 'true' : 'false',
+        ariaDisp: p.nome + ' disponível',
+        dispLabel: a.disp ? 'Disponível' : 'Em falta',
+        dispCor: a.disp ? '#0B4A24' : '#8A1F11',
+        trilho: a.disp ? '#3D8A4A' : '#B5B0A1',
+        knobX: a.disp ? 19 : 3,
+        toggle: () => this.set(p.id, 'disp', !a.disp),
+        selo: a.selo,
+        ariaSelo: 'Selo de ' + p.nome,
+        onSelo: (e) => this.set(p.id, 'selo', e.target.value)
+      };
+    });
+    var bloqueado = alterados === 0 || invalidos > 0;
+    return {
+      publicadoEm: s.publicadoEm,
+      publicadoAgora: s.publicadoAgora,
+      temAlteracao: alterados > 0,
+      alteracoesTexto: alterados + (alterados === 1 ? ' alteração não publicada' : ' alterações não publicadas'),
+      temInvalido: invalidos > 0,
+      bloqueado: bloqueado,
+      pubFundo: bloqueado ? '#DCD8CB' : '#003818',
+      pubCor: bloqueado ? '#4F4F48' : '#FFFFFF',
+      publicar: () => {
+        if (bloqueado) return;
+        this.setState((x) => ({ pub: JSON.parse(JSON.stringify(x.atual)), publicadoEm: 'hoje às 21:40', publicadoAgora: true, filtro: x.filtro === 'alterados' ? 'todos' : x.filtro }));
+      },
+      chips: chips,
+      lista: lista
+    };
+  }
+}
+</script>
+</body>
+</html>

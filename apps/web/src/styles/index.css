@@ -1,0 +1,95 @@
+@import 'tailwindcss';
+@import '@fontsource/outfit/400.css';
+@import '@fontsource/outfit/500.css';
+@import '@fontsource/outfit/600.css';
+@import '@fontsource/outfit/700.css';
+@import '@fontsource-variable/dm-sans';
+
+/*
+ * Design system Morro Verde (artboard "Design system" do protótipo): cores tiradas da logo,
+ * Outfit para títulos, preços e números; DM Sans para o texto. Só tema claro na v1.
+ * Use os tokens (bg-brand, text-ink-2, border-line...), nunca hex solto nos componentes.
+ */
+@theme {
+  --font-sans: 'DM Sans Variable', 'DM Sans', system-ui, sans-serif;
+  --font-display: 'Outfit', system-ui, sans-serif;
+
+  --color-brand: #003818; /* Verde 900: marca, ações, títulos */
+  --color-brand-800: #0b4a24; /* bordas, links, menu ativo */
+  --color-brand-600: #3d7a47; /* rótulos de categoria, ícones de apoio */
+  --color-brand-500: #3d8a4a; /* switch ligado */
+  --color-brand-400: #62a96b; /* status ativo, contador */
+  --color-brand-200: #b8ddb9; /* texto sobre o verde escuro */
+  --color-brand-150: #dcefdc; /* texto do menu */
+  --color-brand-100: #e3f1e2; /* fundos suaves, selecionado */
+  --color-brand-border: #cfe5ce;
+
+  --color-cream: #f6f3ea; /* fundo da página */
+  --color-surface: #ffffff; /* cards */
+  --color-line: #e4e0d4; /* bordas, divisões */
+  --color-line-soft: #efece3; /* divisões dentro de card */
+  --color-line-strong: #d6d1c2; /* bordas de campo e botão secundário */
+  --color-muted: #efebdf;
+  --color-disabled: #dcd8cb;
+  --color-disabled-ink: #4f4f48;
+
+  --color-ink: #14261a; /* texto principal */
+  --color-ink-2: #56665a; /* texto de apoio */
+  --color-ink-3: #3b4a3f;
+
+  --color-amber: #c77a12; /* alerta, fechado */
+  --color-amber-ink: #6b3b00;
+  --color-amber-ink-2: #5c3300;
+  --color-amber-100: #fcefd6;
+  --color-amber-border: #f1ddb4;
+  --color-amber-ring: #f5e0b8;
+  --color-amber-up: #8f4a00; /* preço subiu */
+
+  --color-danger: #8a1f11;
+  --color-danger-ink: #6e1a0e;
+  --color-danger-100: #f9e1de;
+  --color-danger-border: #e2b8b1;
+  --color-danger-strong: #b42318;
+
+  --radius-card: 20px;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--color-cream);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.4;
+    -webkit-font-smoothing: antialiased;
+  }
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+  a {
+    color: var(--color-brand-800);
+  }
+  a:hover {
+    color: var(--color-brand);
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-brand-400);
+    outline-offset: 2px;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff;
+  }
+}
