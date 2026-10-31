@@ -7,7 +7,7 @@ import { defineRailway, github, preserve, project, service } from 'railway/iac';
 // Segredos nunca têm valor aqui: ficam `preserve()` e são definidos com
 // `railway variable set --stdin`.
 //
-// O partial deixa o Postgres fora deste arquivo: ele é criado pelo painel (Postgres 17), e o
+// O partial deixa o Postgres fora deste arquivo: ele é criado pelo painel (Postgres 18), e o
 // `apply` só mexe no que está declarado aqui.
 export const partial = 'apps';
 
