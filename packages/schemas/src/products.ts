@@ -82,3 +82,7 @@ export interface ProductIllustration {
   url: string;
   color: string;
 }
+
+/** Foto enviada e descartada antes de salvar o produto (`POST /admin/uploads/discard`). */
+export const discardUploadBodySchema = z.object({ url: z.string().trim().min(1).max(500) });
+export type DiscardUploadBody = z.infer<typeof discardUploadBodySchema>;

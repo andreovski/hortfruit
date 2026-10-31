@@ -18,7 +18,8 @@ export function ImagePicker({
   value: string;
   color: string;
   uploadsEnabled: boolean;
-  onPick: (url: string, color?: string) => void;
+  /** `uploaded`: foto que acabou de ser enviada ao UploadThing. */
+  onPick: (url: string, color?: string, uploaded?: boolean) => void;
 }) {
   return (
     <div className='flex flex-col gap-3'>
@@ -37,7 +38,7 @@ export function ImagePicker({
               const file = res?.[0] as { serverData?: { url?: string } | null; ufsUrl?: string } | undefined;
               const url = file?.serverData?.url ?? file?.ufsUrl;
               if (url) {
-                onPick(url);
+                onPick(url, undefined, true);
                 toast.success('Foto enviada.');
               }
             }}

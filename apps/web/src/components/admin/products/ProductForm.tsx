@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 
 import { CATEGORIES, CATEGORY_LABEL } from '@/features/admin/labels';
 import { useSaveProduct } from '@/features/admin/products';
+import { usePendingUploads } from '@/features/admin/uploads';
 import { errorMessage } from '@/lib/api';
 import { CARD_COLORS, ILLUSTRATIONS } from '@/lib/illustrations';
 import { cn } from '@/lib/utils';
@@ -59,6 +60,7 @@ export function ProductForm({
   onDone: () => void;
 }) {
   const save = useSaveProduct();
+  const uploads = usePendingUploads();
   const [form, setForm] = useState(() => initialState(product));
   const [errors, setErrors] = useState<Errors>({});
   const [apiError, setApiError] = useState<string | null>(null);
@@ -113,6 +115,7 @@ export function ProductForm({
       { id: product?.id, body },
       {
         onSuccess: () => {
+          uploads.saved();
           toast.success(product ? 'Produto salvo.' : 'Produto cadastrado. Publique a lista para aparecer no app.');
           onDone();
         },
@@ -237,7 +240,8 @@ export function ProductForm({
           value={form.imageUrl}
           color={form.color}
           uploadsEnabled={uploadsEnabled}
-          onPick={(url, color) => {
+          onPick={(url, color, uploaded) => {
+            uploads.replaced(form.imageUrl, url, uploaded);
             set('imageUrl', url);
             if (color) set('color', color);
           }}
