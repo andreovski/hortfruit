@@ -51,7 +51,7 @@ pnpm --filter api seed                         # primeiro ADM, ajustes e os 13 p
   guarda nome e preço do momento (`OrderItem`). Um restaurante pode ter vários pedidos na semana.
 - **Identificação sem login**: o telefone (só dígitos, `normalizePhone`) acha o `Customer`. Não
   encontrado ou inativo → `{ found: false }`, igual nos dois casos, e o app mostra "fale com a
-  Morro Verde" com o WhatsApp. Achado → só nome e endereço parcial (`maskAddress`). Nada de
+  Morro Verde" com o WhatsApp. Achado → só nome, rua sem número (`maskAddress`) e bairro. Nada de
   endereço inteiro, CNPJ ou e-mail nas rotas públicas.
 - **Link secreto do pedido** (`Order.token`, 32+ caracteres aleatórios): `/pedido/$token` mostra,
   edita e cancela até o fechamento da semana (`canCustomerChange`). O aparelho guarda os tokens em

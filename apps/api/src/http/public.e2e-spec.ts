@@ -101,7 +101,7 @@ describe('rotas públicas', () => {
         found: true,
         customer: {
           name: 'Cantina Bella Vista',
-          maskedAddress: 'Rua Itu…, 12…',
+          maskedAddress: 'Rua Itupava',
           neighborhood: 'Alto da XV',
         },
       });
@@ -176,7 +176,7 @@ describe('rotas públicas', () => {
         status: 'NOVO',
         canChange: true,
         canceledBy: null,
-        customer: { name: 'Cantina Bella Vista', maskedAddress: 'Rua Itu…, 12…' },
+        customer: { name: 'Cantina Bella Vista', maskedAddress: 'Rua Itupava' },
         week: { id: week.id, isOpen: true },
       });
       expect(JSON.stringify(view)).not.toContain('contato@bellavista.com');

@@ -48,10 +48,13 @@ describe('telefone', () => {
 });
 
 describe('endereço parcial', () => {
-  it('esconde o resto do nome e do número', () => {
-    expect(maskAddress('Rua Itupava, 1234')).toBe('Rua Itu…, 12…');
-    expect(maskAddress('Avenida Sete de Setembro, 4500, sala 2')).toBe('Avenida Set…, 45…');
-    expect(maskAddress('Itupava')).toBe('Itu…');
+  it('mostra a rua inteira e esconde número e complemento', () => {
+    expect(maskAddress('Rua Itupava, 1234')).toBe('Rua Itupava');
+    expect(maskAddress('Avenida Sete de Setembro, 4500, sala 2')).toBe('Avenida Sete de Setembro');
+    expect(maskAddress('Rua Dom Pedro II 450 - fundos')).toBe('Rua Dom Pedro II');
+    expect(maskAddress('Rua XV de Novembro nº 12')).toBe('Rua XV de Novembro');
+    expect(maskAddress('Rua 7 de Setembro')).toBe('Rua 7 de Setembro');
+    expect(maskAddress('Itupava')).toBe('Itupava');
   });
 });
 

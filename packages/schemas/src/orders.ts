@@ -24,7 +24,7 @@ export type IdentifyResponse =
       found: true;
       customer: {
         name: string; // nome do restaurante
-        maskedAddress: string; // "Rua Itu…, 12…"
+        maskedAddress: string; // só a rua, sem número: "Rua Itupava"
         neighborhood: string | null;
       };
     }
