@@ -3,7 +3,14 @@ import { Download, Printer } from 'lucide-react';
 import { useMemo } from 'react';
 
 import { buttonLinkClass } from '@/components/admin/button-link';
-import { Button, Card, EmptyState, ErrorState, PageHeader, TableSkeleton } from '@/components/admin/ui';
+import {
+  Button,
+  Card,
+  EmptyState,
+  ErrorState,
+  PageHeader,
+  TableSkeleton,
+} from '@/components/admin/ui';
 import { ordersLabel } from '@/features/admin/labels';
 import { usePurchaseList } from '@/features/admin/orders';
 import { useProducts } from '@/features/admin/products';
@@ -13,7 +20,8 @@ export function PurchaseListPage() {
   // A lista de compra não traz imagem e cor: vêm do cadastro dos produtos.
   const products = useProducts();
   const looks = useMemo(
-    () => new Map(products.data?.products.map((p) => [p.id, { imageUrl: p.imageUrl, color: p.color }])),
+    () =>
+      new Map(products.data?.products.map((p) => [p.id, { imageUrl: p.imageUrl, color: p.color }])),
     [products.data]
   );
   const week = query.data?.week;
@@ -29,7 +37,11 @@ export function PurchaseListPage() {
             : 'Soma dos pedidos da semana por produto'
         }
       >
-        <Button variant='secondary' onClick={() => window.print()} disabled={!query.data?.rows.length}>
+        <Button
+          variant='secondary'
+          onClick={() => window.print()}
+          disabled={!query.data?.rows.length}
+        >
           <Printer aria-hidden className='size-4' />
           Imprimir
         </Button>
@@ -50,10 +62,12 @@ export function PurchaseListPage() {
             </span>
           </div>
           {query.data ? (
-            <span className='font-display text-2xl font-bold text-brand'>{formatBRL(query.data.totalCents)}</span>
+            <span className='font-display text-2xl font-bold text-brand'>
+              {formatBRL(query.data.totalCents)}
+            </span>
           ) : null}
         </div>
-        <div className='overflow-x-auto'>
+        <div className='relative overflow-x-auto'>
           {query.isPending ? (
             <TableSkeleton />
           ) : query.isError ? (
@@ -67,10 +81,18 @@ export function PurchaseListPage() {
                   <th scope='col' className='w-16 px-5 py-3'>
                     <span className='sr-only'>Imagem</span>
                   </th>
-                  <th scope='col' className='px-3 py-3 font-bold'>PRODUTO</th>
-                  <th scope='col' className='px-3 py-3 font-bold'>QUANTIDADE TOTAL</th>
-                  <th scope='col' className='px-3 py-3 font-bold'>PEDIDOS</th>
-                  <th scope='col' className='px-5 py-3 text-right font-bold'>VALOR ESTIMADO</th>
+                  <th scope='col' className='px-3 py-3 font-bold'>
+                    PRODUTO
+                  </th>
+                  <th scope='col' className='px-3 py-3 font-bold'>
+                    QUANTIDADE TOTAL
+                  </th>
+                  <th scope='col' className='px-3 py-3 font-bold'>
+                    PEDIDOS
+                  </th>
+                  <th scope='col' className='px-5 py-3 text-right font-bold'>
+                    VALOR ESTIMADO
+                  </th>
                 </tr>
               </thead>
               <tbody>
@@ -84,7 +106,9 @@ export function PurchaseListPage() {
                           className='flex size-10 items-center justify-center rounded-[10px] bg-muted'
                           style={look ? { background: look.color } : undefined}
                         >
-                          {look ? <img src={look.imageUrl} alt='' className='size-8 object-contain' /> : null}
+                          {look ? (
+                            <img src={look.imageUrl} alt='' className='size-8 object-contain' />
+                          ) : null}
                         </span>
                       </td>
                       <td className='px-3 py-2.5'>
@@ -95,7 +119,9 @@ export function PurchaseListPage() {
                         {quantityLabel(row.quantity, row.unit)}
                       </td>
                       <td className='px-3 py-2.5 text-ink-3'>{ordersLabel(row.orderCount)}</td>
-                      <td className='px-5 py-2.5 text-right font-semibold'>{formatBRL(row.totalCents)}</td>
+                      <td className='px-5 py-2.5 text-right font-semibold'>
+                        {formatBRL(row.totalCents)}
+                      </td>
                     </tr>
                   );
                 })}
@@ -104,7 +130,9 @@ export function PurchaseListPage() {
           )}
         </div>
       </Card>
-      <p className='m-0 text-[13px] text-ink-2'>Valores estimados pelos preços da semana, antes da pesagem.</p>
+      <p className='m-0 text-[13px] text-ink-2'>
+        Valores estimados pelos preços da semana, antes da pesagem.
+      </p>
     </>
   );
 }

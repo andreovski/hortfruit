@@ -16,22 +16,33 @@ import { cn } from '@/lib/utils';
 import { Logo } from './Logo';
 
 interface NavItem {
-  to: '/admin' | '/admin/lista-de-compra' | '/admin/clientes' | '/admin/produtos' | '/admin/ajustes';
+  to:
+    | '/admin'
+    | '/admin/lista-de-compra'
+    | '/admin/clientes'
+    | '/admin/produtos'
+    | '/admin/ajustes';
   label: string;
+  /** Rótulo da barra de abas do celular, onde os cinco itens dividem a largura. */
+  short: string;
   icon: LucideIcon;
   badge?: boolean;
 }
 
 const NAV: NavItem[] = [
-  { to: '/admin', label: 'Pedidos', icon: ClipboardList, badge: true },
-  { to: '/admin/lista-de-compra', label: 'Lista de compra', icon: ShoppingBasket },
-  { to: '/admin/clientes', label: 'Clientes', icon: Users },
-  { to: '/admin/produtos', label: 'Produtos e preços', icon: Tag },
-  { to: '/admin/ajustes', label: 'Ajustes', icon: Settings },
+  { to: '/admin', label: 'Pedidos', short: 'Pedidos', icon: ClipboardList, badge: true },
+  { to: '/admin/lista-de-compra', label: 'Lista de compra', short: 'Compra', icon: ShoppingBasket },
+  { to: '/admin/clientes', label: 'Clientes', short: 'Clientes', icon: Users },
+  { to: '/admin/produtos', label: 'Produtos e preços', short: 'Produtos', icon: Tag },
+  { to: '/admin/ajustes', label: 'Ajustes', short: 'Ajustes', icon: Settings },
 ];
 
 const linkBase =
   'flex min-h-11 flex-none items-center gap-3 rounded-xl px-3 font-semibold text-brand-150 no-underline hover:bg-brand-800/60 hover:text-white';
+
+// No celular os itens viram abas: ícone em cima, rótulo curto embaixo, os cinco na largura da tela.
+const tabBase =
+  'relative flex min-h-14 min-w-0 flex-col items-center justify-center gap-1 rounded-xl px-1 py-1.5 text-[11px] leading-none font-semibold text-brand-150 no-underline hover:bg-brand-800/60 hover:text-white md:text-[13px] lg:min-h-11 lg:flex-none lg:flex-row lg:justify-start lg:gap-3 lg:px-3 lg:py-0 lg:text-base lg:leading-normal';
 
 export function Sidebar({
   newCount,
@@ -50,7 +61,9 @@ export function Sidebar({
       <div className='flex items-center gap-3 px-2'>
         <Logo />
         <div className='flex min-w-0 flex-1 flex-col'>
-          <span className='font-display text-base leading-[1.15] font-bold tracking-[0.04em]'>MORRO VERDE</span>
+          <span className='font-display text-base leading-[1.15] font-bold tracking-[0.04em]'>
+            MORRO VERDE
+          </span>
           <span className='text-xs text-brand-200'>Painel administrativo</span>
         </div>
         <button
@@ -64,21 +77,26 @@ export function Sidebar({
         </button>
       </div>
 
-      <div className='-mx-4 flex gap-1 overflow-x-auto px-4 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0'>
+      <div className='-mx-2 grid grid-cols-5 gap-0.5 sm:mx-0 lg:flex lg:flex-col lg:gap-1'>
         {NAV.map((item) => (
           <Link
             key={item.to}
             to={item.to}
             activeOptions={{ exact: true }}
-            className={linkBase}
-            activeProps={{ className: cn(linkBase, 'bg-brand-800 text-white') }}
+            className={tabBase}
+            activeProps={{ className: cn(tabBase, 'bg-brand-800 text-white') }}
           >
             <item.icon aria-hidden className='size-5 flex-none' />
-            <span className='flex-1 whitespace-nowrap'>{item.label}</span>
+            <span aria-hidden className='max-w-full truncate lg:hidden'>
+              {item.short}
+            </span>
+            <span className='sr-only lg:not-sr-only lg:flex-1 lg:whitespace-nowrap'>
+              {item.label}
+            </span>
             {item.badge && newCount > 0 ? (
               <span
                 aria-label={`${newCount} ${newCount === 1 ? 'pedido novo' : 'pedidos novos'}`}
-                className='flex h-6 min-w-6 items-center justify-center rounded-full bg-brand-400 px-[7px] text-xs font-bold text-brand'
+                className='absolute top-1 left-[calc(50%+4px)] flex h-5 min-w-5 items-center justify-center rounded-full bg-brand-400 px-[5px] text-[11px] font-bold text-brand lg:static lg:h-6 lg:min-w-6 lg:px-[7px] lg:text-xs'
               >
                 {newCount}
               </span>
@@ -93,7 +111,10 @@ export function Sidebar({
         type='button'
         onClick={onLogout}
         disabled={loggingOut}
-        className={cn(linkBase, 'mt-auto hidden w-full cursor-pointer bg-transparent text-left lg:flex')}
+        className={cn(
+          linkBase,
+          'mt-auto hidden w-full cursor-pointer bg-transparent text-left lg:flex'
+        )}
       >
         <LogOut aria-hidden className='size-5' />
         Sair
@@ -114,16 +135,17 @@ function WeekCard() {
         <>
           <span className='font-semibold'>Entrega {formatDeliveryDate(week.deliveryDate)}</span>
           <span className='text-[13px] text-brand-150'>
-            {week.isOpen
-              ? `Pedidos fecham ${formatDeadline(week.closesAt)}`
-              : 'Pedidos fechados'}
+            {week.isOpen ? `Pedidos fecham ${formatDeadline(week.closesAt)}` : 'Pedidos fechados'}
           </span>
         </>
       ) : (
         <span className='text-[13px] text-brand-150'>Nenhuma semana aberta</span>
       )}
       {week && !week.isOpen ? (
-        <Link to='/admin/produtos' className='mt-1 text-[13px] font-semibold text-brand-200 hover:text-white'>
+        <Link
+          to='/admin/produtos'
+          className='mt-1 text-[13px] font-semibold text-brand-200 hover:text-white'
+        >
           Publicar a lista para abrir
         </Link>
       ) : null}
