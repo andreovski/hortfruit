@@ -1,6 +1,6 @@
 import { formatPhone } from '@hortifruit/core';
 import type { Customer } from '@hortifruit/schemas';
-import { Plus } from 'lucide-react';
+import { ChevronRight, Plus } from 'lucide-react';
 import { useState } from 'react';
 
 import { CustomerForm } from '@/components/admin/customers/CustomerForm';
@@ -19,6 +19,7 @@ import {
 import { type CustomerStatusFilter, useCustomers } from '@/features/admin/customers';
 import { shortDate } from '@/features/admin/labels';
 import { useDebouncedValue } from '@/features/admin/use-debounced-value';
+import { BELOW_LG_QUERY, useMediaQuery } from '@/features/admin/use-media-query';
 import { cn } from '@/lib/utils';
 
 type Editing = { mode: 'new' } | { mode: 'edit'; customer: Customer } | null;
@@ -28,6 +29,7 @@ export function CustomersPage() {
   const [status, setStatus] = useState<CustomerStatusFilter>('all');
   const [editing, setEditing] = useState<Editing>(null);
   const debouncedSearch = useDebouncedValue(search.trim());
+  const List = useMediaQuery(BELOW_LG_QUERY) ? CustomersList : CustomersTable;
   const query = useCustomers({ search: debouncedSearch, status });
   const customers = query.data?.customers ?? [];
   const activeCount = customers.filter((c) => c.active).length;
@@ -65,7 +67,7 @@ export function CustomersPage() {
       />
 
       <Card aria-label='Lista de clientes' className='overflow-hidden'>
-        <div className='overflow-x-auto'>
+        <div className='relative overflow-x-auto'>
           {query.isPending ? (
             <TableSkeleton />
           ) : query.isError ? (
@@ -77,7 +79,7 @@ export function CustomersPage() {
                 : 'Nenhum cliente cadastrado. Cadastre o primeiro cliente em "Novo cliente".'}
             </EmptyState>
           ) : (
-            <CustomersTable
+            <List
               customers={customers}
               selectedId={editing?.mode === 'edit' ? editing.customer.id : null}
               onSelect={(customer) => setEditing({ mode: 'edit', customer })}
@@ -167,5 +169,55 @@ function CustomersTable({
         ))}
       </tbody>
     </table>
+  );
+}
+
+/** Versão em cartões para celular. */
+function CustomersList({
+  customers,
+  selectedId,
+  onSelect,
+}: {
+  customers: Customer[];
+  selectedId: string | null;
+  onSelect: (customer: Customer) => void;
+}) {
+  return (
+    <ul className='m-0 list-none p-0'>
+      {customers.map((c) => (
+        <li key={c.id} className='border-t border-line-soft first:border-t-0'>
+          <button
+            type='button'
+            onClick={() => onSelect(c)}
+            aria-label={`Editar ${c.name}`}
+            className={cn(
+              'flex w-full cursor-pointer items-center gap-3 bg-transparent px-4 py-3.5 text-left text-ink hover:bg-cream/60',
+              selectedId === c.id && 'bg-brand-100/60'
+            )}
+          >
+            <span className='flex min-w-0 flex-1 flex-col gap-1'>
+              <span className='flex items-center justify-between gap-3'>
+                <span className='truncate font-semibold'>{c.name}</span>
+                <Pill tone={c.active ? 'green' : 'gray'} className='flex-none'>
+                  {c.active ? 'Ativo' : 'Inativo'}
+                </Pill>
+              </span>
+              <span className='text-sm'>
+                {formatPhone(c.phone)}
+                {c.contactName ? <span className='text-ink-2'> · {c.contactName}</span> : null}
+              </span>
+              <span className='truncate text-xs text-ink-2'>
+                {[c.neighborhood, c.city].filter(Boolean).join(' · ') || c.address}
+              </span>
+              <span className='text-xs text-ink-2'>
+                {c.orderCount} {c.orderCount === 1 ? 'pedido' : 'pedidos'}
+                {c.lastOrderAt ? ` · último ${shortDate(c.lastOrderAt)}` : ''}
+              </span>
+            </span>
+            <ChevronRight aria-hidden className='size-5 flex-none text-ink-2' />
+          </button>
+        </li>
+      ))}
+    </ul>
   );
 }

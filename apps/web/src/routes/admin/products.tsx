@@ -138,7 +138,7 @@ export function ProductsPage() {
       />
 
       <Card aria-label='Lista de produtos' className='overflow-hidden'>
-        <div className='overflow-x-auto'>
+        <div className='relative overflow-x-auto'>
           {query.isPending ? (
             <TableSkeleton rows={8} />
           ) : query.isError ? (

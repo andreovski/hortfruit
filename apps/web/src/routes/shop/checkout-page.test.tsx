@@ -43,7 +43,7 @@ describe('finalizar pedido', () => {
           found: true,
           customer: {
             name: 'Cantina Bella Vista',
-            maskedAddress: 'Rua Itu…, 12…',
+            maskedAddress: 'Rua Itupava',
             neighborhood: 'Centro',
           },
         }),
@@ -60,7 +60,7 @@ describe('finalizar pedido', () => {
 
     expect(await screen.findByRole('heading', { name: 'Confira seus dados' })).toBeInTheDocument();
     expect(screen.getByText('Cantina Bella Vista')).toBeInTheDocument();
-    expect(screen.getByText('Rua Itu…, 12… · Centro')).toBeInTheDocument();
+    expect(screen.getByText('Rua Itupava · Centro')).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole('button', { name: 'Enviar pedido' }));
 

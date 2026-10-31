@@ -55,7 +55,7 @@ export function itemsLabel(n: number) {
   return `${n} ${n === 1 ? 'item' : 'itens'}`;
 }
 
-/** Endereço do pedido: "Rua Itu…, 12… · Centro". */
+/** Endereço do pedido: "Rua Itupava · Centro". */
 export function addressLine(maskedAddress: string, neighborhood: string | null) {
   return neighborhood ? `${maskedAddress} · ${neighborhood}` : maskedAddress;
 }

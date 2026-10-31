@@ -164,7 +164,7 @@ export function makeOrder(overrides: Partial<PublicOrder> = {}): PublicOrder {
     ],
     customer: {
       name: 'Cantina Bella Vista',
-      maskedAddress: 'Rua Itu…, 12…',
+      maskedAddress: 'Rua Itupava',
       neighborhood: 'Centro',
     },
     week: makeWeek(),

@@ -1,18 +1,14 @@
 /**
- * Endereço parcial mostrado no fechamento do pedido, para quem souber o telefone de um restaurante
- * não ver o endereço inteiro: "Rua Itupava, 1234" → "Rua Itu…, 12…".
+ * Endereço parcial mostrado no fechamento do pedido: a rua inteira, sem número nem complemento, para
+ * o cliente reconhecer o endereço sem que quem souber o telefone dele veja onde fica exatamente.
+ * "Rua Itupava, 1234" → "Rua Itupava"; "Rua Dom Pedro II 450 - fundos" → "Rua Dom Pedro II".
+ * O bairro vai à parte, ao lado.
  */
 export function maskAddress(street: string): string {
-  const [namePart, ...rest] = street.split(',');
-  const words = namePart.trim().split(/\s+/).filter(Boolean);
-  let name: string;
-  if (words.length <= 1) {
-    name = words[0] ? `${words[0].slice(0, 3)}…` : '';
-  } else {
-    const [first, second] = words;
-    name = `${first} ${second.slice(0, 3)}…`;
-  }
-  const numberMatch = rest.join(',').match(/\d+/);
-  const number = numberMatch ? `, ${numberMatch[0].slice(0, 2)}…` : '';
-  return `${name}${number}`;
+  const [beforeComma] = street.split(',');
+  const [beforeDash] = beforeComma.split(/\s[-–—]\s/);
+  return beforeDash
+    .trim()
+    .replace(/\s+(?:n(?:[º°o.]|úmero)?\s*)?\d+[a-z]?$/i, '')
+    .replace(/\s+/g, ' ');
 }

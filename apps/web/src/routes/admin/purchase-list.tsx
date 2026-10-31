@@ -54,7 +54,7 @@ export function PurchaseListPage() {
             <span className='font-display text-2xl font-bold text-brand'>{formatBRL(query.data.totalCents)}</span>
           ) : null}
         </div>
-        <div className='overflow-x-auto'>
+        <div className='relative overflow-x-auto'>
           {query.isPending ? (
             <TableSkeleton />
           ) : query.isError ? (

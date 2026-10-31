@@ -53,12 +53,12 @@ export function AdminsSettings() {
                 key={admin.id}
                 className='flex flex-wrap items-center gap-3 border-t border-line-soft py-3 first:border-t-0'
               >
-                <div className='flex min-w-0 flex-1 flex-col'>
+                <div className='flex min-w-48 flex-1 flex-col'>
                   <span className='font-semibold'>
                     {admin.name}
                     {self ? <span className='font-normal text-ink-2'> (você)</span> : null}
                   </span>
-                  <span className='text-[13px] text-ink-2'>
+                  <span className='text-[13px] [overflow-wrap:anywhere] text-ink-2'>
                     {[admin.email, admin.phone ? formatPhone(admin.phone) : null].filter(Boolean).join(' · ')}
                   </span>
                 </div>

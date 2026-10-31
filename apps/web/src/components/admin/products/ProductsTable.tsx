@@ -1,6 +1,8 @@
 import type { AdminProduct, Badge } from '@hortifruit/schemas';
 
-import { ProductRow } from './ProductRow';
+import { BELOW_LG_QUERY, useMediaQuery } from '@/features/admin/use-media-query';
+
+import { ProductCard, ProductRow } from './ProductRow';
 
 export function ProductsTable({
   products,
@@ -19,6 +21,25 @@ export function ProductsTable({
   onPatch: (id: string, patch: { available?: boolean; badge?: Badge }) => void;
   onEdit: (product: AdminProduct) => void;
 }) {
+  const compact = useMediaQuery(BELOW_LG_QUERY);
+  if (compact) {
+    return (
+      <ul className='m-0 list-none p-0'>
+        {products.map((p) => (
+          <ProductCard
+            key={p.id}
+            product={p}
+            priceText={priceText(p)}
+            invalid={invalidIds.has(p.id)}
+            onPriceChange={(text) => onPriceChange(p.id, text)}
+            onPriceCommit={() => onPriceCommit(p.id)}
+            onPatch={(patch) => onPatch(p.id, patch)}
+            onEdit={() => onEdit(p)}
+          />
+        ))}
+      </ul>
+    );
+  }
   return (
     <table className='w-full min-w-[1120px] border-collapse text-left'>
       <thead>
