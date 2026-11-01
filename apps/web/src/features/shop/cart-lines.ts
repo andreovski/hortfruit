@@ -1,4 +1,4 @@
-import { checkOrder, missingForMinimum, type OrderProblem } from '@hortifruit/core';
+import { checkOrder, missingForMinimum, type OrderProblem, smallOrderFee } from '@hortifruit/core';
 import type { CatalogProduct } from '@hortifruit/schemas';
 
 export interface CartLine {
@@ -10,6 +10,11 @@ export interface CartLine {
 
 export interface CartSummary {
   lines: CartLine[];
+  /** Soma dos itens. */
+  itemsCents: number;
+  /** Taxa de pedido abaixo do mínimo (0 quando atingiu). */
+  feeCents: number;
+  /** Itens + taxa. */
   totalCents: number;
   itemCount: number;
   missingCents: number;
@@ -23,7 +28,8 @@ export interface CartSummary {
 export function summarizeCart(
   items: Record<string, number>,
   products: CatalogProduct[],
-  minOrderCents: number
+  minOrderCents: number,
+  smallOrderFeeCents = 0
 ): CartSummary {
   const byId = new Map(products.map((p) => [p.id, p]));
   const lines: CartLine[] = [];
@@ -37,18 +43,22 @@ export function summarizeCart(
       belowMin: quantity < product.minQuantity,
     });
   }
-  const totalCents = lines.reduce((sum, l) => sum + l.subtotalCents, 0);
+  const itemsCents = lines.reduce((sum, l) => sum + l.subtotalCents, 0);
+  const feeCents = lines.length > 0 ? smallOrderFee(itemsCents, minOrderCents, smallOrderFeeCents) : 0;
   const check = checkOrder(
     Object.entries(items).map(([productId, quantity]) => ({ productId, quantity })),
     products,
-    minOrderCents
+    minOrderCents,
+    smallOrderFeeCents
   );
   return {
     lines,
-    totalCents,
+    itemsCents,
+    feeCents,
+    totalCents: itemsCents + feeCents,
     itemCount: lines.length,
-    missingCents: missingForMinimum(totalCents, minOrderCents),
-    progress: minOrderCents > 0 ? Math.min(1, totalCents / minOrderCents) : 1,
+    missingCents: missingForMinimum(itemsCents, minOrderCents),
+    progress: minOrderCents > 0 ? Math.min(1, itemsCents / minOrderCents) : 1,
     problems: check.problems,
     canSend: check.ok,
   };

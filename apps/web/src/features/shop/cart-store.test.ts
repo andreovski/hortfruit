@@ -71,12 +71,15 @@ describe('carrinho × catálogo', () => {
     expect(result.changed).toBe(true);
   });
 
-  it('soma pelo preço do catálogo e bloqueia abaixo do mínimo do pedido', () => {
-    const below = summarizeCart({ [TOMATE.id]: 10 }, [TOMATE, ALHO], 20000);
-    expect(below.totalCents).toBe(6900);
+  it('soma pelo preço do catálogo e cobra a taxa abaixo do mínimo do pedido', () => {
+    const below = summarizeCart({ [TOMATE.id]: 10 }, [TOMATE, ALHO], 20000, 5000);
+    expect(below.itemsCents).toBe(6900);
+    expect(below.feeCents).toBe(5000);
+    expect(below.totalCents).toBe(11900);
     expect(below.missingCents).toBe(13100);
-    expect(below.canSend).toBe(false);
-    const ok = summarizeCart({ [TOMATE.id]: 10, [ALHO.id]: 5 }, [TOMATE, ALHO], 20000);
+    expect(below.canSend).toBe(true);
+    const ok = summarizeCart({ [TOMATE.id]: 10, [ALHO.id]: 5 }, [TOMATE, ALHO], 20000, 5000);
+    expect(ok.feeCents).toBe(0);
     expect(ok.totalCents).toBe(20900);
     expect(ok.canSend).toBe(true);
   });

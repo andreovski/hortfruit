@@ -67,6 +67,9 @@ export interface PublicOrder {
   canceledAt: string | null;
   canceledBy: 'CUSTOMER' | 'ADMIN' | null;
   note: string | null;
+  /** Taxa de pedido abaixo do mínimo (0 quando atingiu). */
+  feeCents: number;
+  /** Itens + taxa. */
   totalCents: number;
   items: OrderItem[];
   customer: { name: string; maskedAddress: string; neighborhood: string | null };
@@ -141,6 +144,8 @@ export interface AdminOrdersResponse {
 
 export interface AdminOrderDetail extends AdminOrderRow {
   note: string | null;
+  /** Taxa de pedido abaixo do mínimo (0 quando atingiu); já somada em totalCents. */
+  feeCents: number;
   confirmedAt: string | null;
   deliveredAt: string | null;
   canceledAt: string | null;

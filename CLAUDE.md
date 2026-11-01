@@ -48,8 +48,10 @@ pnpm --filter api seed                         # primeiro ADM, ajustes e os 13 p
 - **Produto**: `draft*` é o que o ADM edita; `published*` é o que o app mostra, copiado ao publicar
   (`previousPriceCents` guarda o publicado anterior, para a variação). Produto nunca publicado não
   aparece no app. Preço inválido bloqueia a publicação.
-- **Pedido**: mínimo por produto E pelo total (`Setting.minOrderCents`, padrão R$ 200). O pedido
-  guarda nome e preço do momento (`OrderItem`). Um restaurante pode ter vários pedidos na semana.
+- **Pedido**: mínimo por produto (bloqueia) e pelo total (`Setting.minOrderCents`, padrão R$ 200).
+  Abaixo do mínimo do total o pedido segue com a taxa `Setting.smallOrderFeeCents` (padrão R$ 50),
+  guardada em `Order.feeCents` e já somada em `totalCents`. O pedido guarda nome e preço do momento
+  (`OrderItem`). Um restaurante pode ter vários pedidos na semana.
 - **Identificação sem login**: o telefone (só dígitos, `normalizePhone`) acha o `Customer`. Não
   encontrado ou inativo → `{ found: false }`, igual nos dois casos, e o app mostra "fale com a
   Morro Verde" com o WhatsApp. Achado → só nome, rua sem número (`maskAddress`) e bairro. Nada de

@@ -11,8 +11,8 @@ export async function adminSettingsRoutes(app: FastifyInstance) {
     const body = updateSettingsBodySchema.parse(request.body);
     await prisma.setting.upsert({
       where: { id: 1 },
-      create: { id: 1, minOrderCents: body.minOrderCents },
-      update: { minOrderCents: body.minOrderCents },
+      create: { id: 1, ...body },
+      update: body,
     });
     return getSettingsDto();
   });

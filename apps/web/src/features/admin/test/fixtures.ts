@@ -67,6 +67,7 @@ export const ordersResponse: AdminOrdersResponse = {
 export const orderDetail: AdminOrderDetail = {
   ...ordersResponse.orders[0],
   note: 'Receber pela porta dos fundos.',
+  feeCents: 0,
   confirmedAt: null,
   deliveredAt: null,
   canceledAt: null,
@@ -140,5 +141,5 @@ export function mockShell(week: CurrentWeekResponse['week'] = openWeek) {
   mockRoute('GET', 'me', me);
   mockRoute('GET', 'admin/orders/new-count', { count: 2 });
   mockRoute('GET', 'admin/weeks/current', { week, suggestion: weekSuggestion });
-  mockRoute('GET', 'admin/settings', { minOrderCents: 20_000, uploadsEnabled: false, whatsapp: '41999990000' });
+  mockRoute('GET', 'admin/settings', { minOrderCents: 20_000, smallOrderFeeCents: 5000, uploadsEnabled: false, whatsapp: '41999990000' });
 }

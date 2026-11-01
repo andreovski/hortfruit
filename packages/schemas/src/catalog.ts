@@ -24,6 +24,8 @@ export interface CatalogResponse {
   /** Data/hora da última publicação da lista. */
   publishedAt: string | null;
   minOrderCents: number;
+  /** Taxa somada ao pedido que não atinge o mínimo. */
+  smallOrderFeeCents: number;
   /** Número do WhatsApp da Morro Verde (só dígitos, com DDD) ou null se não configurado. */
   whatsapp: string | null;
   products: CatalogProduct[];

@@ -121,6 +121,7 @@ export function makeCatalog(overrides: Partial<CatalogResponse> = {}): CatalogRe
     week: makeWeek(),
     publishedAt: '2026-11-02T11:00:00.000Z',
     minOrderCents: 20000,
+    smallOrderFeeCents: 5000,
     whatsapp: '41999998888',
     products: [TOMATE, ALHO, MORANGO],
     ...overrides,
@@ -139,6 +140,7 @@ export function makeOrder(overrides: Partial<PublicOrder> = {}): PublicOrder {
     canceledAt: null,
     canceledBy: null,
     note: 'Portão lateral',
+    feeCents: 0,
     totalCents: 12500,
     items: [
       {

@@ -24,15 +24,15 @@ function fillCart() {
 }
 
 describe('finalizar pedido', () => {
-  it('abaixo do mínimo o envio fica bloqueado', async () => {
-    const api = mockApi({ 'GET /api/catalog': () => json(makeCatalog()) });
+  it('abaixo do mínimo mostra a taxa no total e deixa enviar', async () => {
+    mockApi({ 'GET /api/catalog': () => json(makeCatalog()) });
     cartStore.setQuantity(TOMATE, 10);
     renderShop('/finalizar');
 
-    const button = await screen.findByRole('button', { name: 'Atinja o mínimo para enviar' });
-    expect(button).toBeDisabled();
+    expect(await screen.findByText('Taxa de pedido abaixo do mínimo')).toBeInTheDocument();
     expect(screen.getByText(/para o pedido mínimo de/)).toBeInTheDocument();
-    expect(api.calls.filter((c) => c.method === 'POST')).toHaveLength(0);
+    expect(screen.getByText('R$ 119,00')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Continuar' })).toBeEnabled();
   });
 
   it('telefone achado → confere os dados → envia, guarda o link e abre a confirmação', async () => {
@@ -55,7 +55,7 @@ describe('finalizar pedido', () => {
 
     await userEvent.type(await screen.findByLabelText('Telefone com DDD'), '41998765432');
     expect(screen.getByLabelText('Telefone com DDD')).toHaveValue('(41) 99876-5432');
-    await userEvent.type(screen.getByLabelText(/Observação para a entrega/), 'Portão lateral');
+    await userEvent.type(screen.getByPlaceholderText('Ex.: Tomates maduros'), 'Portão lateral');
     await userEvent.click(screen.getByRole('button', { name: 'Continuar' }));
 
     expect(await screen.findByRole('heading', { name: 'Confira seus dados' })).toBeInTheDocument();

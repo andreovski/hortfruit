@@ -5,6 +5,7 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   LEGUMES: 'Legumes',
   FRUTAS: 'Frutas',
   VERDURAS: 'Verduras',
+  HORTALICAS: 'Hortaliças',
   OUTROS: 'Outros',
 };
 

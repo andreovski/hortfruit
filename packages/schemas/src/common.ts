@@ -21,7 +21,7 @@ export const positiveCentsSchema = z.number().int().positive('O valor precisa se
 export const unitSchema = z.enum(['kg', 'saco', 'un', 'caixa', 'maco', 'duzia', 'bandeja']);
 export type UnitCode = z.infer<typeof unitSchema>;
 
-export const categorySchema = z.enum(['LEGUMES', 'FRUTAS', 'VERDURAS', 'OUTROS']);
+export const categorySchema = z.enum(['LEGUMES', 'FRUTAS', 'VERDURAS', 'HORTALICAS', 'OUTROS']);
 export type Category = z.infer<typeof categorySchema>;
 
 export const badgeSchema = z.enum(['DESTAQUE', 'NOVO']).nullable();

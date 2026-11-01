@@ -19,9 +19,9 @@ beforeEach(() => {
 });
 
 describe('Ajustes', () => {
-  it('fecha os pedidos com confirmação e salva o pedido mínimo', async () => {
+  it('fecha os pedidos com confirmação e salva o pedido mínimo e a taxa', async () => {
     mockRoute('POST', 'admin/weeks/current/close', { ok: true });
-    mockRoute('PATCH', 'admin/settings', { minOrderCents: 25_000, uploadsEnabled: false, whatsapp: null });
+    mockRoute('PATCH', 'admin/settings', { minOrderCents: 25_000, smallOrderFeeCents: 3000, uploadsEnabled: false, whatsapp: null });
     renderAdmin('/admin/ajustes');
     const user = userEvent.setup();
 
@@ -37,8 +37,17 @@ describe('Ajustes', () => {
     expect(min).toHaveValue('200,00');
     await user.clear(min);
     await user.type(min, '250');
+    const fee = screen.getByLabelText('Taxa abaixo do mínimo (R$)');
+    expect(fee).toHaveValue('50,00');
+    await user.clear(fee);
+    await user.type(fee, '30');
     await user.click(screen.getByRole('button', { name: 'Salvar' }));
-    await waitFor(() => expect(callsTo('PATCH', 'admin/settings')[0]?.options.json).toEqual({ minOrderCents: 25_000 }));
+    await waitFor(() =>
+      expect(callsTo('PATCH', 'admin/settings')[0]?.options.json).toEqual({
+        minOrderCents: 25_000,
+        smallOrderFeeCents: 3000,
+      })
+    );
   });
 });
 

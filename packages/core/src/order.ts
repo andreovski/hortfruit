@@ -20,7 +20,6 @@ export type OrderProblemCode =
   | 'UNAVAILABLE'
   | 'INVALID_QUANTITY'
   | 'BELOW_PRODUCT_MIN'
-  | 'BELOW_ORDER_MIN'
   | 'DUPLICATE_PRODUCT';
 
 export interface OrderProblem {
@@ -39,19 +38,26 @@ export interface PricedLine {
 
 export interface OrderCheck {
   lines: PricedLine[];
+  /** Soma dos itens. */
+  itemsCents: number;
+  /** Taxa de pedido abaixo do mínimo (0 quando atingiu). */
+  feeCents: number;
+  /** Itens + taxa. */
   totalCents: number;
   problems: OrderProblem[];
   ok: boolean;
 }
 
 /**
- * Confere um pedido contra o catálogo publicado (escopo 10: mínimo por produto E pelo total).
+ * Confere um pedido contra o catálogo publicado. O mínimo por produto bloqueia; o mínimo do pedido
+ * não: abaixo dele o pedido segue com a taxa `smallOrderFeeCents` (Ajustes).
  * Quantidades são inteiras, na unidade de venda do produto.
  */
 export function checkOrder(
   items: OrderItemInput[],
   products: CatalogProductForOrder[],
-  minOrderCents: number
+  minOrderCents: number,
+  smallOrderFeeCents = 0
 ): OrderCheck {
   const problems: OrderProblem[] = [];
   const lines: PricedLine[] = [];
@@ -113,15 +119,26 @@ export function checkOrder(
     });
   }
 
-  const totalCents = lines.reduce((sum, l) => sum + l.subtotalCents, 0);
-  if (items.length > 0 && totalCents < minOrderCents) {
-    problems.push({
-      code: 'BELOW_ORDER_MIN',
-      message: 'O pedido não atingiu o valor mínimo para entrega.',
-    });
-  }
+  const itemsCents = lines.reduce((sum, l) => sum + l.subtotalCents, 0);
+  const feeCents = lines.length > 0 ? smallOrderFee(itemsCents, minOrderCents, smallOrderFeeCents) : 0;
 
-  return { lines, totalCents, problems, ok: problems.length === 0 };
+  return {
+    lines,
+    itemsCents,
+    feeCents,
+    totalCents: itemsCents + feeCents,
+    problems,
+    ok: problems.length === 0,
+  };
+}
+
+/** Taxa cobrada quando os itens não somam o pedido mínimo (0 quando atinge). */
+export function smallOrderFee(
+  itemsCents: number,
+  minOrderCents: number,
+  smallOrderFeeCents: number
+): number {
+  return itemsCents < minOrderCents ? Math.max(0, smallOrderFeeCents) : 0;
 }
 
 /** O cliente ainda pode editar ou cancelar o pedido (até o fechamento da semana)? */

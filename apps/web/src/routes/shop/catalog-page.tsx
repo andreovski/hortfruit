@@ -59,13 +59,22 @@ function CatalogContent({ data }: { data: CatalogResponse }) {
   }, [data.products]);
   const visible =
     filter === 'ALL' ? data.products : data.products.filter((p) => p.category === filter);
-  const summary = summarizeCart(cart.state.items, data.products, data.minOrderCents);
+  const summary = summarizeCart(
+    cart.state.items,
+    data.products,
+    data.minOrderCents,
+    data.smallOrderFeeCents
+  );
 
   return (
     <>
       <main className='flex flex-col gap-4 px-4 pt-1 pb-4'>
         {open && data.week ? (
-          <OpenStrip week={data.week} minOrderCents={data.minOrderCents} />
+          <OpenStrip
+            week={data.week}
+            minOrderCents={data.minOrderCents}
+            smallOrderFeeCents={data.smallOrderFeeCents}
+          />
         ) : (
           <ClosedStrip week={data.week} />
         )}
@@ -131,9 +140,10 @@ function CatalogContent({ data }: { data: CatalogResponse }) {
       {open && summary.itemCount > 0 ? (
         <BottomBar>
           <MinimumProgress
-            totalCents={summary.totalCents}
+            totalCents={summary.itemsCents}
             minOrderCents={data.minOrderCents}
             missingCents={summary.missingCents}
+            feeCents={data.smallOrderFeeCents}
           />
           <Link
             to='/finalizar'
@@ -145,7 +155,7 @@ function CatalogContent({ data }: { data: CatalogResponse }) {
                 {cart.editing ? ` · pedido ${orderNumber(cart.editing.number)}` : ''}
               </span>
               <span className='font-display text-lg font-bold'>
-                {formatBRL(summary.totalCents)}
+                {formatBRL(summary.itemsCents)}
               </span>
             </span>
             <span className='flex items-center gap-1.5 font-bold'>

@@ -88,6 +88,7 @@ export function toPublicOrder(order: FullOrder, now: Date = clock.now()): Public
     canceledAt: isoOrNull(order.canceledAt),
     canceledBy: order.canceledBy,
     note: order.note,
+    feeCents: order.feeCents,
     totalCents: order.totalCents,
     items: order.items.map(toItemDto),
     customer: maskedCustomer(order.customer),
@@ -145,6 +146,7 @@ export function toAdminOrderDetail(order: FullOrder, now: Date = clock.now()): A
   return {
     ...toAdminOrderRow({ ...order, _count: { items: order.items.length } }),
     note: order.note,
+    feeCents: order.feeCents,
     confirmedAt: isoOrNull(order.confirmedAt),
     deliveredAt: isoOrNull(order.deliveredAt),
     canceledAt: isoOrNull(order.canceledAt),
@@ -167,7 +169,7 @@ export function toAdminOrderDetail(order: FullOrder, now: Date = clock.now()): A
 /** Confere os itens contra o catálogo publicado de agora; problema → 422 com o código. */
 async function priceItems(items: OrderItemInput[], tx: Prisma.TransactionClient) {
   const [catalog, setting] = await Promise.all([catalogForOrder(tx), getSetting(tx)]);
-  const check = checkOrder(items, catalog, setting.minOrderCents);
+  const check = checkOrder(items, catalog, setting.minOrderCents, setting.smallOrderFeeCents);
   if (!check.ok) {
     const [first] = check.problems;
     throw new AppError(422, first.message, first.code);
@@ -181,6 +183,7 @@ async function priceItems(items: OrderItemInput[], tx: Prisma.TransactionClient)
     ).map((p) => [p.id, p.unit])
   );
   return {
+    feeCents: check.feeCents,
     totalCents: check.totalCents,
     items: check.lines.map((line) => ({
       productId: line.productId,
@@ -213,6 +216,7 @@ export async function createOrder(input: {
         weekId: week.id,
         status: 'NOVO',
         note: input.note || null,
+        feeCents: priced.feeCents,
         totalCents: priced.totalCents,
         items: { create: priced.items },
       },
@@ -244,6 +248,7 @@ export async function updateOrder(
     return tx.order.update({
       where: { id: order.id },
       data: {
+        feeCents: priced.feeCents,
         totalCents: priced.totalCents,
         ...(input.note !== undefined ? { note: input.note || null } : {}),
         editedAt: now,
