@@ -228,6 +228,7 @@ describe('ajustes', () => {
     vi.stubEnv('UPLOADTHING_TOKEN', '');
     expect((await api.get('/admin/settings')).json<Settings>()).toEqual({
       minOrderCents: 20000,
+      smallOrderFeeCents: 5000,
       uploadsEnabled: false,
       whatsapp: '41999990000',
     });
@@ -235,6 +236,9 @@ describe('ajustes', () => {
 
     const patched = await api.patch('/admin/settings', { minOrderCents: 5000 });
     expect(patched.json<Settings>().minOrderCents).toBe(5000);
+    const fee = await api.patch('/admin/settings', { smallOrderFeeCents: 3000 });
+    expect(fee.json<Settings>()).toMatchObject({ minOrderCents: 5000, smallOrderFeeCents: 3000 });
+    expect((await api.patch('/admin/settings', { smallOrderFeeCents: -1 })).statusCode).toBe(400);
     expect((await api.patch('/admin/settings', { minOrderCents: -1 })).statusCode).toBe(400);
 
     const order = await client(app).post('/orders', {

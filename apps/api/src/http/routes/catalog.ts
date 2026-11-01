@@ -20,6 +20,7 @@ export async function catalogRoutes(app: FastifyInstance) {
       week: week ? toWeekDto(week, now) : null,
       publishedAt: isoOrNull(setting.publishedAt),
       minOrderCents: setting.minOrderCents,
+      smallOrderFeeCents: setting.smallOrderFeeCents,
       whatsapp: getWhatsappNumber(),
       products: products.map(toCatalogProduct),
     };

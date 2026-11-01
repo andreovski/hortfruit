@@ -123,6 +123,18 @@ function OrderDetail({ order }: { order: AdminOrderDetail }) {
             </li>
           ))}
         </ul>
+        {order.feeCents > 0 ? (
+          <>
+            <div className='flex items-baseline justify-between pt-3 text-sm text-ink-2'>
+              <span>Itens</span>
+              <span>{formatBRL(order.totalCents - order.feeCents)}</span>
+            </div>
+            <div className='flex items-baseline justify-between pt-1 text-sm text-ink-2'>
+              <span>Taxa (abaixo do mínimo)</span>
+              <span>{formatBRL(order.feeCents)}</span>
+            </div>
+          </>
+        ) : null}
         <div className='flex items-baseline justify-between pt-3'>
           <span className='font-semibold'>Total estimado</span>
           <span className='font-display text-[22px] font-bold text-brand'>{formatBRL(order.totalCents)}</span>

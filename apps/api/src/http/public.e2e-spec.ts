@@ -80,6 +80,7 @@ describe('rotas públicas', () => {
         week: null,
         publishedAt: null,
         minOrderCents: 20000,
+        smallOrderFeeCents: 5000,
         whatsapp: null,
         products: [],
       });
@@ -203,7 +204,7 @@ describe('rotas públicas', () => {
       expect(res.statusCode).toBe(409);
     });
 
-    it('abaixo do mínimo do produto ou do pedido → 422 com o código', async () => {
+    it('abaixo do mínimo do produto → 422 com o código', async () => {
       const { customer, tomate, laranja } = await orderScenario();
       const belowProduct = await api.post('/orders', {
         phone: customer.phone,
@@ -218,13 +219,21 @@ describe('rotas públicas', () => {
         code: 'BELOW_PRODUCT_MIN',
       });
 
-      const belowOrder = await api.post('/orders', {
+      expect(await prisma.order.count()).toBe(0);
+    });
+
+    it('abaixo do mínimo do pedido aceita e soma a taxa dos Ajustes', async () => {
+      const { customer, tomate } = await orderScenario();
+      await prisma.setting.update({ where: { id: 1 }, data: { smallOrderFeeCents: 4500 } });
+      const created = await api.post('/orders', {
         phone: customer.phone,
         items: [{ productId: tomate.id, quantity: 10 }],
       });
-      expect(belowOrder.statusCode).toBe(422);
-      expect(belowOrder.json().code).toBe('BELOW_ORDER_MIN');
-      expect(await prisma.order.count()).toBe(0);
+      expect(created.statusCode).toBe(201);
+      const order = await api.get(`/orders/${created.json().token}`);
+      const itemsCents = order.json().items[0].subtotalCents;
+      expect(order.json().feeCents).toBe(4500);
+      expect(order.json().totalCents).toBe(itemsCents + 4500);
     });
 
     it('produto em falta, não publicado ou arquivado → 422', async () => {
@@ -328,7 +337,7 @@ describe('rotas públicas', () => {
     it('edição que não passa na validação → 422 e não mexe no pedido', async () => {
       const { token, tomate } = await placeOrder();
       const res = await api.put(`/orders/${token}`, {
-        items: [{ productId: tomate.id, quantity: 10 }],
+        items: [{ productId: tomate.id, quantity: 5 }],
       });
       expect(res.statusCode).toBe(422);
       const order = await prisma.order.findUniqueOrThrow({

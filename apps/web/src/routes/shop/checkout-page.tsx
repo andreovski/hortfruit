@@ -55,7 +55,12 @@ function Checkout({ data }: { data: CatalogResponse }) {
   const open = useWeekOpen(data.week);
   const cart = useActiveCart();
   useReconcileCart(cart.store, data.products);
-  const summary = summarizeCart(cart.state.items, data.products, data.minOrderCents);
+  const summary = summarizeCart(
+    cart.state.items,
+    data.products,
+    data.minOrderCents,
+    data.smallOrderFeeCents
+  );
   const editing = cart.editing;
 
   const [phone, setPhone] = useState(() => maskPhoneInput(getRememberedPhone()));
@@ -165,9 +170,7 @@ function Checkout({ data }: { data: CatalogResponse }) {
 
   const blocked = !open
     ? 'Pedidos fechados'
-    : summary.missingCents > 0
-      ? 'Atinja o mínimo para enviar'
-      : !summary.canSend
+    : !summary.canSend
         ? 'Confira os itens do pedido'
         : null;
   const busy = identify.isPending || send.isPending;
@@ -193,7 +196,21 @@ function Checkout({ data }: { data: CatalogResponse }) {
               />
             ))}
           </ul>
-          <div className='flex items-baseline justify-between border-t border-line-soft pt-3.5 pb-3'>
+          {summary.feeCents > 0 ? (
+            <>
+              <div className='flex items-baseline justify-between border-t border-line-soft pt-3 text-sm text-ink-2'>
+                <span>Itens</span>
+                <span>{formatBRL(summary.itemsCents)}</span>
+              </div>
+              <div className='flex items-baseline justify-between pt-1 text-sm text-ink-2'>
+                <span>Taxa de pedido abaixo do mínimo</span>
+                <span>{formatBRL(summary.feeCents)}</span>
+              </div>
+            </>
+          ) : null}
+          <div
+            className={`flex items-baseline justify-between pb-3 ${summary.feeCents > 0 ? 'pt-2' : 'border-t border-line-soft pt-3.5'}`}
+          >
             <span className='font-semibold'>Total estimado</span>
             <span aria-live='polite' className='font-display text-[22px] font-bold text-brand'>
               {formatBRL(summary.totalCents)}
@@ -207,6 +224,13 @@ function Checkout({ data }: { data: CatalogResponse }) {
             <span>
               Faltam <strong>{formatBRL(summary.missingCents)}</strong> para o pedido mínimo de{' '}
               {formatBRL(data.minOrderCents)}.
+              {summary.feeCents > 0 ? (
+                <>
+                  {' '}
+                  Você pode enviar assim, com a taxa de <strong>{formatBRL(summary.feeCents)}</strong>
+                  , ou completar o pedido.
+                </>
+              ) : null}
             </span>
           </div>
         ) : null}
@@ -217,7 +241,7 @@ function Checkout({ data }: { data: CatalogResponse }) {
 
         <div className='flex flex-col gap-1.5'>
           <label htmlFor='obs-pedido' className='text-sm font-semibold'>
-            Observação para a entrega <span className='font-normal text-ink-2'>(opcional)</span>
+            Observação <span className='font-normal text-ink-2'>(opcional)</span>
           </label>
           <textarea
             id='obs-pedido'
@@ -225,7 +249,7 @@ function Checkout({ data }: { data: CatalogResponse }) {
             maxLength={500}
             value={cart.state.note}
             onChange={(e) => cart.store.setNote(e.target.value)}
-            placeholder='Ex.: entregar até 9h, portão lateral'
+            placeholder='Ex.: Tomates maduros'
             className='w-full resize-none rounded-xl border border-line-strong bg-surface px-3 py-2.5 text-[15px] text-ink'
           />
         </div>
@@ -276,9 +300,10 @@ function Checkout({ data }: { data: CatalogResponse }) {
       {phase.kind === 'notFound' && !editing ? null : (
         <BottomBar>
           <MinimumProgress
-            totalCents={summary.totalCents}
+            totalCents={summary.itemsCents}
             minOrderCents={data.minOrderCents}
             missingCents={summary.missingCents}
+            feeCents={summary.feeCents}
           />
           {blocked ? (
             <button type='button' disabled className={buttonClass('disabled')}>

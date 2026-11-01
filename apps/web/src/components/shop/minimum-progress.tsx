@@ -2,15 +2,22 @@ import { formatBRL } from '@hortifruit/core';
 
 import { cn } from '@/lib/utils';
 
-/** Barra de progresso até o pedido mínimo (âmbar abaixo, verde quando atinge). */
+/**
+ * Barra de progresso até o pedido mínimo (âmbar abaixo, verde quando atinge). Abaixo do mínimo o
+ * pedido ainda vai, com a taxa.
+ */
 export function MinimumProgress({
   totalCents,
   minOrderCents,
   missingCents,
+  feeCents = 0,
 }: {
+  /** Soma dos itens (sem a taxa). */
   totalCents: number;
   minOrderCents: number;
   missingCents: number;
+  /** Taxa cobrada abaixo do mínimo. */
+  feeCents?: number;
 }) {
   const pct = minOrderCents > 0 ? Math.min(100, (totalCents / minOrderCents) * 100) : 100;
   const below = missingCents > 0;
@@ -18,7 +25,9 @@ export function MinimumProgress({
     <div className='flex flex-col gap-1'>
       <div className='flex justify-between text-xs text-brand-600'>
         <span>
-          {below ? `Faltam ${formatBRL(missingCents)} para o mínimo` : 'Pedido mínimo atingido'}
+          {below
+            ? `Faltam ${formatBRL(missingCents)} para o mínimo${feeCents > 0 ? ` · taxa de ${formatBRL(feeCents)}` : ''}`
+            : 'Pedido mínimo atingido'}
         </span>
         <span>mín. {formatBRL(minOrderCents)}</span>
       </div>

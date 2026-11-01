@@ -51,6 +51,7 @@ enum Category {
   LEGUMES
   FRUTAS
   VERDURAS
+  HORTALICAS
   OUTROS
 }
 
@@ -130,6 +131,9 @@ model Order {
   weekId     String      @map("week_id")
   status     OrderStatus @default(NOVO)
   note       String?
+  /// Taxa de pedido abaixo do mínimo, do momento do pedido (0 quando atingiu).
+  feeCents   Int         @default(0) @map("fee_cents")
+  /// Itens + taxa.
   totalCents Int         @map("total_cents")
 
   createdAt   DateTime  @default(now()) @map("created_at")
@@ -170,10 +174,12 @@ model OrderItem {
 
 /// Ajustes do painel (uma linha só, id = 1).
 model Setting {
-  id            Int      @id @default(1)
-  minOrderCents Int      @default(20000) @map("min_order_cents")
-  publishedAt   DateTime? @map("published_at")
-  updatedAt     DateTime @updatedAt @map("updated_at")
+  id                 Int       @id @default(1)
+  minOrderCents      Int       @default(20000) @map("min_order_cents")
+  /// Taxa cobrada quando o pedido não atinge o mínimo (padrão R$ 50).
+  smallOrderFeeCents Int       @default(5000) @map("small_order_fee_cents")
+  publishedAt        DateTime? @map("published_at")
+  updatedAt          DateTime  @updatedAt @map("updated_at")
 
   @@map("settings")
 }

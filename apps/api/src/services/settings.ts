@@ -15,6 +15,7 @@ export async function getSettingsDto(db: Db = prisma): Promise<Settings> {
   const setting = await getSetting(db);
   return {
     minOrderCents: setting.minOrderCents,
+    smallOrderFeeCents: setting.smallOrderFeeCents,
     uploadsEnabled: !!getUploadthingToken(),
     whatsapp: getWhatsappNumber(),
   };

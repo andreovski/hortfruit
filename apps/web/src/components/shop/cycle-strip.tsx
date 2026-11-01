@@ -13,7 +13,15 @@ import { type ReactNode, useState } from 'react';
 import { useNow } from '@/features/shop/hooks';
 
 /** Faixa "Aceitando pedidos": tocar abre "Como funciona". */
-export function OpenStrip({ week, minOrderCents }: { week: Week; minOrderCents: number }) {
+export function OpenStrip({
+  week,
+  minOrderCents,
+  smallOrderFeeCents,
+}: {
+  week: Week;
+  minOrderCents: number;
+  smallOrderFeeCents: number;
+}) {
   const now = useNow();
   const [open, setOpen] = useState(false);
   const left = timeLeftLabel(week.closesAt, now);
@@ -46,6 +54,7 @@ export function OpenStrip({ week, minOrderCents }: { week: Week; minOrderCents: 
         onOpenChange={setOpen}
         week={week}
         minOrderCents={minOrderCents}
+        smallOrderFeeCents={smallOrderFeeCents}
       />
     </>
   );
@@ -96,11 +105,13 @@ export function HowItWorksSheet({
   onOpenChange,
   week,
   minOrderCents,
+  smallOrderFeeCents,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   week: Week;
   minOrderCents: number;
+  smallOrderFeeCents: number;
 }) {
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
@@ -127,11 +138,14 @@ export function HowItWorksSheet({
               Peça até <strong>{formatDeadline(week.closesAt)}</strong>. Os preços valem até lá.
             </Rule>
             <Rule icon={<Truck className='size-[18px]' />}>
-              Entrega <strong>{formatDeliveryDate(week.deliveryDate)}</strong> (toda sexta-feira)
+              Entrega <strong>{formatDeliveryDate(week.deliveryDate)}</strong>
             </Rule>
             <Rule icon={<CalendarDays className='size-[18px]' />}>
-              Pedido mínimo de <strong>{formatBRL(minOrderCents)}</strong>, e cada produto tem a sua
-              quantidade mínima
+              Pedido mínimo de <strong>{formatBRL(minOrderCents)}</strong>
+              {smallOrderFeeCents > 0 ? (
+                <> (abaixo dele, taxa de {formatBRL(smallOrderFeeCents)})</>
+              ) : null}
+              , e cada produto tem a sua quantidade mínima
             </Rule>
             <Rule icon={<Phone className='size-[18px]' />}>
               No fim, você se identifica <strong>só com o telefone</strong>

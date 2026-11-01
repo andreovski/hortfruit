@@ -40,10 +40,11 @@ export const CATEGORY_LABEL: Record<Category, string> = {
   LEGUMES: 'Legumes',
   FRUTAS: 'Frutas',
   VERDURAS: 'Verduras',
+  HORTALICAS: 'Hortaliças',
   OUTROS: 'Outros',
 };
 
-export const CATEGORY_ORDER: Category[] = ['LEGUMES', 'FRUTAS', 'VERDURAS', 'OUTROS'];
+export const CATEGORY_ORDER: Category[] = ['LEGUMES', 'FRUTAS', 'VERDURAS', 'HORTALICAS', 'OUTROS'];
 
 export const BADGE_LABEL = { DESTAQUE: 'Destaque', NOVO: 'Novo' } as const;
 

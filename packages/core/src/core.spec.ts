@@ -4,6 +4,7 @@ import {
   canAdminTransition,
   canCustomerChange,
   checkOrder,
+  smallOrderFee,
   formatBRL,
   formatDeadline,
   formatDeliveryDate,
@@ -109,17 +110,25 @@ describe('pedido', () => {
       20000
     );
     expect(r.totalCents).toBe(13800 + 8400);
+    expect(r.feeCents).toBe(0);
     expect(r.ok).toBe(true);
   });
 
-  it('aponta mínimo do produto, do pedido, falta e produto desconhecido', () => {
+  it('abaixo do mínimo do pedido aceita e soma a taxa', () => {
+    const r = checkOrder([{ productId: 'tomate', quantity: 10 }], products, 20000, 5000);
+    expect(r.ok).toBe(true);
+    expect(r.itemsCents).toBe(6900);
+    expect(r.feeCents).toBe(5000);
+    expect(r.totalCents).toBe(11900);
+    expect(smallOrderFee(20000, 20000, 5000)).toBe(0);
+    expect(smallOrderFee(19999, 20000, 5000)).toBe(5000);
+  });
+
+  it('aponta mínimo do produto, falta e produto desconhecido', () => {
     const codes = (items: { productId: string; quantity: number }[]) =>
       checkOrder(items, products, 20000).problems.map((p) => p.code);
     expect(codes([])).toEqual(['EMPTY']);
-    expect(codes([{ productId: 'tomate', quantity: 5 }])).toEqual([
-      'BELOW_PRODUCT_MIN',
-      'BELOW_ORDER_MIN',
-    ]);
+    expect(codes([{ productId: 'tomate', quantity: 5 }])).toEqual(['BELOW_PRODUCT_MIN']);
     expect(codes([{ productId: 'morango', quantity: 10 }])).toContain('UNAVAILABLE');
     expect(codes([{ productId: 'x', quantity: 10 }])).toContain('UNKNOWN_PRODUCT');
     expect(codes([{ productId: 'tomate', quantity: 1.5 }])).toContain('INVALID_QUANTITY');
