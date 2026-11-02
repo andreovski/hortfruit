@@ -13,6 +13,11 @@ export const partial = 'apps';
 
 const ROOT_FILES = ['/package.json', '/pnpm-lock.yaml', '/pnpm-workspace.yaml', '/turbo.json'];
 
+// Domínio próprio do app (CNAME no DNS de grupocleyton.com.br apontando para o alvo que o Railway
+// mostra). O domínio gerado `*.up.railway.app` continua no ar e aceito pelo CORS.
+const APP_DOMAIN = 'hortifruit.grupocleyton.com.br';
+const WEB_PORT = 4173;
+
 export default defineRailway(() => {
   const repo = github('andreovski/hortfruit', { checkSuites: false });
 
@@ -37,8 +42,9 @@ export default defineRailway(() => {
       HOST: '::',
       TRUST_PROXY: 'true',
       DATABASE_URL: '${{Postgres.DATABASE_URL}}',
-      APP_URL: 'https://${{hortifruit-web.RAILWAY_PUBLIC_DOMAIN}}',
-      FRONTEND_URL: 'https://${{hortifruit-web.RAILWAY_PUBLIC_DOMAIN}}',
+      // O UploadThing chama `${APP_URL}/api/uploadthing`: vai pelo domínio próprio.
+      APP_URL: `https://${APP_DOMAIN}`,
+      FRONTEND_URL: `https://${APP_DOMAIN},https://\${{hortifruit-web.RAILWAY_PUBLIC_DOMAIN}}`,
       JWT_SECRET: preserve(),
       OWNER_NAME: preserve(),
       OWNER_EMAIL: preserve(),
@@ -59,8 +65,10 @@ export default defineRailway(() => {
     start: 'node apps/web/server.mjs',
     // O Railway recusa ponto no caminho do healthcheck: `/` devolve o index.html.
     healthcheck: '/',
+    // Domínio próprio na porta em que o server.mjs escuta (sem a porta, o IaC assume 8080).
+    domains: [{ domain: APP_DOMAIN, port: WEB_PORT }],
     env: {
-      PORT: '4173',
+      PORT: String(WEB_PORT),
       // `/api/*` vai para a API pela rede privada (um domínio só, cookie do ADM de primeira parte).
       API_URL: 'http://${{hortifruit-api.RAILWAY_PRIVATE_DOMAIN}}:${{hortifruit-api.PORT}}',
     },
