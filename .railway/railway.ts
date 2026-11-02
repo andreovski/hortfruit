@@ -15,8 +15,9 @@ const ROOT_FILES = ['/package.json', '/pnpm-lock.yaml', '/pnpm-workspace.yaml', 
 
 // Domínio próprio do app. O IaC do Railway não registra domínio próprio: ele é criado pela CLI
 // (`railway domain hortifruit.grupocleyton.com.br --port 4173 --service hortifruit-web`) ou pelo
-// painel, e o DNS de grupocleyton.com.br aponta para o alvo que o Railway mostra. O domínio gerado
-// `*.up.railway.app` continua no ar e aceito pelo CORS.
+// painel, e o DNS de grupocleyton.com.br (Hostinger) aponta para o alvo que o Railway mostra. O
+// domínio gerado `*.up.railway.app` continua no ar; ele chama `/api` na mesma origem, então não
+// precisa estar no CORS (com domínio próprio, RAILWAY_PUBLIC_DOMAIN passa a ser o próprio).
 const APP_DOMAIN = 'hortifruit.grupocleyton.com.br';
 const WEB_PORT = 4173;
 
@@ -46,7 +47,7 @@ export default defineRailway(() => {
       DATABASE_URL: '${{Postgres.DATABASE_URL}}',
       // O UploadThing chama `${APP_URL}/api/uploadthing`: vai pelo domínio próprio.
       APP_URL: `https://${APP_DOMAIN}`,
-      FRONTEND_URL: `https://${APP_DOMAIN},https://\${{hortifruit-web.RAILWAY_PUBLIC_DOMAIN}}`,
+      FRONTEND_URL: `https://${APP_DOMAIN}`,
       JWT_SECRET: preserve(),
       OWNER_NAME: preserve(),
       OWNER_EMAIL: preserve(),
