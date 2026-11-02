@@ -41,21 +41,21 @@ Segredo nunca vai no arquivo. Defina com `railway variable set --stdin`, por exe
 openssl rand -hex 32 | pnpm exec railway variable set JWT_SECRET --stdin --service hortifruit-api
 ```
 
-| Variável                  | Serviço  | Para quê                                                                                                                             |
-| ------------------------- | -------- | ------------------------------------------------------------------------------------------------------------------------------------ |
-| `DATABASE_URL`            | api      | Referência `${{Postgres.DATABASE_URL}}` (já no arquivo).                                                                             |
-| `APP_URL`, `FRONTEND_URL` | api      | Domínio próprio do web (já no arquivo). O UploadThing chama `${APP_URL}/api/uploadthing`; o CORS aceita também o `*.up.railway.app`. |
-| `TRUST_PROXY`             | api      | `true`: a API está atrás do proxy do Railway e do `server.mjs`.                                                                      |
-| `JWT_SECRET`              | api      | **Obrigatória**: assina a sessão do ADM. Sem ela a API não sobe em produção. Trocar derruba as sessões.                              |
-| `OWNER_NAME`              | api      | Nome do primeiro ADM.                                                                                                                |
-| `OWNER_EMAIL`             | api      | E-mail do primeiro ADM (login). Pelo menos um entre e-mail e telefone.                                                               |
-| `OWNER_PHONE`             | api      | Telefone do primeiro ADM (login), com DDD.                                                                                           |
-| `OWNER_PASSWORD`          | api      | Senha inicial, usada só quando o primeiro ADM é criado. Depois troque em Ajustes e pode apagar a variável.                           |
-| `WHATSAPP_NUMBER`         | api      | WhatsApp da Morro Verde, só dígitos com DDD (ex.: `41999998888`). Sem ele os botões de WhatsApp somem.                               |
-| `UPLOADTHING_TOKEN`       | api      | Token do [UploadThing](https://uploadthing.com) (Dashboard › API Keys). Liga o envio de foto dos produtos.                           |
-| `HOST`                    | api      | `::` (já no arquivo): a rede privada do Railway pode ser só IPv6.                                                                    |
-| `PORT`                    | api, web | `8080` e `4173` (já no arquivo).                                                                                                     |
-| `API_URL`                 | web      | Endereço privado da API (já no arquivo, por referência).                                                                             |
+| Variável                  | Serviço  | Para quê                                                                                                                                                              |
+| ------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `DATABASE_URL`            | api      | Referência `${{Postgres.DATABASE_URL}}` (já no arquivo).                                                                                                              |
+| `APP_URL`, `FRONTEND_URL` | api      | Domínio próprio do web (já no arquivo). O UploadThing chama `${APP_URL}/api/uploadthing`; o `*.up.railway.app` segue funcionando porque chama `/api` na mesma origem. |
+| `TRUST_PROXY`             | api      | `true`: a API está atrás do proxy do Railway e do `server.mjs`.                                                                                                       |
+| `JWT_SECRET`              | api      | **Obrigatória**: assina a sessão do ADM. Sem ela a API não sobe em produção. Trocar derruba as sessões.                                                               |
+| `OWNER_NAME`              | api      | Nome do primeiro ADM.                                                                                                                                                 |
+| `OWNER_EMAIL`             | api      | E-mail do primeiro ADM (login). Pelo menos um entre e-mail e telefone.                                                                                                |
+| `OWNER_PHONE`             | api      | Telefone do primeiro ADM (login), com DDD.                                                                                                                            |
+| `OWNER_PASSWORD`          | api      | Senha inicial, usada só quando o primeiro ADM é criado. Depois troque em Ajustes e pode apagar a variável.                                                            |
+| `WHATSAPP_NUMBER`         | api      | WhatsApp da Morro Verde, só dígitos com DDD (ex.: `41999998888`). Sem ele os botões de WhatsApp somem.                                                                |
+| `UPLOADTHING_TOKEN`       | api      | Token do [UploadThing](https://uploadthing.com) (Dashboard › API Keys). Liga o envio de foto dos produtos.                                                            |
+| `HOST`                    | api      | `::` (já no arquivo): a rede privada do Railway pode ser só IPv6.                                                                                                     |
+| `PORT`                    | api, web | `8080` e `4173` (já no arquivo).                                                                                                                                      |
+| `API_URL`                 | web      | Endereço privado da API (já no arquivo, por referência).                                                                                                              |
 
 ## 3. Backup
 
