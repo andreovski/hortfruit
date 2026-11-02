@@ -67,24 +67,25 @@ pg_dump "$(pnpm exec railway variables --service Postgres --kv | grep DATABASE_P
 
 ## 4. Domínio próprio (`hortifruit.grupocleyton.com.br`)
 
-O `.railway/railway.ts` declara o domínio no `hortifruit-web` (porta 4173) e aponta `APP_URL` e
-`FRONTEND_URL` da API para ele. O endereço `hortifruit-web-production.up.railway.app` continua
-funcionando. Não há nada no código que dependa do domínio: o link do pedido usa o endereço aberto
-no navegador e o cookie do ADM não fixa domínio.
+O IaC do Railway não registra domínio próprio (`config plan` recusa um `domains` no arquivo). O
+`.railway/railway.ts` só aponta `APP_URL` e `FRONTEND_URL` da API para o domínio; o domínio em si é
+criado pela CLI. O endereço `hortifruit-web-production.up.railway.app` continua funcionando. Nada
+no código depende do domínio: o link do pedido usa o endereço aberto no navegador e o cookie do ADM
+não fixa domínio.
 
-1. `pnpm exec railway config plan`: confira que o plano só adiciona o domínio próprio e troca
-   `APP_URL`/`FRONTEND_URL` (o domínio `*.up.railway.app` não pode sair). Então
-   `pnpm exec railway config apply`.
-2. No Railway, em `hortifruit-web` › Settings › Networking, o domínio aparece com os registros que
-   o Railway pede: um **CNAME** (`hortifruit` → alvo `xxxx.up.railway.app`) e um **TXT** de
-   verificação (`_railway-verify.hortifruit`). Copie os valores exatos de lá.
-3. Crie os dois registros no DNS de `grupocleyton.com.br`. No Registro.br: Domínios ›
-   `grupocleyton.com.br` › DNS › Configurar zona DNS (modo avançado, se ainda não estiver) ›
-   Nova entrada. O nome é só `hortifruit` (e `_railway-verify.hortifruit`); TTL padrão. Se o DNS do
-   domínio estiver em outro provedor (Cloudflare, hospedagem), crie no painel dele; na Cloudflare,
-   deixe o CNAME como **DNS only** (nuvem cinza) até o certificado sair.
-4. Espere a propagação (minutos a algumas horas). O Railway marca o domínio como verificado e emite
-   o certificado HTTPS sozinho.
+1. Crie o domínio no serviço web, na porta do `server.mjs`:
+   `pnpm exec railway domain hortifruit.grupocleyton.com.br --port 4173 --service hortifruit-web`.
+   A CLI (ou o painel, em `hortifruit-web` › Settings › Networking) mostra os registros: um
+   **CNAME** (`hortifruit` → `xxxx.up.railway.app`) e um **TXT** de verificação
+   (`_railway-verify.hortifruit`).
+2. Crie os dois no DNS de `grupocleyton.com.br`. Hoje os nameservers são da Hostinger
+   (`*.dns-parking.com`): hPanel › Domínios › `grupocleyton.com.br` › DNS / Nameservers › Gerenciar
+   registros DNS. Nome só `hortifruit` (e `_railway-verify.hortifruit`), TTL padrão. Não precisa de
+   Cloudflare.
+3. Espere o Railway marcar o domínio como verificado e emitir o certificado (minutos a algumas
+   horas).
+4. Só então `pnpm exec railway config plan` → `apply`, para trocar `APP_URL`/`FRONTEND_URL`.
+   Antes disso, o callback do UploadThing iria para um domínio que ainda não responde.
 5. Teste `https://hortifruit.grupocleyton.com.br/` e `/admin` (entrar de novo: a sessão é por
    domínio) e, com `UPLOADTHING_TOKEN` definido, envie uma foto de produto.
 6. Mande o link novo para os clientes. Links de pedido antigos (`*.up.railway.app/pedido/...`)

@@ -13,8 +13,10 @@ export const partial = 'apps';
 
 const ROOT_FILES = ['/package.json', '/pnpm-lock.yaml', '/pnpm-workspace.yaml', '/turbo.json'];
 
-// Domínio próprio do app (CNAME no DNS de grupocleyton.com.br apontando para o alvo que o Railway
-// mostra). O domínio gerado `*.up.railway.app` continua no ar e aceito pelo CORS.
+// Domínio próprio do app. O IaC do Railway não registra domínio próprio: ele é criado pela CLI
+// (`railway domain hortifruit.grupocleyton.com.br --port 4173 --service hortifruit-web`) ou pelo
+// painel, e o DNS de grupocleyton.com.br aponta para o alvo que o Railway mostra. O domínio gerado
+// `*.up.railway.app` continua no ar e aceito pelo CORS.
 const APP_DOMAIN = 'hortifruit.grupocleyton.com.br';
 const WEB_PORT = 4173;
 
@@ -65,8 +67,6 @@ export default defineRailway(() => {
     start: 'node apps/web/server.mjs',
     // O Railway recusa ponto no caminho do healthcheck: `/` devolve o index.html.
     healthcheck: '/',
-    // Domínio próprio na porta em que o server.mjs escuta (sem a porta, o IaC assume 8080).
-    domains: [{ domain: APP_DOMAIN, port: WEB_PORT }],
     env: {
       PORT: String(WEB_PORT),
       // `/api/*` vai para a API pela rede privada (um domínio só, cookie do ADM de primeira parte).
