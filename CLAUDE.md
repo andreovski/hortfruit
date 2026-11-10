@@ -72,6 +72,11 @@ pnpm --filter api seed                         # primeiro ADM, ajustes e os 13 p
 - **WhatsApp** da Morro Verde: variável `WHATSAPP_NUMBER` (só dígitos, com DDD), devolvida no
   catálogo. Sem ela, os botões de WhatsApp somem.
 
+- **PWA**: `vite-plugin-pwa` em `apps/web/vite.config.ts` (manifest, ícones em `public/icons`,
+  service worker com atualização automática). O cache guarda só o app (JS, CSS, fontes, imagens);
+  `/api` e `/uploadthing` sempre vão para a rede. `server.mjs` serve `sw.js`, `registerSW.js` e
+  `manifest.webmanifest` sem cache.
+
 ## Visual
 
 Design system do protótipo: verde Morro Verde, creme, Outfit (títulos, preços, números) e DM Sans
