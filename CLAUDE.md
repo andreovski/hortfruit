@@ -46,8 +46,9 @@ pnpm --filter api seed                         # primeiro ADM, ajustes e os 13 p
   `openWeek`). Ela fecha sozinha em `closesAt` (quinta 12h) ou à mão (`closedAt`). Sem semana
   aberta o app mostra "Pedidos fechados" com os preços como referência. Não reabre sozinha.
 - **Produto**: `draft*` é o que o ADM edita; `published*` é o que o app mostra, copiado ao publicar
-  (`previousPriceCents` guarda o publicado anterior, para a variação). Produto nunca publicado não
-  aparece no app. Preço inválido bloqueia a publicação.
+  (`previousPriceCents` guarda o publicado anterior; o painel não mostra mais variação nem preço
+  anterior). `costCents` é o valor de custo: só no ADM, fora do rascunho/publicação, com a margem
+  na tabela. Produto nunca publicado não aparece no app. Preço inválido bloqueia a publicação.
 - **Pedido**: mínimo por produto (bloqueia) e pelo total (`Setting.minOrderCents`, padrão R$ 200).
   Abaixo do mínimo do total o pedido segue com a taxa `Setting.smallOrderFeeCents` (padrão R$ 50),
   guardada em `Order.feeCents` e já somada em `totalCents`. O pedido guarda nome e preço do momento

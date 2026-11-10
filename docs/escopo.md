@@ -130,7 +130,7 @@ Preços no protótipo são fictícios.
 - Não há envio de link de acesso nem senha para o cliente.
 
 ### 7.4 Produtos e preços
-- Tabela com produto, forma de venda, mínimo, preço da semana (editável), preço anterior, variação, disponibilidade (Disponível/Em falta) e selo (Destaque, Novo).
+- Tabela com produto, forma de venda, mínimo, preço da semana (editável), custo e margem (só no painel), disponibilidade (Disponível/Em falta) e selo (Destaque, Novo).
 - Filtros: Todos, Legumes, Frutas, Em falta, Alterados.
 - Alterações ficam "não publicadas" até o ADM clicar em **"Publicar lista da semana"**. Preço inválido bloqueia a publicação.
 

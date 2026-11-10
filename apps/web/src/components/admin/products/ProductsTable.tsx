@@ -41,7 +41,7 @@ export function ProductsTable({
     );
   }
   return (
-    <table className='w-full min-w-[1220px] border-collapse text-left'>
+    <table className='w-full min-w-[1120px] border-collapse text-left'>
       <thead>
         <tr className='text-xs tracking-[0.05em] text-ink-2'>
           <th scope='col' className='w-16 py-3 pl-5'>
@@ -51,7 +51,6 @@ export function ProductsTable({
           <th scope='col' className='px-3 py-3 font-bold'>VENDA</th>
           <th scope='col' className='px-3 py-3 font-bold'>MÍNIMO</th>
           <th scope='col' className='w-[170px] px-3 py-3 font-bold'>PREÇO DA SEMANA</th>
-          <th scope='col' className='px-3 py-3 font-bold'>VARIAÇÃO</th>
           <th scope='col' className='px-3 py-3 font-bold'>CUSTO</th>
           <th scope='col' className='px-3 py-3 font-bold'>DISPONIBILIDADE</th>
           <th scope='col' className='w-[150px] px-3 py-3 font-bold'>SELO</th>

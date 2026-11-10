@@ -3,7 +3,6 @@ import {
   formatPercent,
   marginPercent,
   parseBRL,
-  priceChangePercent,
   quantityLabel,
   unitShort,
 } from '@hortifruit/core';
@@ -15,21 +14,6 @@ import { BADGE_OPTIONS, CATEGORY_LABEL } from '@/features/admin/labels';
 import { cn } from '@/lib/utils';
 
 import { Switch } from '../ui';
-
-/** Preço de comparação: o publicado quando o rascunho mudou; senão, o publicado anterior. */
-export function basePrice(product: AdminProduct, draftCents: number | null): number | null {
-  const published = product.published?.priceCents ?? null;
-  if (published !== null && draftCents !== null && draftCents !== published) return published;
-  return product.previousPriceCents;
-}
-
-export function variationLabel(base: number | null, current: number | null) {
-  if (current === null) return { text: '—', tone: 'text-ink-2' };
-  const pct = priceChangePercent(base, current);
-  if (pct === null || Math.abs(pct) < 0.05) return { text: '—', tone: 'text-ink-2' };
-  const text = `${pct > 0 ? '+' : ''}${pct.toFixed(1).replace('.', ',')}%`;
-  return { text, tone: pct > 0 ? 'text-amber-up' : 'text-brand-800' };
-}
 
 export function ProductRow({
   product,
@@ -49,8 +33,6 @@ export function ProductRow({
   onEdit: () => void;
 }) {
   const current = parseBRL(priceText);
-  const base = basePrice(product, current);
-  const variation = variationLabel(base, current);
 
   return (
     <tr className={cn('border-t border-line-soft', product.changed && 'bg-amber-50/50')}>
@@ -70,12 +52,10 @@ export function ProductRow({
           product={product}
           priceText={priceText}
           invalid={invalid}
-          base={base}
           onPriceChange={onPriceChange}
           onPriceCommit={onPriceCommit}
         />
       </td>
-      <td className={cn('px-3 py-2.5 text-sm font-semibold', variation.tone)}>{variation.text}</td>
       <td className='px-3 py-2.5'>
         <CostInfo product={product} priceCents={current} />
       </td>
@@ -105,8 +85,6 @@ export function ProductCard({
   onEdit,
 }: RowProps) {
   const current = parseBRL(priceText);
-  const base = basePrice(product, current);
-  const variation = variationLabel(base, current);
 
   return (
     <li
@@ -127,25 +105,14 @@ export function ProductCard({
         <EditButton product={product} onEdit={onEdit} />
       </div>
       <div className='flex flex-col gap-3 sm:flex-row sm:items-start sm:gap-4'>
-        <div className='flex items-start gap-3 sm:w-[300px] sm:flex-none'>
-          <div className='min-w-0 flex-1'>
-            <PriceField
-              product={product}
-              priceText={priceText}
-              invalid={invalid}
-              base={base}
-              onPriceChange={onPriceChange}
-              onPriceCommit={onPriceCommit}
-            />
-          </div>
-          <span
-            className={cn(
-              'flex min-h-11 w-16 flex-none items-center justify-end text-sm font-semibold',
-              variation.tone
-            )}
-          >
-            {variation.text}
-          </span>
+        <div className='sm:w-[240px] sm:flex-none'>
+          <PriceField
+            product={product}
+            priceText={priceText}
+            invalid={invalid}
+            onPriceChange={onPriceChange}
+            onPriceCommit={onPriceCommit}
+          />
         </div>
         <div className='flex flex-1 flex-wrap items-center justify-between gap-x-4 gap-y-2'>
           <AvailabilitySwitch product={product} onPatch={onPatch} />
@@ -217,14 +184,12 @@ function PriceField({
   product,
   priceText,
   invalid,
-  base,
   onPriceChange,
   onPriceCommit,
 }: {
   product: AdminProduct;
   priceText: string;
   invalid: boolean;
-  base: number | null;
   onPriceChange: (text: string) => void;
   onPriceCommit: () => void;
 }) {
@@ -257,13 +222,7 @@ function PriceField({
         />
         <span className='text-xs text-ink-2'>/{unit}</span>
       </label>
-      <span className={cn('mt-0.5 block text-xs', invalid ? 'text-danger-strong' : 'text-ink-2')}>
-        {invalid
-          ? 'Preço inválido'
-          : base !== null
-            ? `antes ${formatBRL(base)}`
-            : 'sem preço anterior'}
-      </span>
+      {invalid ? <span className='mt-0.5 block text-xs text-danger-strong'>Preço inválido</span> : null}
     </>
   );
 }

@@ -36,9 +36,3 @@ export function marginPercent(costCents: number | null, priceCents: number | nul
 export function formatPercent(value: number): string {
   return `${value.toFixed(1).replace('.', ',')}%`;
 }
-
-/** Variação percentual entre dois preços, ou null quando não há anterior. */
-export function priceChangePercent(previous: number | null, current: number): number | null {
-  if (!previous) return null;
-  return ((current - previous) / previous) * 100;
-}
