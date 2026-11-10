@@ -76,6 +76,8 @@ model Product {
   description     String?
   sortOrder       Int      @default(0) @map("sort_order")
   archived        Boolean  @default(false)
+  /// Valor de custo (centavos) na unidade de venda. Só no painel ADM, nunca no app.
+  costCents       Int?     @map("cost_cents")
 
   draftPriceCents Int     @map("draft_price_cents")
   draftAvailable  Boolean @default(true) @map("draft_available")

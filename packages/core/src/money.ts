@@ -26,8 +26,13 @@ export function centsToInput(cents: number): string {
   return (cents / 100).toFixed(2).replace('.', ',');
 }
 
-/** Variação percentual entre dois preços, ou null quando não há anterior. */
-export function priceChangePercent(previous: number | null, current: number): number | null {
-  if (!previous) return null;
-  return ((current - previous) / previous) * 100;
+/** Margem sobre o preço de venda, em %: (preço − custo) / preço. Sem custo ou preço → null. */
+export function marginPercent(costCents: number | null, priceCents: number | null): number | null {
+  if (!costCents || !priceCents || priceCents <= 0) return null;
+  return ((priceCents - costCents) / priceCents) * 100;
+}
+
+/** 33.333 → "33,3%". */
+export function formatPercent(value: number): string {
+  return `${value.toFixed(1).replace('.', ',')}%`;
 }

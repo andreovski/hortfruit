@@ -21,6 +21,8 @@ export const productBodySchema = z.object({
     .optional(),
   /** Preço do rascunho (centavos); só vale para o app depois de publicar. */
   priceCents: positiveCentsSchema,
+  /** Valor de custo (centavos) na unidade de venda; null limpa. Só o ADM vê. */
+  costCents: positiveCentsSchema.nullable().optional(),
   archived: z.boolean().optional(),
 });
 export type ProductBody = z.input<typeof productBodySchema>;
@@ -45,6 +47,8 @@ export interface AdminProduct {
   description: string | null;
   sortOrder: number;
   archived: boolean;
+  /** Valor de custo (centavos) na unidade de venda; null se não informado. */
+  costCents: number | null;
   /** Rascunho (o que o ADM está editando). */
   draft: { priceCents: number; available: boolean; badge: Badge };
   /** O que o app mostra hoje; null se nunca foi publicado. */

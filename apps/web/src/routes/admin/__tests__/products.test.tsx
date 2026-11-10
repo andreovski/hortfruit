@@ -22,19 +22,18 @@ beforeEach(() => {
 const publishButton = () => screen.getByRole('button', { name: /Publicar lista da semana/ });
 
 describe('Produtos e preços', () => {
-  it('mostra a tabela, a variação e as alterações não publicadas', async () => {
+  it('mostra a tabela, o custo e as alterações não publicadas', async () => {
     mockShell(openWeek);
     renderAdmin('/admin/produtos');
 
     const price = await screen.findByLabelText('Preço de Tomate por kg');
     expect(price).toHaveValue('6,90');
     const tomato = within(price.closest('tr')!);
-    expect(tomato.getByText('antes R$ 6,50')).toBeInTheDocument();
-    expect(tomato.getByText('+6,2%')).toBeInTheDocument();
-    // Manga: rascunho R$ 7,00 contra o publicado R$ 6,50.
-    const mango = within(screen.getByLabelText('Preço de Manga por kg').closest('tr')!);
-    expect(mango.getByText('antes R$ 6,50')).toBeInTheDocument();
-    expect(mango.getByText('+7,7%')).toBeInTheDocument();
+    expect(screen.queryByText('VARIAÇÃO')).not.toBeInTheDocument();
+    expect(screen.queryByText(/^antes R\$/)).not.toBeInTheDocument();
+    // Custo R$ 4,50 contra R$ 6,90: margem de 34,8%.
+    expect(tomato.getByText('R$ 4,50')).toBeInTheDocument();
+    expect(tomato.getByText('margem 34,8%')).toBeInTheDocument();
     expect(screen.getByText('1 alteração não publicada')).toBeInTheDocument();
     expect(screen.getByText('Alterado')).toBeInTheDocument();
     expect(screen.getByText(/Lista publicada seg, 02\/11 às 08:15/)).toBeInTheDocument();

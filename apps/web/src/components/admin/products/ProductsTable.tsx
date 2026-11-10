@@ -51,7 +51,7 @@ export function ProductsTable({
           <th scope='col' className='px-3 py-3 font-bold'>VENDA</th>
           <th scope='col' className='px-3 py-3 font-bold'>MÍNIMO</th>
           <th scope='col' className='w-[170px] px-3 py-3 font-bold'>PREÇO DA SEMANA</th>
-          <th scope='col' className='px-3 py-3 font-bold'>VARIAÇÃO</th>
+          <th scope='col' className='px-3 py-3 font-bold'>CUSTO</th>
           <th scope='col' className='px-3 py-3 font-bold'>DISPONIBILIDADE</th>
           <th scope='col' className='w-[150px] px-3 py-3 font-bold'>SELO</th>
           <th scope='col' className='w-14 py-3 pr-5'>

@@ -61,6 +61,7 @@ describe('produtos e publicação', () => {
       sortOrder: 14,
       description: null,
       archived: false,
+      costCents: null,
       draft: { priceCents: 590, available: true, badge: null },
       published: null,
       previousPriceCents: null,
@@ -74,6 +75,9 @@ describe('produtos e publicação', () => {
     expect(list.products.find((p) => p.name === 'Morango')?.draft.available).toBe(false);
     expect(list.changedCount).toBe(14);
     expect(list.publishedAt).toBeNull();
+
+    const withCost = await api.post('/admin/products', { ...NEW_PRODUCT, name: 'Chuchu', costCents: 380 });
+    expect(withCost.json<AdminProduct>().costCents).toBe(380);
 
     const invalid = await api.post('/admin/products', { ...NEW_PRODUCT, priceCents: 0 });
     expect(invalid.statusCode).toBe(400);
@@ -89,14 +93,20 @@ describe('produtos e publicação', () => {
       available: false,
       badge: 'NOVO',
       minQuantity: 5,
+      costCents: 480,
     });
     expect(res.statusCode).toBe(200);
     expect(res.json<AdminProduct>()).toMatchObject({
       minQuantity: 5,
+      costCents: 480,
       draft: { priceCents: 750, available: false, badge: 'NOVO' },
       published: { priceCents: 690, available: true, badge: null },
       changed: true,
     });
+    const cleared = (
+      await api.patch(`/admin/products/${product.id}`, { costCents: null })
+    ).json<AdminProduct>();
+    expect(cleared.costCents).toBeNull();
     const archived = (
       await api.patch(`/admin/products/${product.id}`, { archived: true })
     ).json<AdminProduct>();
@@ -140,6 +150,16 @@ describe('produtos e publicação', () => {
     expect(catalog.products).toHaveLength(13);
     expect(catalog.week).toMatchObject({ deliveryDate: '2026-12-04', isOpen: true });
     expect(catalog.products.find((p) => p.name === 'Morango')?.available).toBe(false);
+
+    // Custo é só do ADM: não marca alteração e não aparece no catálogo.
+    const withCost = (
+      await api.patch(`/admin/products/${tomate.id}`, { costCents: 450 })
+    ).json<AdminProduct>();
+    expect(withCost).toMatchObject({ costCents: 450, changed: false });
+    const tomateNoApp = (await client(app).get('/catalog'))
+      .json<CatalogResponse>()
+      .products.find((p) => p.name === 'Tomate');
+    expect(tomateNoApp).not.toHaveProperty('costCents');
 
     // Muda preço do tomate e arquiva a cebola; republica sem abrir semana nova.
     vi.restoreAllMocks();
