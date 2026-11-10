@@ -31,6 +31,9 @@ describe('Produtos e preços', () => {
     const tomato = within(price.closest('tr')!);
     expect(tomato.getByText('antes R$ 6,50')).toBeInTheDocument();
     expect(tomato.getByText('+6,2%')).toBeInTheDocument();
+    // Custo R$ 4,50 contra R$ 6,90: margem de 34,8%.
+    expect(tomato.getByText('R$ 4,50')).toBeInTheDocument();
+    expect(tomato.getByText('margem 34,8%')).toBeInTheDocument();
     // Manga: rascunho R$ 7,00 contra o publicado R$ 6,50.
     const mango = within(screen.getByLabelText('Preço de Manga por kg').closest('tr')!);
     expect(mango.getByText('antes R$ 6,50')).toBeInTheDocument();

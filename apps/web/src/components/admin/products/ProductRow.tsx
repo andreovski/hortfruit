@@ -1,4 +1,12 @@
-import { formatBRL, parseBRL, priceChangePercent, quantityLabel, unitShort } from '@hortifruit/core';
+import {
+  formatBRL,
+  formatPercent,
+  marginPercent,
+  parseBRL,
+  priceChangePercent,
+  quantityLabel,
+  unitShort,
+} from '@hortifruit/core';
 import type { AdminProduct, Badge } from '@hortifruit/schemas';
 import { Pencil } from 'lucide-react';
 
@@ -69,6 +77,9 @@ export function ProductRow({
       </td>
       <td className={cn('px-3 py-2.5 text-sm font-semibold', variation.tone)}>{variation.text}</td>
       <td className='px-3 py-2.5'>
+        <CostInfo product={product} priceCents={current} />
+      </td>
+      <td className='px-3 py-2.5'>
         <AvailabilitySwitch product={product} onPatch={onPatch} />
       </td>
       <td className='px-3 py-2.5'>
@@ -111,6 +122,7 @@ export function ProductCard({
           <span className='text-xs text-ink-2'>
             {product.saleDescription} · mín. {quantityLabel(product.minQuantity, product.unit)}
           </span>
+          <CostInfo product={product} priceCents={current} inline />
         </div>
         <EditButton product={product} onEdit={onEdit} />
       </div>
@@ -143,6 +155,38 @@ export function ProductCard({
         </div>
       </div>
     </li>
+  );
+}
+
+/** Custo (só ADM) e a margem contra o preço que está no campo. */
+function CostInfo({
+  product,
+  priceCents,
+  inline = false,
+}: {
+  product: AdminProduct;
+  priceCents: number | null;
+  inline?: boolean;
+}) {
+  if (product.costCents === null) {
+    return inline ? null : <span className='text-sm text-ink-2'>—</span>;
+  }
+  const margin = marginPercent(product.costCents, priceCents);
+  const marginText = margin === null ? null : `margem ${formatPercent(margin)}`;
+  const marginTone = margin !== null && margin < 0 ? 'text-danger-strong' : 'text-ink-2';
+  if (inline) {
+    return (
+      <span className='text-xs text-ink-2'>
+        custo {formatBRL(product.costCents)}
+        {marginText ? <span className={marginTone}> · {marginText}</span> : null}
+      </span>
+    );
+  }
+  return (
+    <>
+      <span className='block text-sm whitespace-nowrap'>{formatBRL(product.costCents)}</span>
+      {marginText ? <span className={cn('block text-xs', marginTone)}>{marginText}</span> : null}
+    </>
   );
 }
 

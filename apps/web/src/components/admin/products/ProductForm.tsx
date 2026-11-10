@@ -1,4 +1,4 @@
-import { centsToInput, parseBRL, unitName, UNITS } from '@hortifruit/core';
+import { centsToInput, formatPercent, marginPercent, parseBRL, unitName, UNITS } from '@hortifruit/core';
 import {
   type AdminProduct,
   type Category,
@@ -27,6 +27,7 @@ interface FormState {
   saleDescription: string;
   minQuantity: string;
   price: string;
+  cost: string;
   imageUrl: string;
   color: string;
   description: string;
@@ -42,11 +43,19 @@ function initialState(product: AdminProduct | null): FormState {
     saleDescription: product?.saleDescription ?? unitName('kg'),
     minQuantity: String(product?.minQuantity ?? 1),
     price: product ? centsToInput(product.draft.priceCents) : '',
+    cost: product?.costCents ? centsToInput(product.costCents) : '',
     imageUrl: product?.imageUrl ?? ILLUSTRATIONS[0].url,
     color: product?.color ?? ILLUSTRATIONS[0].color,
     description: product?.description ?? '',
     archived: product?.archived ?? false,
   };
+}
+
+/** Dica do campo de custo: a margem quando custo e preço são válidos. */
+function costHint(cost: string, price: string): string {
+  const margin = marginPercent(parseBRL(cost), parseBRL(price));
+  if (margin === null) return 'Só aparece no painel, nunca no app. Opcional.';
+  return `Margem de ${formatPercent(margin)} sobre o preço. Só aparece no painel.`;
 }
 
 /** Cadastro do produto. O preço vai para o rascunho: o app só vê depois de publicar. */
@@ -83,6 +92,7 @@ export function ProductForm({
     event.preventDefault();
     setApiError(null);
     const priceCents = parseBRL(form.price);
+    const costCents = form.cost.trim() ? parseBRL(form.cost) : null;
     const body: ProductBody = {
       name: form.name,
       category: form.category,
@@ -93,17 +103,20 @@ export function ProductForm({
       color: form.color,
       description: form.description,
       priceCents: priceCents ?? 0,
+      costCents: costCents ?? null,
       archived: form.archived,
     };
     const parsed = productBodySchema.safeParse(body);
     const next: Errors = {};
     if (!parsed.success) {
       for (const issue of parsed.error.issues) {
-        const key = (issue.path[0] === 'priceCents' ? 'price' : issue.path[0]) as keyof FormState;
+        const path = issue.path[0];
+        const key = (path === 'priceCents' ? 'price' : path === 'costCents' ? 'cost' : path) as keyof FormState;
         next[key] ??= issue.message;
       }
     }
     if (priceCents === null) next.price = 'Informe um preço válido, como 6,90.';
+    if (form.cost.trim() && costCents === null) next.cost = 'Informe um custo válido, como 4,50, ou deixe em branco.';
     if (!Number.isInteger(Number(form.minQuantity)) || Number(form.minQuantity) < 1) {
       next.minQuantity = 'O mínimo precisa ser um número inteiro maior que zero.';
     }
@@ -219,6 +232,24 @@ export function ProductForm({
             aria-invalid={!!errors.price}
             aria-describedby={describedBy('price')}
             onChange={(e) => set('price', e.target.value.replace(/[^\d,.]/g, ''))}
+            className={inputClass}
+          />
+        </Field>
+        <Field
+          id='p-cost'
+          label='Valor de custo (R$)'
+          hint={costHint(form.cost, form.price)}
+          error={errors.cost}
+          className='col-span-6 sm:col-span-3'
+        >
+          <input
+            id='p-cost'
+            inputMode='decimal'
+            placeholder='0,00'
+            value={form.cost}
+            aria-invalid={!!errors.cost}
+            aria-describedby={describedBy('cost') ?? 'p-cost-hint'}
+            onChange={(e) => set('cost', e.target.value.replace(/[^\d,.]/g, ''))}
             className={inputClass}
           />
         </Field>

@@ -7,10 +7,12 @@ import {
   smallOrderFee,
   formatBRL,
   formatDeadline,
+  formatPercent,
   formatDeliveryDate,
   formatPhone,
   isValidPhone,
   isWeekOpen,
+  marginPercent,
   maskAddress,
   maskPhoneInput,
   normalizePhone,
@@ -31,6 +33,14 @@ describe('money', () => {
     expect(parseBRL('')).toBeNull();
     expect(parseBRL('0')).toBeNull();
     expect(parseBRL('abc')).toBeNull();
+  });
+
+  it('calcula a margem sobre o preço de venda', () => {
+    expect(marginPercent(500, 1000)).toBe(50);
+    expect(marginPercent(1200, 1000)).toBe(-20);
+    expect(marginPercent(null, 1000)).toBeNull();
+    expect(marginPercent(500, null)).toBeNull();
+    expect(formatPercent(100 / 3)).toBe('33,3%');
   });
 });
 
