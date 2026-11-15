@@ -32,6 +32,8 @@ export async function adminProductsRoutes(app: FastifyInstance) {
         description: body.description ?? null,
         costCents: body.costCents ?? null,
         archived: body.archived ?? false,
+        wholesale: body.wholesale ?? false,
+        promotion: body.promotion ?? false,
         sortOrder: (last._max.sortOrder ?? 0) + 1,
         draftPriceCents: priceCents,
         draftAvailable: true,

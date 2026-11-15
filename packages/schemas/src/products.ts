@@ -24,6 +24,10 @@ export const productBodySchema = z.object({
   /** Valor de custo (centavos) na unidade de venda; null limpa. Só o ADM vê. */
   costCents: positiveCentsSchema.nullable().optional(),
   archived: z.boolean().optional(),
+  /** Filtro "Atacado" do catálogo. Vale na hora, sem publicar. */
+  wholesale: z.boolean().optional(),
+  /** Filtro "Promoções" do catálogo. Vale na hora, sem publicar. */
+  promotion: z.boolean().optional(),
 });
 export type ProductBody = z.input<typeof productBodySchema>;
 
@@ -49,6 +53,10 @@ export interface AdminProduct {
   archived: boolean;
   /** Valor de custo (centavos) na unidade de venda; null se não informado. */
   costCents: number | null;
+  /** Aparece no filtro "Atacado" do catálogo. */
+  wholesale: boolean;
+  /** Aparece no filtro "Promoções" do catálogo. */
+  promotion: boolean;
   /** Rascunho (o que o ADM está editando). */
   draft: { priceCents: number; available: boolean; badge: Badge };
   /** O que o app mostra hoje; null se nunca foi publicado. */

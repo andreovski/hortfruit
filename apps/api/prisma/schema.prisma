@@ -78,6 +78,9 @@ model Product {
   archived        Boolean  @default(false)
   /// Valor de custo (centavos) na unidade de venda. Só no painel ADM, nunca no app.
   costCents       Int?     @map("cost_cents")
+  /// Filtros extras do catálogo (além da categoria). Valem na hora, sem publicar.
+  wholesale       Boolean  @default(false)
+  promotion       Boolean  @default(false)
 
   draftPriceCents Int     @map("draft_price_cents")
   draftAvailable  Boolean @default(true) @map("draft_available")

@@ -53,6 +53,8 @@ export function toAdminProduct(p: Product): AdminProduct {
     sortOrder: p.sortOrder,
     archived: p.archived,
     costCents: p.costCents,
+    wholesale: p.wholesale,
+    promotion: p.promotion,
     draft: { priceCents: p.draftPriceCents, available: p.draftAvailable, badge: p.draftBadge },
     published:
       p.publishedPriceCents === null
@@ -94,6 +96,8 @@ export function toCatalogProduct(p: Product): CatalogProduct {
     imageUrl: p.imageUrl,
     color: p.color,
     description: p.description,
+    wholesale: p.wholesale,
+    promotion: p.promotion,
   };
 }
 

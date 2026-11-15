@@ -32,6 +32,8 @@ interface FormState {
   color: string;
   description: string;
   archived: boolean;
+  wholesale: boolean;
+  promotion: boolean;
 }
 type Errors = Partial<Record<keyof FormState, string>>;
 
@@ -48,6 +50,8 @@ function initialState(product: AdminProduct | null): FormState {
     color: product?.color ?? ILLUSTRATIONS[0].color,
     description: product?.description ?? '',
     archived: product?.archived ?? false,
+    wholesale: product?.wholesale ?? false,
+    promotion: product?.promotion ?? false,
   };
 }
 
@@ -105,6 +109,8 @@ export function ProductForm({
       priceCents: priceCents ?? 0,
       costCents: costCents ?? null,
       archived: form.archived,
+      wholesale: form.wholesale,
+      promotion: form.promotion,
     };
     const parsed = productBodySchema.safeParse(body);
     const next: Errors = {};
@@ -263,6 +269,33 @@ export function ProductForm({
             className={cn(inputClass, 'resize-y py-2.5')}
           />
         </Field>
+      </div>
+
+      <div role='group' aria-labelledby='p-filters' className='flex flex-col gap-1 rounded-xl bg-cream px-3.5 py-2.5'>
+        <span id='p-filters' className='text-[13px] font-semibold text-ink'>
+          Filtros extras do catálogo
+        </span>
+        <div className='flex flex-wrap gap-x-6'>
+          <Switch
+            checked={form.wholesale}
+            onCheckedChange={(wholesale) => set('wholesale', wholesale)}
+            label='Aparece em Atacado'
+            onText='Atacado'
+            offText='Atacado'
+            offTone='muted'
+          />
+          <Switch
+            checked={form.promotion}
+            onCheckedChange={(promotion) => set('promotion', promotion)}
+            label='Aparece em Promoções'
+            onText='Promoção'
+            offText='Promoção'
+            offTone='muted'
+          />
+        </div>
+        <span className='text-xs text-ink-2'>
+          Ligado, o produto aparece no filtro do app assim que você salvar.
+        </span>
       </div>
 
       <fieldset className='m-0 flex flex-col gap-2 border-0 p-0'>

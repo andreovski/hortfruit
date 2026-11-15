@@ -49,6 +49,8 @@ pnpm --filter api seed                         # primeiro ADM, ajustes e os 13 p
   (`previousPriceCents` guarda o publicado anterior; o painel não mostra mais variação nem preço
   anterior). `costCents` é o valor de custo: só no ADM, fora do rascunho/publicação, com a margem
   na tabela. Produto nunca publicado não aparece no app. Preço inválido bloqueia a publicação.
+  `wholesale` e `promotion` alimentam os filtros extras "Atacado" e "Promoções" do catálogo (antes
+  das categorias, em tom âmbar). São cadastro: valem ao salvar, sem publicar, e não marcam alteração.
 - **Pedido**: mínimo por produto (bloqueia) e pelo total (`Setting.minOrderCents`, padrão R$ 200).
   Abaixo do mínimo do total o pedido segue com a taxa `Setting.smallOrderFeeCents` (padrão R$ 50),
   guardada em `Order.feeCents` e já somada em `totalCents`. O pedido guarda nome e preço do momento

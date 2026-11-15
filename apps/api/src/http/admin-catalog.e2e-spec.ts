@@ -62,6 +62,8 @@ describe('produtos e publicação', () => {
       description: null,
       archived: false,
       costCents: null,
+      wholesale: false,
+      promotion: false,
       draft: { priceCents: 590, available: true, badge: null },
       published: null,
       previousPriceCents: null,
@@ -160,6 +162,17 @@ describe('produtos e publicação', () => {
       .json<CatalogResponse>()
       .products.find((p) => p.name === 'Tomate');
     expect(tomateNoApp).not.toHaveProperty('costCents');
+    expect(tomateNoApp).toMatchObject({ wholesale: false, promotion: false });
+
+    // Atacado e promoção valem na hora, sem publicar e sem marcar alteração.
+    const flagged = (
+      await api.patch(`/admin/products/${tomate.id}`, { wholesale: true, promotion: true })
+    ).json<AdminProduct>();
+    expect(flagged).toMatchObject({ wholesale: true, promotion: true, changed: false });
+    const tomateFlagged = (await client(app).get('/catalog'))
+      .json<CatalogResponse>()
+      .products.find((p) => p.name === 'Tomate');
+    expect(tomateFlagged).toMatchObject({ wholesale: true, promotion: true });
 
     // Muda preço do tomate e arquiva a cebola; republica sem abrir semana nova.
     vi.restoreAllMocks();

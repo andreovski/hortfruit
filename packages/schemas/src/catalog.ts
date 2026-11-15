@@ -17,6 +17,10 @@ export interface CatalogProduct {
   /** Cor de fundo do card (#RRGGBB). */
   color: string;
   description: string | null;
+  /** Aparece no filtro "Atacado". */
+  wholesale: boolean;
+  /** Aparece no filtro "Promoções". */
+  promotion: boolean;
 }
 
 export interface CatalogResponse {
