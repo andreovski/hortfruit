@@ -176,6 +176,16 @@ function ProductName({ product }: { product: AdminProduct }) {
           Alterado
         </span>
       ) : null}
+      {product.wholesale ? (
+        <span className='rounded-full bg-info-100 px-2 py-0.5 text-[11px] font-bold text-info-ink'>
+          Atacado
+        </span>
+      ) : null}
+      {product.promotion ? (
+        <span className='rounded-full bg-info-100 px-2 py-0.5 text-[11px] font-bold text-info-ink'>
+          Promoção
+        </span>
+      ) : null}
     </span>
   );
 }

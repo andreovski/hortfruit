@@ -42,6 +42,31 @@ describe('catálogo', () => {
     expect(screen.queryByText('Tomate')).not.toBeInTheDocument();
   });
 
+  it('Atacado e Promoções vêm antes das categorias e filtram pelos produtos marcados', async () => {
+    const catalog = makeCatalog();
+    catalog.products = catalog.products.map((p) =>
+      p.id === TOMATE.id ? { ...p, wholesale: true } : p
+    );
+    mockApi({ 'GET /api/catalog': () => json(catalog) });
+    renderShop('/');
+
+    const atacado = await screen.findByRole('button', { name: 'Atacado' });
+    // Sem produto em promoção, o filtro não aparece.
+    expect(screen.queryByRole('button', { name: 'Promoções' })).not.toBeInTheDocument();
+    const group = screen.getByRole('group', { name: 'Filtrar produtos' });
+    expect(within(group).getAllByRole('button')[0]).toBe(atacado);
+
+    await userEvent.click(atacado);
+    expect(atacado).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText('Tomate')).toBeInTheDocument();
+    expect(screen.queryByText('Morango')).not.toBeInTheDocument();
+
+    // Tocar de novo volta para todos.
+    await userEvent.click(atacado);
+    expect(screen.getByRole('button', { name: 'Todos' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByText('Morango')).toBeInTheDocument();
+  });
+
   it('fechado: preços de referência, sem botões de adicionar, WhatsApp e sem data prometida', async () => {
     mockApi({
       'GET /api/catalog': () =>

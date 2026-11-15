@@ -91,6 +91,8 @@ export const TOMATE: CatalogProduct = {
   imageUrl: '/products/tomate.svg',
   color: '#FBE4DE',
   description: null,
+  wholesale: false,
+  promotion: false,
 };
 
 export const ALHO: CatalogProduct = {

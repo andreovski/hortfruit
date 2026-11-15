@@ -1,7 +1,8 @@
 import { formatBRL, formatDeadline, whatsappLink } from '@hortifruit/core';
 import type { CatalogProduct, CatalogResponse, Category } from '@hortifruit/schemas';
 import { Link } from '@tanstack/react-router';
-import { ChevronRight, MessageCircle, PackageOpen, Pencil } from 'lucide-react';
+import { ChevronRight, MessageCircle, Package, PackageOpen, Pencil, Tag } from 'lucide-react';
+import type { ReactNode } from 'react';
 import { useMemo, useState } from 'react';
 
 import { ClosedStrip, OpenStrip } from '@/components/shop/cycle-strip';
@@ -23,7 +24,30 @@ import { useReconcileCart, useWeekOpen } from '@/features/shop/hooks';
 import { useCatalog } from '@/features/shop/queries';
 import { cn } from '@/lib/utils';
 
-type Filter = 'ALL' | Category;
+/** Filtros extras: vêm antes das categorias, com outra cor. Não são categorias. */
+type ExtraFilter = 'ATACADO' | 'PROMOCOES';
+type Filter = 'ALL' | Category | ExtraFilter;
+
+const EXTRA_FILTERS: { value: ExtraFilter; label: string; icon: ReactNode; match: (p: CatalogProduct) => boolean }[] = [
+  {
+    value: 'ATACADO',
+    label: 'Atacado',
+    icon: <Package className='size-4' aria-hidden />,
+    match: (p) => p.wholesale,
+  },
+  {
+    value: 'PROMOCOES',
+    label: 'Promoções',
+    icon: <Tag className='size-4' aria-hidden />,
+    match: (p) => p.promotion,
+  },
+];
+
+function matchesFilter(product: CatalogProduct, filter: Filter): boolean {
+  if (filter === 'ALL') return true;
+  const extra = EXTRA_FILTERS.find((f) => f.value === filter);
+  return extra ? extra.match(product) : product.category === filter;
+}
 
 export function CatalogPage() {
   const catalog = useCatalog();
@@ -57,8 +81,12 @@ function CatalogContent({ data }: { data: CatalogResponse }) {
     const present = new Set(data.products.map((p) => p.category));
     return CATEGORY_ORDER.filter((c) => present.has(c));
   }, [data.products]);
-  const visible =
-    filter === 'ALL' ? data.products : data.products.filter((p) => p.category === filter);
+  // Só mostra o filtro extra que tem produto.
+  const extraFilters = useMemo(
+    () => EXTRA_FILTERS.filter((f) => data.products.some(f.match)),
+    [data.products]
+  );
+  const visible = data.products.filter((p) => matchesFilter(p, filter));
   const summary = summarizeCart(
     cart.state.items,
     data.products,
@@ -99,12 +127,24 @@ function CatalogContent({ data }: { data: CatalogResponse }) {
           </EmptyState>
         ) : (
           <>
-            {filters.length > 1 ? (
+            {filters.length > 1 || extraFilters.length > 0 ? (
               <div role='group' aria-label='Filtrar produtos' className='flex flex-wrap gap-2'>
+                {extraFilters.map((f) => (
+                  <FilterChip
+                    key={f.value}
+                    extra
+                    icon={f.icon}
+                    active={filter === f.value}
+                    onClick={() => setFilter(filter === f.value ? 'ALL' : f.value)}
+                  >
+                    {f.label}
+                  </FilterChip>
+                ))}
                 <FilterChip active={filter === 'ALL'} onClick={() => setFilter('ALL')}>
                   Todos
                 </FilterChip>
-                {filters.map((c) => (
+                {filters.length > 1 &&
+                  filters.map((c) => (
                   <FilterChip key={c} active={filter === c} onClick={() => setFilter(c)}>
                     {CATEGORY_LABEL[c]}
                   </FilterChip>
@@ -184,10 +224,15 @@ function CatalogContent({ data }: { data: CatalogResponse }) {
 function FilterChip({
   active,
   onClick,
+  extra = false,
+  icon,
   children,
 }: {
   active: boolean;
   onClick: () => void;
+  /** Filtro extra (Atacado, Promoções): tom âmbar para não parecer categoria. */
+  extra?: boolean;
+  icon?: ReactNode;
   children: string;
 }) {
   return (
@@ -196,10 +241,17 @@ function FilterChip({
       aria-pressed={active}
       onClick={onClick}
       className={cn(
-        'min-h-11 cursor-pointer rounded-full border px-4 text-sm font-semibold',
-        active ? 'border-brand bg-brand text-white' : 'border-line-strong bg-surface text-ink'
+        'flex min-h-11 cursor-pointer items-center gap-1.5 rounded-full border px-4 text-sm font-semibold',
+        extra
+          ? active
+            ? 'border-amber-ink bg-amber-ink text-white'
+            : 'border-amber-border bg-amber-100 text-amber-ink'
+          : active
+            ? 'border-brand bg-brand text-white'
+            : 'border-line-strong bg-surface text-ink'
       )}
     >
+      {icon}
       {children}
     </button>
   );

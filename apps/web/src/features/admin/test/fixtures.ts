@@ -111,6 +111,8 @@ export function product(overrides: Partial<AdminProduct> = {}): AdminProduct {
     sortOrder: 1,
     archived: false,
     costCents: 450,
+    wholesale: false,
+    promotion: false,
     draft: { priceCents: 690, available: true, badge: null },
     published: { priceCents: 690, available: true, badge: null },
     previousPriceCents: 650,
